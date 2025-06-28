@@ -1,69 +1,68 @@
 /// This class contains all the App Text in String formats.
 class REYTexts {
   // -- GLOBAL Texts
-  static const String and = "dan";
-  static const String skip = "Lewati";
-  static const String done = "Selesai";
-  static const String submit = "Kirim";
+  static const String and = "and";
+  static const String skip = "Skip";
+  static const String done = "Done";
+  static const String submit = "Submit";
   static const String appName = "Sobat Sampah";
-  static const String rContinue = "Lanjutkan";
+  static const String rContinue = "Continue";
 
   // -- OnBoarding Texts
-  static const String onBoardingTitle1 =
-      "Kumpulkan Sampah,\nCintai Lingkungan!";
-  static const String onBoardingTitle2 = "Setor Sampah,\nRaih Manfaat!";
-  static const String onBoardingTitle3 = "Tukar Sampah,\nDapat Poin!";
+  static const String onBoardingTitle1 = "Reduce Waste,\nSave the Planet!";
+  static const String onBoardingTitle2 = "Recycle Smarter,\nLive Better!";
+  static const String onBoardingTitle3 = "Earn Rewards,\nMake a Difference!";
 
   static const String onBoardingSubTitle1 =
-      "Kumpulkan sampah di sekitarmu dan jadi pahlawan lingkungan.";
+      "Take action by reducing waste and protecting our earth.";
   static const String onBoardingSubTitle2 =
-      "Setorkan sampah ke bank sampah terdekat dan lihat perubahan nyata.";
+      "Sort and recycle your waste for a cleaner, healthier community.";
   static const String onBoardingSubTitle3 =
-      "Tukarkan poin dengan barang-barang menarik yang kamu inginkan.";
+      "Collect points and redeem exciting rewards for your eco-friendly habits.";
 
   // -- Authentication Forms
-  static const String firstName = "Nama Depan";
-  static const String lastName = "Nama Belakang";
+  static const String firstName = "First Name";
+  static const String lastName = "Last Name";
   static const String email = "Email";
-  static const String password = "Kata Sandi";
-  static const String newPassword = "Kata Sandi Baru";
-  static const String username = "Nama Pengguna";
-  static const String phoneNo = "Nomor Telepon";
-  static const String rememberMe = "Ingat Saya";
-  static const String forgetPassword = "Lupa Kata Sandi?";
-  static const String signIn = "Masuk";
-  static const String createAccount = "Buat Akun";
-  static const String orSignInWith = "atau masuk dengan";
-  static const String orSignUpWith = "atau daftar dengan";
-  static const String iAgreeTo = "Saya setuju dengan";
-  static const String privacyPolicy = "Kebijakan Privasi";
-  static const String termsOfUse = "Syarat Penggunaan";
-  static const String verificationCode = "Kode Verifikasi";
-  static const String resendEmail = "Kirim Ulang Email";
-  static const String resendEmailIn = "Kirim ulang email dalam";
+  static const String password = "Password";
+  static const String newPassword = "New Password";
+  static const String username = "Username";
+  static const String phoneNo = "Phone Number";
+  static const String rememberMe = "Remember Me";
+  static const String forgetPassword = "Forgot Password?";
+  static const String signIn = "Sign In";
+  static const String createAccount = "Create Account";
+  static const String orSignInWith = "or sign in with";
+  static const String orSignUpWith = "or sign up with";
+  static const String iAgreeTo = "I agree to the";
+  static const String privacyPolicy = "Privacy Policy";
+  static const String termsOfUse = "Terms of Use";
+  static const String verificationCode = "Verification Code";
+  static const String resendEmail = "Resend Email";
+  static const String resendEmailIn = "Resend email in";
 
   // -- Authentication Headings
-  static const String loginTitle = "Selamat datang kembali,";
+  static const String loginTitle = "Welcome back,";
   static const String loginSubTitle =
-      "Kumpulkan dan tukarkan sampahmu menjadi uang!";
-  static const String signupTitle = "Mari buat akun Anda";
-  static const String forgetPasswordTitle = "Lupa kata sandi";
+      "Collect and exchange your waste for money!";
+  static const String signupTitle = "Let's create your account";
+  static const String forgetPasswordTitle = "Forgot password";
   static const String forgetPasswordSubTitle =
-      "Jangan khawatir, kadang orang bisa lupa juga, masukkan email Anda dan kami akan mengirimkan tautan reset kata sandi.";
-  static const String changeYourPasswordTitle =
-      "Email Reset Kata Sandi Terkirim";
+      "Don't worry, everyone forgets sometimes. Enter your email and we'll send you a password reset link.";
+  static const String changeYourPasswordTitle = "Password Reset Email Sent";
   static const String changeYourPasswordSubTitle =
-      "Keamanan Akun Anda adalah Prioritas Kami! Kami Telah Mengirimkan Tautan Aman untuk Mengubah Kata Sandi Anda dan Melindungi Akun Anda.";
-  static const String confirmEmail = "Verifikasi alamat email Anda!";
+      "Your Account Security is Our Priority! We've sent a secure link to change your password and protect your account.";
+  static const String confirmEmail = "Verify your email address!";
   static const String confirmEmailSubTitle =
-      "Selamat! Akun Anda Menunggu: Verifikasi Email Anda untuk Mulai Berbelanja dan Nikmati Penawaran Tak Tertandingi serta Penawaran yang Dipersonalisasi.";
+      "Congratulations! Your account is waiting: Verify your email to start shopping and enjoy unbeatable and personalized offers.";
   static const String emailNotReceivedMessage =
-      "Tidak menerima email? Periksa folder sampah/spam atau kirim ulang.";
-  static const String yourAccountCreatedTitle = "Akun Anda berhasil dibuat!";
+      "Didn't receive the email? Check your junk/spam folder or resend.";
+  static const String yourAccountCreatedTitle =
+      "Your account has been created!";
   static const String yourAccountCreatedSubTitle =
-      "Selamat Datang di Destinasi Belanja Utama Anda: Akun Anda Telah Dibuat, Nikmati Kegembiraan Belanja Online yang Lancar!";
+      "Welcome to your ultimate shopping destination: Your account has been created, enjoy the excitement of seamless online shopping!";
 
   // -- Home
-  static const String homeAppbarTitle = "Sampahmu, uangmu!";
+  static const String homeAppbarTitle = "Your waste, your money!";
   static const String homeAppbarSubTitle = "Reynaldhi T. Graha";
 }
