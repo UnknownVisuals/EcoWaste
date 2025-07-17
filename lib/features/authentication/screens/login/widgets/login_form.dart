@@ -85,7 +85,11 @@ class LoginForm extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => loginController.login(
+                    email: emailController.text,
+                    password: passwordController.text,
+                    role: "WARGA",
+                  ),
                   child: const Text(REYTexts.signIn),
                 ),
               ),

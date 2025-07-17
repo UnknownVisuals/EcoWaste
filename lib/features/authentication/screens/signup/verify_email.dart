@@ -1,5 +1,5 @@
+import 'package:eco_waste/common/widgets/success_screen.dart';
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
-import 'package:eco_waste/features/authentication/screens/signup/widgets/success_screen.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
