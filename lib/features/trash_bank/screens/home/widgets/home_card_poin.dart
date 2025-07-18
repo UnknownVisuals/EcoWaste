@@ -1,6 +1,7 @@
 import 'package:eco_waste/common/widgets/icon_button.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/trash_bank/screens/deposit_asus/deposit_asus.dart';
+import 'package:eco_waste/features/trash_bank/screens/poin_exchange/poin_exchange.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -54,27 +55,26 @@ class HomeCardPoin extends StatelessWidget {
                       symbol: 'Rp',
                       decimalDigits: 2,
                     ).format(poin),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineLarge!.copyWith(color: REYColors.white),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: REYColors.white,
+                    ),
                   ),
-                  // Row(
-                  //   children: [
-                  //     const Icon(
-                  //       Iconsax.coin_1,
-                  //       size: REYSizes.iconSm,
-                  //       color: REYColors.white,
-                  //     ),
-                  //     const SizedBox(width: REYSizes.sm / 2),
-                  //     Text(
-                  //       'Poin',
-                  //       style: Theme.of(context)
-                  //           .textTheme
-                  //           .bodyMedium!
-                  //           .copyWith(color: REYColors.white),
-                  //     ),
-                  //   ],
-                  // ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Iconsax.coin_1,
+                        size: REYSizes.iconSm,
+                        color: REYColors.white,
+                      ),
+                      const SizedBox(width: REYSizes.sm / 2),
+                      Text(
+                        'Poin',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: REYColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
 
@@ -92,12 +92,12 @@ class HomeCardPoin extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // const SizedBox(width: REYSizes.spaceBtwItems),
-                  // REYIconButton(
-                  //   icon: Iconsax.bitcoin_convert,
-                  //   title: 'Tukar\nPoin',
-                  //   onPressed: () => Get.to(const PoinExchangeScreen()),
-                  // ),
+                  const SizedBox(width: REYSizes.spaceBtwItems),
+                  REYIconButton(
+                    icon: Iconsax.bitcoin_convert,
+                    title: 'Tukar\nPoin',
+                    onPressed: () => Get.to(const PoinExchangeScreen()),
+                  ),
                 ],
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:eco_waste/features/authentication/screens/signup/signup.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
+import 'package:eco_waste/utils/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -16,9 +17,11 @@ class LoginForm extends StatelessWidget {
     final LoginController loginController = Get.put(LoginController());
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Obx(
       () => Form(
+        key: formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: REYSizes.spaceBtwSections,
@@ -32,6 +35,8 @@ class LoginForm extends StatelessWidget {
                   prefixIcon: Icon(Iconsax.direct_right),
                   labelText: REYTexts.email,
                 ),
+                validator: (value) => REYValidator.validateEmail(value),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: REYSizes.spaceBtwInputFields),
 
@@ -51,6 +56,8 @@ class LoginForm extends StatelessWidget {
                     onPressed: loginController.toggleObscurePassword,
                   ),
                 ),
+                validator: (value) => REYValidator.validatePassword(value),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: REYSizes.spaceBtwInputFields / 2),
 
@@ -85,11 +92,15 @@ class LoginForm extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => loginController.login(
-                    email: emailController.text,
-                    password: passwordController.text,
-                    role: "WARGA",
-                  ),
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      loginController.login(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        role: "WARGA",
+                      );
+                    }
+                  },
                   child: const Text(REYTexts.signIn),
                 ),
               ),
