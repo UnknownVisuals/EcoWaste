@@ -1,15 +1,19 @@
 import 'package:intl/intl.dart';
 
 class REYFormatter {
+  // Customize the date format as needed
   static String formatDate(DateTime? date) {
     date ??= DateTime.now();
-    return DateFormat('dd-MMM-yyyy')
-        .format(date); // Customize the date format as needed
+    return DateFormat('dd-MMM-yyyy').format(date);
   }
 
+  // Format as Indonesian Rupiah
   static String formatCurrency(double amount) {
-    return NumberFormat.currency(locale: 'en_US', symbol: '\$')
-        .format(amount); // Customize the currency locale and symbol as needed
+    return NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp',
+      decimalDigits: 2,
+    ).format(amount);
   }
 
   static String formatPhoneNumber(String phoneNumber) {
@@ -55,8 +59,3 @@ class REYFormatter {
     return formattedNumber.toString();
   }
 }
-
-/*
-*
-*
-* */

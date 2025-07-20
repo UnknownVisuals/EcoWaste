@@ -12,21 +12,27 @@ class DepositAsusController extends GetxController {
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
 
   RxList<WasteTypeModel> wasteType = <WasteTypeModel>[].obs;
-  Rx<bool> isLoading = false.obs;
   Rx<File?> selectedImage = Rx<File?>(null);
+  Rx<bool> isLoading = false.obs;
 
   // New state for selected waste type and weight
-  RxString selectedWasteType = ''.obs;
+  RxString jenisSampah = ''.obs;
   RxString beratSampah = ''.obs;
+  RxString suhuPembakaran = ''.obs;
 
   // Setters for state
   void setWasteType(String value) {
-    selectedWasteType.value = value;
+    jenisSampah.value = value;
     update();
   }
 
   void setBeratSampah(String value) {
     beratSampah.value = value;
+    update();
+  }
+
+  void setSuhuPembakaran(String value) {
+    suhuPembakaran.value = value;
     update();
   }
 
@@ -36,7 +42,7 @@ class DepositAsusController extends GetxController {
     required String userId,
     required String desaId,
   }) {
-    if (selectedWasteType.value.isEmpty || beratSampah.value.isEmpty) {
+    if (jenisSampah.value.isEmpty || beratSampah.value.isEmpty) {
       REYLoaders.errorSnackBar(
         title: "Data tidak lengkap",
         message: "Pilih jenis sampah dan masukkan berat sampah.",
@@ -44,7 +50,7 @@ class DepositAsusController extends GetxController {
       return;
     }
     final selectedOption = wasteType.firstWhere(
-      (option) => option.name == selectedWasteType.value,
+      (option) => option.name == jenisSampah.value,
     );
     final berat = double.tryParse(beratSampah.value) ?? 0;
     final harga = selectedOption.pricePerKg * berat;
@@ -52,7 +58,7 @@ class DepositAsusController extends GetxController {
       username: username,
       desaId: desaId,
       berat: berat,
-      jenisSampah: selectedWasteType.value,
+      jenisSampah: jenisSampah.value,
       poin: harga,
       waktu: DateTime.now(),
       rt: '00',

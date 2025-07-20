@@ -25,12 +25,6 @@ class DepositAsusScreen extends StatelessWidget {
       DepositAsusController(),
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (depositAsusController.wasteType.isEmpty) {
-        depositAsusController.getWasteType();
-      }
-    });
-
     return Scaffold(
       appBar: REYAppBar(
         showBackArrow: true,
@@ -47,6 +41,7 @@ class DepositAsusScreen extends StatelessWidget {
             const DepositTutorialCarousel(),
             const SizedBox(height: REYSizes.spaceBtwSections),
 
+            // Setor Sampah Section
             const REYSectionHeading(title: 'Setor Sampah'),
             const SizedBox(height: REYSizes.spaceBtwItems),
             Obx(() {
@@ -60,10 +55,9 @@ class DepositAsusScreen extends StatelessWidget {
                   children: [
                     // Jenis Sampah
                     DropdownButtonFormField<String>(
-                      value:
-                          depositAsusController.selectedWasteType.value.isEmpty
+                      value: depositAsusController.jenisSampah.value.isEmpty
                           ? null
-                          : depositAsusController.selectedWasteType.value,
+                          : depositAsusController.jenisSampah.value,
                       items: depositAsusController.wasteType.map((wasteType) {
                         return DropdownMenuItem<String>(
                           value: wasteType.name,
@@ -100,13 +94,26 @@ class DepositAsusScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: REYSizes.spaceBtwInputFields),
 
+                    // Berat Sampah
+                    TextFormField(
+                      initialValue: depositAsusController.suhuPembakaran.value,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Iconsax.sun_1),
+                        labelText: 'Suhu Pembakaran (\u00B0C)',
+                      ),
+                      onChanged: (value) {
+                        depositAsusController.setSuhuPembakaran(value);
+                      },
+                    ),
+                    const SizedBox(height: REYSizes.spaceBtwInputFields),
+
                     // Kalkulasi Total Harga
                     const Divider(),
                     Obx(() {
-                      if (depositAsusController
-                              .selectedWasteType
-                              .value
-                              .isEmpty ||
+                      if (depositAsusController.jenisSampah.value.isEmpty ||
                           depositAsusController.beratSampah.value.isEmpty) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +133,7 @@ class DepositAsusScreen extends StatelessWidget {
                           .firstWhere(
                             (option) =>
                                 option.name ==
-                                depositAsusController.selectedWasteType.value,
+                                depositAsusController.jenisSampah.value,
                           );
                       final berat =
                           double.tryParse(
