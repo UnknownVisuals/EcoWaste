@@ -1,7 +1,7 @@
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/models/login_model.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
-import 'package:eco_waste/features/navigation_menu.dart';
+import 'package:eco_waste/features/user/navigation_menu.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
@@ -28,7 +28,7 @@ class LoginController extends GetxController {
       final storedUser = storage.read('user');
       if (storedUser != null) {
         userController.userModel.value = UserModel.fromJson(storedUser);
-        Get.off(NavigationMenu(userModel: userController.userModel.value));
+        Get.off(UserNavigationMenu(userModel: userController.userModel.value));
       }
     }
   }
@@ -64,7 +64,7 @@ class LoginController extends GetxController {
           userController.removeUserFromStorage();
         }
 
-        Get.off(NavigationMenu(userModel: userController.userModel.value));
+        Get.off(UserNavigationMenu(userModel: userController.userModel.value));
       } else {
         REYLoaders.errorSnackBar(
           title: 'Login Gagal',

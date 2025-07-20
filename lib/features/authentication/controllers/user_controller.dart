@@ -1,5 +1,5 @@
 import 'package:eco_waste/features/authentication/models/user_model.dart';
-import 'package:eco_waste/features/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

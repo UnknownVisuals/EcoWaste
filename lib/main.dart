@@ -2,7 +2,7 @@ import 'package:eco_waste/controllers/theme_controller.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/onboarding.dart';
-import 'package:eco_waste/features/navigation_menu.dart';
+import 'package:eco_waste/features/user/navigation_menu.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,9 @@ class App extends StatelessWidget {
         darkTheme: REYAppTheme.darkTheme,
         home: seenOnboarding
             ? (rememberMe && storedUser != null
-                  ? NavigationMenu(userModel: UserModel.fromJson(storedUser!))
+                  ? UserNavigationMenu(
+                      userModel: UserModel.fromJson(storedUser!),
+                    )
                   : const LoginScreen())
             : const OnBoardingScreen(),
       ),
