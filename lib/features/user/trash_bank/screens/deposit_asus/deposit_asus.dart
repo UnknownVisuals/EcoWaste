@@ -1,7 +1,6 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/deposit_asus_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/models/deposit_asus_model.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/widgets/deposit_tutorial_carousel.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
@@ -22,14 +21,15 @@ class DepositAsusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RxString jenisSampahController = ''.obs;
-    RxString beratSampahController = ''.obs;
-
     final DepositAsusController depositAsusController = Get.put(
       DepositAsusController(),
     );
 
-    depositAsusController.getWasteType();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (depositAsusController.wasteType.isEmpty) {
+        depositAsusController.getWasteType();
+      }
+    });
 
     return Scaffold(
       appBar: REYAppBar(
@@ -47,25 +47,23 @@ class DepositAsusScreen extends StatelessWidget {
             const DepositTutorialCarousel(),
             const SizedBox(height: REYSizes.spaceBtwSections),
 
-            // Deposit List
             const REYSectionHeading(title: 'Setor Sampah'),
             const SizedBox(height: REYSizes.spaceBtwItems),
-
             Obx(() {
               if (depositAsusController.isLoading.value) {
                 return const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation(REYColors.primary),
                 );
               }
-
               return Form(
                 child: Column(
                   children: [
                     // Jenis Sampah
                     DropdownButtonFormField<String>(
-                      value: jenisSampahController.value.isEmpty
+                      value:
+                          depositAsusController.selectedWasteType.value.isEmpty
                           ? null
-                          : jenisSampahController.value,
+                          : depositAsusController.selectedWasteType.value,
                       items: depositAsusController.wasteType.map((wasteType) {
                         return DropdownMenuItem<String>(
                           value: wasteType.name,
@@ -77,20 +75,18 @@ class DepositAsusScreen extends StatelessWidget {
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        jenisSampahController.value = newValue!;
-                        depositAsusController.update();
+                        depositAsusController.setWasteType(newValue!);
                       },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Iconsax.trash),
                         labelText: 'Jenis Sampah',
                       ),
                     ),
-
                     const SizedBox(height: REYSizes.spaceBtwInputFields),
 
                     // Berat Sampah
                     TextFormField(
-                      initialValue: beratSampahController.value,
+                      initialValue: depositAsusController.beratSampah.value,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
@@ -99,47 +95,19 @@ class DepositAsusScreen extends StatelessWidget {
                         labelText: 'Berat Sampah (kg)',
                       ),
                       onChanged: (value) {
-                        beratSampahController.value = value;
-                        depositAsusController.update();
+                        depositAsusController.setBeratSampah(value);
                       },
                     ),
+                    const SizedBox(height: REYSizes.spaceBtwInputFields),
 
-                    // const SizedBox(height: REYSizes.spaceBtwInputFields),
-
-                    // // TPS
-                    // TextFormField(
-                    //   initialValue: tpsRTController.value,
-                    //   decoration: const InputDecoration(
-                    //     prefixIcon: Icon(Iconsax.box),
-                    //     labelText: 'TPS',
-                    //   ),
-                    //   onChanged: (value) {
-                    //     tpsRTController.value = value;
-                    //     depositAsusController.update();
-                    //   },
-                    // ),
-
-                    // const SizedBox(height: REYSizes.spaceBtwInputFields),
-
-                    // // Lokasi
-                    // TextFormField(
-                    //   initialValue: lokasiRWController.value,
-                    //   decoration: const InputDecoration(
-                    //     prefixIcon: Icon(Iconsax.location),
-                    //     labelText: 'Lokasi',
-                    //   ),
-                    //   onChanged: (value) {
-                    //     lokasiRWController.value = value;
-                    //     depositAsusController.update();
-                    //   },
-                    // ),
-                    const SizedBox(height: REYSizes.spaceBtwItems),
+                    // Kalkulasi Total Harga
                     const Divider(),
-
-                    // Price Calculation
                     Obx(() {
-                      if (jenisSampahController.value.isEmpty ||
-                          beratSampahController.value.isEmpty) {
+                      if (depositAsusController
+                              .selectedWasteType
+                              .value
+                              .isEmpty ||
+                          depositAsusController.beratSampah.value.isEmpty) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -154,16 +122,18 @@ class DepositAsusScreen extends StatelessWidget {
                           ],
                         );
                       }
-
                       final selectedOption = depositAsusController.wasteType
                           .firstWhere(
                             (option) =>
-                                option.name == jenisSampahController.value,
+                                option.name ==
+                                depositAsusController.selectedWasteType.value,
                           );
                       final berat =
-                          double.tryParse(beratSampahController.value) ?? 0;
+                          double.tryParse(
+                            depositAsusController.beratSampah.value,
+                          ) ??
+                          0;
                       final harga = selectedOption.pricePerKg * berat;
-
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -182,42 +152,197 @@ class DepositAsusScreen extends StatelessWidget {
                         ],
                       );
                     }),
-
                     const Divider(),
-                    const SizedBox(height: REYSizes.spaceBtwItems),
+                    const SizedBox(height: REYSizes.spaceBtwInputFields),
 
-                    // Submit Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final selectedOption = depositAsusController.wasteType
-                              .firstWhere(
-                                (option) =>
-                                    option.name == jenisSampahController.value,
+                    // Bukti Setor Gambar
+                    REYSectionHeading(
+                      title: 'Bukti Setor',
+                      showActionButton: true,
+                      buttonTitle: "Hapus Foto",
+                      onPressed: () {
+                        depositAsusController.selectedImage.value = null;
+                      },
+                    ),
+                    const SizedBox(height: REYSizes.spaceBtwItems / 2),
+                    Obx(() {
+                      final image = depositAsusController.selectedImage.value;
+                      return AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: GestureDetector(
+                          onTap: image == null
+                              ? () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return SafeArea(
+                                        child: Wrap(
+                                          children: [
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.image,
+                                              ),
+                                              title: Text(
+                                                'Pilih dari Galeri',
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.of(context).pop();
+                                                await depositAsusController
+                                                    .pickImageFromGallery();
+                                              },
+                                            ),
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.camera,
+                                              ),
+                                              title: Text(
+                                                'Ambil dari Kamera',
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.of(context).pop();
+                                                await depositAsusController
+                                                    .captureImageWithCamera();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                              : null,
+                          child: image == null
+                              ? Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: REYColors.lightGrey,
+                                    borderRadius: BorderRadius.circular(
+                                      REYSizes.inputFieldRadius,
+                                    ),
+                                    border: Border.all(
+                                      color: REYColors.grey,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Iconsax.image,
+                                          size: 48,
+                                          color: REYColors.darkerGrey,
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'Tap untuk upload foto',
+                                          style: TextStyle(
+                                            color: REYColors.darkerGrey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    REYSizes.inputFieldRadius,
+                                  ),
+                                  child: Image.file(
+                                    image,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: REYSizes.spaceBtwInputFields),
+
+                    // Tombol Ganti Foto dan Kumpulkan
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Obx(() {
+                            final image =
+                                depositAsusController.selectedImage.value;
+
+                            // Button to change photo
+                            return OutlinedButton(
+                              onPressed: image == null
+                                  ? null
+                                  : () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) {
+                                          return SafeArea(
+                                            child: Wrap(
+                                              children: [
+                                                ListTile(
+                                                  leading: const Icon(
+                                                    Iconsax.image,
+                                                  ),
+                                                  title: Text(
+                                                    'Pilih dari Galeri',
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.bodyMedium,
+                                                  ),
+                                                  onTap: () async {
+                                                    Navigator.of(context).pop();
+                                                    await depositAsusController
+                                                        .pickImageFromGallery();
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading: const Icon(
+                                                    Iconsax.camera,
+                                                  ),
+                                                  title: Text(
+                                                    'Ambil dari Kamera',
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.bodyMedium,
+                                                  ),
+                                                  onTap: () async {
+                                                    Navigator.of(context).pop();
+                                                    await depositAsusController
+                                                        .captureImageWithCamera();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                              child: const Text("Ganti Foto"),
+                            );
+                          }),
+                        ),
+                        const SizedBox(width: REYSizes.spaceBtwItems),
+
+                        // Button to submit deposit
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              depositAsusController.submitDeposit(
+                                username: username,
+                                userId: userId,
+                                desaId: desaId,
                               );
-                          final berat =
-                              double.tryParse(beratSampahController.value) ?? 0;
-                          final harga = selectedOption.pricePerKg * berat;
-
-                          final depositAsusModel = DepositAsusModel(
-                            username: username,
-                            desaId: desaId,
-                            berat: berat,
-                            jenisSampah: jenisSampahController.value,
-                            poin: harga,
-                            waktu: DateTime.now(),
-                            rt: '00',
-                            rw: '00',
-                            userId: userId,
-                            available: true,
-                            wasteTypeId: selectedOption.id,
-                          );
-
-                          depositAsusController.postDeposit(depositAsusModel);
-                        },
-                        child: const Text('Kumpulkan'),
-                      ),
+                            },
+                            child: const Text('Kumpulkan'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

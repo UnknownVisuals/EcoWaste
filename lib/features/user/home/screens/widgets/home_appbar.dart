@@ -7,8 +7,8 @@ import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({
+class UserHomeAppBar extends StatelessWidget {
+  const UserHomeAppBar({
     super.key,
     required this.username,
     required this.userId,

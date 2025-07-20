@@ -1,5 +1,4 @@
-import 'package:eco_waste/controllers/navigation_controller.dart';
-import 'package:eco_waste/features/authentication/models/user_model.dart';
+import 'package:eco_waste/features/admin/navigation_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +13,8 @@ class AdminNavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(NavigationController(userModel: userModel));
-    // final dark = REYHelperFunctions.isDarkMode(context);
-    // Get.lazyPut(
-    //   () => UserModel(
-    //     id: userModel.id,
-    //     email: userModel.email,
-    //     username: userModel.username,
-    //     desaId: userModel.desaId,
-    //     poin: userModel.poin,
-    //   ),
-    // );
+    final controller = Get.put(AdminNavigationController());
+    final dark = REYHelperFunctions.isDarkMode(context);
 
     return Scaffold(
       bottomNavigationBar: Obx(

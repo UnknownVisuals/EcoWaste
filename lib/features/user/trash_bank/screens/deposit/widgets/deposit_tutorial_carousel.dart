@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eco_waste/common/widgets/circular_container.dart';
-import 'package:eco_waste/features/user/homescreen/controllers/home_controller.dart';
+import 'package:eco_waste/features/user/home/controllers/home_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
+import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,23 +13,20 @@ class DepositTutorialCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.put(HomeController());
+    final homeController = Get.put(UserHomeController());
 
     List<Widget> items = [
       const DepositTutorialCard(
-        imagePath: "assets/onboarding/onboarding_1_alt.png",
+        imagePath: REYImages.trashDeposit1,
         text: 'Pilah sampah yang terkumpul!',
-        // text: 'Kumpulkan dan pilah sampahmu!',
       ),
       const DepositTutorialCard(
-        imagePath: "assets/onboarding/onboarding_2_alt.png",
+        imagePath: REYImages.trashDeposit2,
         text: 'Catat semua jenis sampah pada aplikasi....',
-        // text: 'Bawa sampahmu ke bank sampah terdekat!',
       ),
       const DepositTutorialCard(
-        imagePath: "assets/onboarding/onboarding_3_alt.png",
+        imagePath: REYImages.trashDeposit3,
         text: 'Saldo akan bertambah setelah dikumpulkan!',
-        // text: 'Tukar sampahmu dan dapatkan poin untuk hadiah menarik!',
       ),
     ];
 

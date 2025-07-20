@@ -1,3 +1,4 @@
+import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/features/authentication/controllers/login_controller.dart';
 import 'package:eco_waste/features/authentication/screens/password_config/forget_password.dart';
 import 'package:eco_waste/features/authentication/screens/signup/signup.dart';
@@ -88,7 +89,7 @@ class LoginForm extends StatelessWidget {
               ),
               const SizedBox(height: REYSizes.spaceBtwSections),
 
-              // Signin Button
+              // Signin Button USER
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -102,6 +103,16 @@ class LoginForm extends StatelessWidget {
                     }
                   },
                   child: const Text(REYTexts.signIn),
+                ),
+              ),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+
+              // Signin Button USER
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(const AdminNavigationMenu()),
+                  child: const Text("ADMIN"),
                 ),
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),

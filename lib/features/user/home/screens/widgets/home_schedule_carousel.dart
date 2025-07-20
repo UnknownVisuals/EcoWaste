@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eco_waste/common/widgets/circular_container.dart';
-import 'package:eco_waste/features/user/homescreen/controllers/home_controller.dart';
+import 'package:eco_waste/features/user/home/controllers/home_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/schedule_controller.dart';
-import 'package:eco_waste/features/user/homescreen/screens/widgets/home_schedule_card.dart';
+import 'package:eco_waste/features/user/home/screens/widgets/home_schedule_card.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class HomeScheduleCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.put(HomeController());
+    final UserHomeController homeController = Get.put(UserHomeController());
     final ScheduleController scheduleController = Get.put(ScheduleController());
     scheduleController.getSchedule(desaId: desaId);
 

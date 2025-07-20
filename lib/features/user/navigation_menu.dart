@@ -1,4 +1,4 @@
-import 'package:eco_waste/controllers/navigation_controller.dart';
+import 'package:eco_waste/features/user/navigation_controller.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
@@ -14,7 +14,7 @@ class UserNavigationMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController(userModel: userModel));
+    final controller = Get.put(UserNavigationController(userModel: userModel));
     final dark = REYHelperFunctions.isDarkMode(context);
     Get.lazyPut(
       () => UserModel(
