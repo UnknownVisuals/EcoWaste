@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
+import 'package:eco_waste/features/user/leaderboard/models/leaderboard_model.dart';
 import 'package:eco_waste/features/user/trash_bank/models/deposit_asus_model.dart';
 import 'package:eco_waste/features/user/trash_bank/models/waste_type_model.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
@@ -15,8 +16,59 @@ class DepositAsusController extends GetxController {
   Rx<File?> selectedImage = Rx<File?>(null);
   Rx<bool> isLoading = false.obs;
 
+  RxList<WasteTypeModel> mockWasteTypes = [
+    WasteTypeModel(
+      id: "WT001",
+      name: "Plastik",
+      description:
+          "Botol, gelas, dan wadah plastik lainnya. Pastikan dalam keadaan bersih dan kering sebelum disetor.",
+      pricePerKg: 15.0,
+      recyclable: true,
+      hazardous: false,
+    ),
+    WasteTypeModel(
+      id: "WT002",
+      name: "Kertas",
+      description:
+          "Kertas HVS, koran, majalah, dan kardus. Tidak termasuk kertas thermal atau yang berlapis plastik/lilin.",
+      pricePerKg: 15.0,
+      recyclable: true,
+      hazardous: false,
+    ),
+    WasteTypeModel(
+      id: "WT003",
+      name: "Kaca",
+      description:
+          "Botol atau wadah kaca bekas sirup, kecap, atau minuman. Pisahkan berdasarkan warna jika memungkinkan.",
+      pricePerKg: 15.0,
+      recyclable: true,
+      hazardous: false,
+    ),
+    WasteTypeModel(
+      id: "WT004",
+      name: "Organik",
+      description:
+          "Sisa makanan, daun kering, dan sampah dari kebun yang dapat diolah menjadi kompos.",
+      pricePerKg: 10.0,
+      recyclable: true,
+      hazardous: false,
+    ),
+    WasteTypeModel(
+      id: "WT005",
+      name: "B3",
+      description:
+          "Bahan Berbahaya dan Beracun seperti baterai bekas, lampu, dan sampah elektronik.",
+      pricePerKg: 15.0,
+      recyclable: false,
+      hazardous: true,
+    ),
+  ].obs;
+
   // POST Deposit Asus
-  Future<void> postDeposit(DepositAsusModel depositAsusModel) async {
+  Future<void> postDeposit(
+    DepositAsusModel depositAsusModel,
+    LeaderboardModel leaderboardModel,
+  ) async {
     isLoading.value = true;
 
     try {
@@ -26,7 +78,13 @@ class DepositAsusController extends GetxController {
         depositAsusModel.toJson(),
       );
 
-      if (response.statusCode == 201) {
+      final responseLeaderboard = await httpHelper.postRequest(
+        'leaderboard',
+        'ADMIN',
+        leaderboardModel.toJson(),
+      );
+
+      if (response.statusCode == 201 && responseLeaderboard.statusCode == 200) {
         REYLoaders.successSnackBar(
           title: "Sukses menyetor sampah",
           message: "Data sampah berhasil disetor",

@@ -1,5 +1,6 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
+import 'package:eco_waste/features/user/leaderboard/models/leaderboard_model.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/deposit_asus_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/models/deposit_asus_model.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/widgets/deposit_image_proof.dart';
@@ -32,7 +33,7 @@ class DepositAsusScreen extends StatelessWidget {
       DepositAsusController(),
     );
 
-    depositAsusController.getWasteType();
+    // depositAsusController.getWasteType();
 
     final dark = REYHelperFunctions.isDarkMode(context);
 
@@ -71,7 +72,9 @@ class DepositAsusScreen extends StatelessWidget {
                       value: jenisSampah.value.isEmpty
                           ? null
                           : jenisSampah.value,
-                      items: depositAsusController.wasteType.map((wasteType) {
+                      items: depositAsusController.mockWasteTypes.map((
+                        wasteType,
+                      ) {
                         return DropdownMenuItem<String>(
                           value: wasteType.name,
                           alignment: AlignmentDirectional.center,
@@ -149,7 +152,8 @@ class DepositAsusScreen extends StatelessWidget {
                         );
                       }
 
-                      final selectedOption = depositAsusController.wasteType
+                      final selectedOption = depositAsusController
+                          .mockWasteTypes
                           .firstWhere(
                             (option) => option.name == jenisSampah.value,
                           );
@@ -298,7 +302,7 @@ class DepositAsusScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               final selectedOption = depositAsusController
-                                  .wasteType
+                                  .mockWasteTypes
                                   .firstWhere(
                                     (option) =>
                                         option.name == jenisSampah.value,
@@ -321,8 +325,19 @@ class DepositAsusScreen extends StatelessWidget {
                                 wasteTypeId: selectedOption.id,
                               );
 
+                              final leaderboardModel = LeaderboardModel(
+                                id: '',
+                                totalPoin: harga.toInt(),
+                                jumlahPengumpulan: 1,
+                                available: true,
+                                poinSaatIni: harga.toInt(),
+                                userId: userId,
+                                user: User(username: username, role: 'WARGA'),
+                              );
+
                               depositAsusController.postDeposit(
                                 depositAsusModel,
+                                leaderboardModel,
                               );
                             },
                             child: const Text('Kumpulkan'),
