@@ -1,6 +1,7 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 class HistoryDetailPage extends StatelessWidget {
@@ -93,13 +94,15 @@ class HistoryDetailPage extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: REYSizes.spaceBtwItems / 4),
-            Text(
-              NumberFormat.currency(
-                locale: 'id',
-                symbol: 'Rp',
-                decimalDigits: 2,
-              ).format(poin),
-              style: Theme.of(context).textTheme.labelLarge,
+            Row(
+              children: [
+                const Icon(Iconsax.coin_1, size: REYSizes.iconSm),
+                const SizedBox(width: REYSizes.sm / 2),
+                Text(
+                  "$poin Poin",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
             ),
 
             // Status

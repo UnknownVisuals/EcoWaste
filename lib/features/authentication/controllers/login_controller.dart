@@ -49,6 +49,7 @@ class LoginController extends GetxController {
 
       final loginResponse = await httpHelper.postRequest(
         'auth/login',
+        'WARGA',
         loginModel.toJson(),
       );
 

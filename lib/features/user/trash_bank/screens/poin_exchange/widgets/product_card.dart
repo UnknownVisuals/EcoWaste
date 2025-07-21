@@ -1,4 +1,3 @@
-import 'package:eco_waste/common/styles/shadow_styles.dart';
 import 'package:eco_waste/common/widgets/rounded_container.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
@@ -6,18 +5,20 @@ import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class REYProductCard extends StatelessWidget {
+class ProductCard extends StatelessWidget {
   final String name;
   final String price;
   final String imageUrl;
   final VoidCallback? onTap;
+  final VoidCallback? onAddToCart;
 
-  const REYProductCard({
+  const ProductCard({
     super.key,
     required this.name,
     required this.price,
     required this.imageUrl,
     this.onTap,
+    this.onAddToCart,
   });
 
   @override
@@ -30,7 +31,6 @@ class REYProductCard extends StatelessWidget {
         width: 180,
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
-          boxShadow: [REYShadowStyles.productCardShadow],
           borderRadius: BorderRadius.circular(REYSizes.productImageRadius),
           color: dark ? REYColors.darkerGrey : REYColors.white,
         ),
@@ -39,17 +39,13 @@ class REYProductCard extends StatelessWidget {
             // Product Image
             REYRoundedContainer(
               height: 180,
-              padding: const EdgeInsets.all(1),
-              backgroundColor: dark ? REYColors.dark : REYColors.light,
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      REYSizes.productImageRadius,
-                    ),
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
-                  ),
-                ],
+              padding: const EdgeInsets.all(REYSizes.sm),
+              backgroundColor: dark ? REYColors.darkerGrey : REYColors.white,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  REYSizes.productImageRadius,
+                ),
+                child: Image.network(imageUrl, fit: BoxFit.cover),
               ),
             ),
 
@@ -61,37 +57,39 @@ class REYProductCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     textAlign: TextAlign.left,
                   ),
+                  const SizedBox(height: REYSizes.spaceBtwItems / 2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         price,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-
-                      Container(
-                        decoration: BoxDecoration(
-                          color: REYColors.dark,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(REYSizes.cardRadiusMd),
-                            bottomRight: Radius.circular(
-                              REYSizes.productImageRadius,
+                      GestureDetector(
+                        onTap: onAddToCart,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: REYSizes.sm),
+                          padding: const EdgeInsets.all(REYSizes.sm / 2),
+                          decoration: BoxDecoration(
+                            color: REYColors.primary,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(REYSizes.cardRadiusMd),
+                              bottomRight: Radius.circular(
+                                REYSizes.productImageRadius,
+                              ),
                             ),
                           ),
-                        ),
-                        child: SizedBox(
-                          width: REYSizes.iconLg * 1.2,
-                          height: REYSizes.iconLg * 1.2,
-                          child: Center(
-                            child: const Icon(
-                              Iconsax.add,
-                              color: REYColors.white,
-                            ),
+                          child: const SizedBox(
+                            width: REYSizes.iconMd,
+                            height: REYSizes.iconMd,
+                            child: Icon(Iconsax.add, color: REYColors.white),
                           ),
                         ),
                       ),

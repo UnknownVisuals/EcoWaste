@@ -94,13 +94,15 @@ class HistoryCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems / 4),
-                  Text(
-                    NumberFormat.currency(
-                      locale: 'id',
-                      symbol: 'Rp',
-                      decimalDigits: 2,
-                    ).format(poin),
-                    style: Theme.of(context).textTheme.labelLarge,
+                  Row(
+                    children: [
+                      const Icon(Iconsax.coin_1, size: REYSizes.iconSm),
+                      const SizedBox(width: REYSizes.sm / 2),
+                      Text(
+                        "$poin Poin",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -15,61 +15,6 @@ class DepositAsusController extends GetxController {
   Rx<File?> selectedImage = Rx<File?>(null);
   Rx<bool> isLoading = false.obs;
 
-  // New state for selected waste type and weight
-  RxString jenisSampah = ''.obs;
-  RxString beratSampah = ''.obs;
-  RxString suhuPembakaran = ''.obs;
-
-  // Setters for state
-  void setWasteType(String value) {
-    jenisSampah.value = value;
-    update();
-  }
-
-  void setBeratSampah(String value) {
-    beratSampah.value = value;
-    update();
-  }
-
-  void setSuhuPembakaran(String value) {
-    suhuPembakaran.value = value;
-    update();
-  }
-
-  // Submit deposit logic
-  void submitDeposit({
-    required String username,
-    required String userId,
-    required String desaId,
-  }) {
-    if (jenisSampah.value.isEmpty || beratSampah.value.isEmpty) {
-      REYLoaders.errorSnackBar(
-        title: "Data tidak lengkap",
-        message: "Pilih jenis sampah dan masukkan berat sampah.",
-      );
-      return;
-    }
-    final selectedOption = wasteType.firstWhere(
-      (option) => option.name == jenisSampah.value,
-    );
-    final berat = double.tryParse(beratSampah.value) ?? 0;
-    final harga = selectedOption.pricePerKg * berat;
-    final depositAsusModel = DepositAsusModel(
-      username: username,
-      desaId: desaId,
-      berat: berat,
-      jenisSampah: jenisSampah.value,
-      poin: harga,
-      waktu: DateTime.now(),
-      rt: '00',
-      rw: '00',
-      userId: userId,
-      available: true,
-      wasteTypeId: selectedOption.id,
-    );
-    postDeposit(depositAsusModel);
-  }
-
   // POST Deposit Asus
   Future<void> postDeposit(DepositAsusModel depositAsusModel) async {
     isLoading.value = true;
@@ -77,6 +22,7 @@ class DepositAsusController extends GetxController {
     try {
       final response = await httpHelper.postRequest(
         'pengumpulan-sampah',
+        'ADMIN',
         depositAsusModel.toJson(),
       );
 

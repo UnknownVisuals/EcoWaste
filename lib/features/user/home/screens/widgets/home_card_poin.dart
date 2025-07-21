@@ -1,13 +1,12 @@
 import 'package:eco_waste/common/widgets/icon_button.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit_asus/deposit_asus.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/poin_exchange.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/product_page.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 
 class HomeCardPoin extends StatelessWidget {
   const HomeCardPoin({
@@ -50,11 +49,7 @@ class HomeCardPoin extends StatelessWidget {
                     ).textTheme.titleMedium!.copyWith(color: REYColors.white),
                   ),
                   Text(
-                    NumberFormat.currency(
-                      locale: 'id',
-                      symbol: 'Rp',
-                      decimalDigits: 2,
-                    ).format(poin),
+                    poin.toString(),
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: REYColors.white,
                     ),
@@ -96,7 +91,7 @@ class HomeCardPoin extends StatelessWidget {
                   REYIconButton(
                     icon: Iconsax.bitcoin_convert,
                     title: 'Tukar\nPoin',
-                    onPressed: () => Get.to(const PoinExchangeScreen()),
+                    onPressed: () => Get.to(const ProductPageScreen()),
                   ),
                 ],
               ),
