@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 class HistoryDetailPage extends StatelessWidget {
   const HistoryDetailPage({
@@ -112,14 +113,14 @@ class HistoryDetailPage extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {},
-                    child: Text('Batalkan'),
+                    child: Text('cancel'.tr),
                   ),
                 ),
                 const SizedBox(width: REYSizes.spaceBtwItems),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text('Konfirmasi'),
+                    child: Text('confirm'.tr),
                   ),
                 ),
               ],

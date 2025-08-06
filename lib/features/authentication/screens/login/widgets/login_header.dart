@@ -11,7 +11,7 @@ class LoginHeader extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Image(height: 150, image: AssetImage(REYImages.logo)),
           Text(

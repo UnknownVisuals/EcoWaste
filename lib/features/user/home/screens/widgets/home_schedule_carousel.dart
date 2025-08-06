@@ -51,7 +51,7 @@ class HomeScheduleCarousel extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Pengumpulan Sampah',
+                              'wasteCollection'.tr,
                               style: Theme.of(context).textTheme.titleLarge!
                                   .copyWith(color: REYColors.white),
                             ),

@@ -5,9 +5,10 @@ class UserModel {
     required this.username,
     required this.desaId,
     required this.poin,
+    this.role = 'WARGA',
   });
 
-  final String id, email, username, desaId;
+  final String id, email, username, desaId, role;
   late int poin;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +18,7 @@ class UserModel {
       username: json['username'],
       desaId: json['desaId'],
       poin: json['poin'] ?? 0,
+      role: json['role'] ?? 'WARGA',
     );
   }
 
@@ -27,6 +29,7 @@ class UserModel {
       'username': username,
       'desaId': desaId,
       'poin': poin,
+      'role': role,
     };
   }
 }

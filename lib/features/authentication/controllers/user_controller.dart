@@ -10,6 +10,7 @@ class UserController extends GetxController {
     username: '',
     desaId: '',
     poin: 0,
+    role: 'WARGA',
   ).obs;
 
   final GetStorage storage = GetStorage();

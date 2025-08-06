@@ -6,6 +6,7 @@ import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 class DepositCard extends StatelessWidget {
   const DepositCard({
@@ -89,7 +90,7 @@ class DepositCard extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return DepositConfirmationScreen(
-                            title: 'Batalkan',
+                            title: 'cancel'.tr,
                             message: 'Yakin membatalkan setoran sampah?',
                             depositId: id,
                             depositValue: false,
@@ -101,7 +102,7 @@ class DepositCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     child: Text(
-                      "Batalkan",
+                      'cancel'.tr,
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
@@ -112,7 +113,7 @@ class DepositCard extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return DepositConfirmationScreen(
-                            title: 'Konfirmasi',
+                            title: 'confirm'.tr,
                             message: 'Pastikan semua data sudah benar!',
                             depositId: id,
                             depositValue: true,
@@ -124,7 +125,7 @@ class DepositCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     child: Text(
-                      "Konfirmasi",
+                      'confirm'.tr,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: REYColors.textWhite,
                       ),

@@ -1,4 +1,7 @@
 /// This class contains all the App Text in String formats.
+/// Note: This class is being deprecated in favor of the new translation system
+/// located in /utils/translations/app_translations.dart
+/// Use Get.tr() method with translation keys instead of these static strings
 class REYTexts {
   // -- GLOBAL Texts
   static const String and = "and";

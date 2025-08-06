@@ -7,6 +7,7 @@ class LogoutController extends GetxController {
 
   Future<void> logout() async {
     storage.remove('user');
+    storage.remove('userRole');
     storage.write('rememberMe', false);
     Get.offAll(() => const LoginScreen());
   }

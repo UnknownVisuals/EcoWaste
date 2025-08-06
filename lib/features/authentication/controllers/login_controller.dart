@@ -2,6 +2,7 @@ import 'package:eco_waste/features/authentication/controllers/user_controller.da
 import 'package:eco_waste/features/authentication/models/login_model.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/user/navigation_menu.dart';
+import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
@@ -28,24 +29,24 @@ class LoginController extends GetxController {
       final storedUser = storage.read('user');
       if (storedUser != null) {
         userController.userModel.value = UserModel.fromJson(storedUser);
-        Get.off(UserNavigationMenu(userModel: userController.userModel.value));
+        if (userController.userModel.value.role == 'ADMIN') {
+          Get.off(
+            AdminNavigationMenu(userModel: userController.userModel.value),
+          );
+        } else {
+          Get.off(
+            UserNavigationMenu(userModel: userController.userModel.value),
+          );
+        }
       }
     }
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-    required String role,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     isLoading.value = true;
 
     try {
-      final loginModel = LoginModel(
-        email: email,
-        password: password,
-        role: role,
-      );
+      final loginModel = LoginModel(email: email, password: password);
 
       final loginResponse = await httpHelper.postRequest(
         'auth/login',
@@ -55,27 +56,42 @@ class LoginController extends GetxController {
 
       if (loginResponse.statusCode == 200) {
         final responseBody = loginResponse.body;
+        final userRole = responseBody['user']['role'] ?? 'WARGA';
 
         userController.updateUserModel(responseBody['user'], 0);
         await userController.refreshUserPoin(responseBody['user']['id']);
 
         if (rememberMe.value) {
           userController.saveUserToStorage();
+          storage.write(
+            'userRole',
+            userRole,
+          ); // Store user role from API response
         } else {
           userController.removeUserFromStorage();
+          storage.remove('userRole');
         }
 
-        Get.off(UserNavigationMenu(userModel: userController.userModel.value));
+        // Navigate based on role from API response
+        if (userController.userModel.value.role == 'ADMIN') {
+          Get.off(
+            AdminNavigationMenu(userModel: userController.userModel.value),
+          );
+        } else {
+          Get.off(
+            UserNavigationMenu(userModel: userController.userModel.value),
+          );
+        }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'Login Gagal',
-          message: "Kesalahan Identitas",
+          title: 'loginFailed'.tr,
+          message: 'identityError'.tr,
         );
       }
     } catch (e) {
       REYLoaders.errorSnackBar(
-        title: 'Login Gagal',
-        message: 'Gagal memproses login: ${e.toString()}',
+        title: 'loginFailed'.tr,
+        message: '${'failedToProcess'.tr}: ${e.toString()}',
       );
     } finally {
       isLoading.value = false;

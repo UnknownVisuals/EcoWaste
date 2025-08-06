@@ -4,9 +4,11 @@ import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/common/widgets/settings_menu_tile.dart';
 import 'package:eco_waste/common/widgets/user_profile_tile.dart';
 import 'package:eco_waste/controllers/theme_controller.dart';
+import 'package:eco_waste/controllers/language_controller.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/authentication/screens/logout/logout.dart';
 import 'package:eco_waste/features/user/personalization/screens/settings/address.dart';
+import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/deposit_only.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/history/history.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -23,6 +25,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find();
+    final LanguageController languageController = Get.find();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -36,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
                   REYAppBar(
                     showBackArrow: false,
                     title: Text(
-                      'Akun',
+                      'account'.tr,
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(color: REYColors.white),
                     ),
@@ -59,15 +62,27 @@ class SettingsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   // Account Settings
-                  const REYSectionHeading(
-                    title: 'Pengaturan Akun',
+                  REYSectionHeading(
+                    title: 'accountSettings'.tr,
                     showActionButton: false,
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems),
                   REYSettingsMenuTile(
+                    icon: Iconsax.user,
+                    title: 'profile'.tr,
+                    subTitle: 'profileSubtitle'.tr,
+                    onTap: () => Get.to(
+                      ProfileScreen(
+                        username: userModel.username,
+                        email: userModel.email,
+                        desaId: userModel.desaId,
+                      ),
+                    ),
+                  ),
+                  REYSettingsMenuTile(
                     icon: Iconsax.receipt,
-                    title: 'Riwayat',
-                    subTitle: 'Lihat riwayat setor sampah',
+                    title: 'history'.tr,
+                    subTitle: 'historySubtitle'.tr,
                     onTap: () => Get.to(
                       HistoryScreen(
                         userId: userModel.id,
@@ -77,8 +92,8 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.check,
-                    title: 'Konfirmasi',
-                    subTitle: 'Konfirmasi setor sampah',
+                    title: 'confirmation'.tr,
+                    subTitle: 'confirmationSubtitle'.tr,
                     onTap: () => Get.to(
                       DepositOnly(
                         userId: userModel.id,
@@ -88,16 +103,16 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.location,
-                    title: 'Alamat Setor',
-                    subTitle: 'Lihat alamat tempat setor sampah',
+                    title: 'address'.tr,
+                    subTitle: 'addressSubtitle'.tr,
                     onTap: () =>
                         Get.to(AddressScreen(desaId: userModel.desaId)),
                   ),
 
                   // App Settings
                   const SizedBox(height: REYSizes.spaceBtwSections),
-                  const REYSectionHeading(
-                    title: 'Pengaturan Aplikasi',
+                  REYSectionHeading(
+                    title: 'appSettings'.tr,
                     showActionButton: false,
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems),
@@ -106,12 +121,31 @@ class SettingsScreen extends StatelessWidget {
 
                     return REYSettingsMenuTile(
                       icon: Iconsax.moon,
-                      title: 'Mode Gelap',
+                      title: 'darkMode'.tr,
                       subTitle: 'Sesuaikan tampilan dengan cahaya sekitar',
                       trailing: Switch(
                         value: isDark,
                         onChanged: (value) {
                           themeController.toggleTheme(value);
+                        },
+                        activeColor: REYColors.primary,
+                      ),
+                    );
+                  }),
+
+                  Obx(() {
+                    bool isEnglish = languageController.isEnglish;
+
+                    return REYSettingsMenuTile(
+                      icon: Iconsax.language_circle,
+                      title: 'language'.tr,
+                      subTitle: isEnglish ? 'english'.tr : 'indonesian'.tr,
+                      trailing: Switch(
+                        value: isEnglish,
+                        onChanged: (value) {
+                          languageController.changeLanguage(
+                            value ? 'en' : 'id',
+                          );
                         },
                         activeColor: REYColors.primary,
                       ),
@@ -132,7 +166,7 @@ class SettingsScreen extends StatelessWidget {
                           },
                         );
                       },
-                      child: const Text('Logout'),
+                      child: Text('logout'.tr),
                     ),
                   ),
                 ],

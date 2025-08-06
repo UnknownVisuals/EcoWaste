@@ -23,6 +23,7 @@ class UserNavigationMenu extends StatelessWidget {
         username: userModel.username,
         desaId: userModel.desaId,
         poin: userModel.poin,
+        role: userModel.role,
       ),
     );
 
@@ -42,11 +43,11 @@ class UserNavigationMenu extends StatelessWidget {
           hoverColor: REYColors.primary.withValues(alpha: 0.2),
           rippleColor: REYColors.primary.withValues(alpha: 0.2),
           tabBackgroundColor: REYColors.primary.withValues(alpha: 0.1),
-          tabs: const [
-            GButton(icon: Iconsax.home, text: 'Beranda'),
-            GButton(icon: Iconsax.award, text: 'Peringkat'),
-            GButton(icon: Iconsax.global, text: 'Berita'),
-            GButton(icon: Iconsax.user, text: 'Profil'),
+          tabs: [
+            GButton(icon: Iconsax.home, text: 'home'.tr),
+            GButton(icon: Iconsax.award, text: 'leaderboard'.tr),
+            GButton(icon: Iconsax.global, text: 'news'.tr),
+            GButton(icon: Iconsax.user, text: 'profile'.tr),
           ],
         ),
       ),

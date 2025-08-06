@@ -1,10 +1,13 @@
 import 'package:eco_waste/controllers/theme_controller.dart';
+import 'package:eco_waste/controllers/language_controller.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:eco_waste/features/user/navigation_menu.dart';
+import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/theme/theme.dart';
+import 'package:eco_waste/utils/translations/app_translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -14,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(ThemeController());
+  Get.put(LanguageController());
   await dotenv.load(fileName: ".env");
   await GetStorage.init();
   final GetStorage storage = GetStorage();
@@ -44,6 +48,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find();
+    final LanguageController languageController = Get.find();
 
     return Obx(
       () => GetMaterialApp(
@@ -51,14 +56,28 @@ class App extends StatelessWidget {
         themeMode: themeController.theme,
         theme: REYAppTheme.lightTheme,
         darkTheme: REYAppTheme.darkTheme,
+        translations: AppTranslations(),
+        locale: languageController.currentLocale.value,
+        fallbackLocale: const Locale(
+          'id',
+          'ID',
+        ), // Default fallback to Indonesian
         home: seenOnboarding
             ? (rememberMe && storedUser != null
-                  ? UserNavigationMenu(
-                      userModel: UserModel.fromJson(storedUser!),
-                    )
+                  ? _getNavigationMenu(storedUser!)
                   : const LoginScreen())
             : const OnBoardingScreen(),
       ),
     );
+  }
+
+  Widget _getNavigationMenu(Map<String, dynamic> storedUser) {
+    final userModel = UserModel.fromJson(storedUser);
+
+    if (userModel.role == 'ADMIN') {
+      return AdminNavigationMenu(userModel: userModel);
+    } else {
+      return UserNavigationMenu(userModel: userModel);
+    }
   }
 }

@@ -3,7 +3,6 @@ import 'package:eco_waste/features/authentication/screens/password_config/forget
 import 'package:eco_waste/features/authentication/screens/signup/signup.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,9 +30,9 @@ class LoginForm extends StatelessWidget {
               // Email
               TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.direct_right),
-                  labelText: REYTexts.email,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.direct_right),
+                  labelText: 'email'.tr,
                 ),
                 validator: (value) => REYValidator.validateEmail(value),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -46,7 +45,7 @@ class LoginForm extends StatelessWidget {
                 obscureText: loginController.obscurePassword.value,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Iconsax.password_check),
-                  labelText: REYTexts.password,
+                  labelText: 'password'.tr,
                   suffixIcon: IconButton(
                     icon: Icon(
                       loginController.obscurePassword.value
@@ -72,23 +71,23 @@ class LoginForm extends StatelessWidget {
                         value: loginController.rememberMe.value,
                         onChanged: loginController.toggleRememberMe,
                       ),
-                      const Text(REYTexts.rememberMe),
+                      Text('rememberMe'.tr),
                     ],
                   ),
 
                   // Forgot Password
                   TextButton(
                     onPressed: () => Get.to(const ForgetPasswordScreen()),
-                    child: const Text(
-                      REYTexts.forgetPassword,
-                      style: TextStyle(color: REYColors.primary),
+                    child: Text(
+                      'forgetPassword'.tr,
+                      style: const TextStyle(color: REYColors.primary),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: REYSizes.spaceBtwSections),
 
-              // Signin Button USER
+              // Signin Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -97,11 +96,10 @@ class LoginForm extends StatelessWidget {
                       loginController.login(
                         email: emailController.text,
                         password: passwordController.text,
-                        role: "WARGA",
                       );
                     }
                   },
-                  child: const Text(REYTexts.signIn),
+                  child: Text('signIn'.tr),
                 ),
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
@@ -111,7 +109,7 @@ class LoginForm extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () => Get.to(const SignupScreen()),
-                  child: const Text(REYTexts.createAccount),
+                  child: Text('createAccount'.tr),
                 ),
               ),
             ],
