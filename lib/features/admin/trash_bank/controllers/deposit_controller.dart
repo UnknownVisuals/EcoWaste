@@ -83,6 +83,37 @@ class DepositController extends GetxController {
     }
   }
 
+  // GET All deposits for a desa (for admin to see all users)
+  Future<void> getDepositByDesa({required String desaId}) async {
+    isLoading.value = true;
+
+    try {
+      final depositResponse = await httpHelper.getRequest(
+        'pengumpulan-sampah/desa/$desaId', // API endpoint for desa deposits
+      );
+
+      if (depositResponse.statusCode == 200) {
+        final jsonData = depositResponse.body;
+
+        deposit.value = (jsonData as List)
+            .map((item) => DepositModel.fromJson(item))
+            .toList();
+      } else {
+        REYLoaders.errorSnackBar(
+          title: "failedToLoadRanking".tr,
+          message: "Error occurred while loading deposits for desa",
+        );
+      }
+    } catch (e) {
+      REYLoaders.errorSnackBar(
+        title: "failedToLoadRanking".tr,
+        message: e.toString(),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   String formatDepositTime(DateTime dateTime) {
     final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm');
     return formatter.format(dateTime);

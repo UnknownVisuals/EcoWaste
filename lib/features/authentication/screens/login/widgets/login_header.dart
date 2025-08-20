@@ -13,12 +13,17 @@ class LoginHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // Logo
           const Image(height: 150, image: AssetImage(REYImages.logo)),
+
+          // Title
           Text(
             REYTexts.loginTitle,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: REYSizes.sm),
+
+          // Subtitle
           Text(
             REYTexts.loginSubTitle,
             style: Theme.of(context).textTheme.bodyMedium,

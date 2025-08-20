@@ -27,9 +27,9 @@ class NewsScreen extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.to(
               ProfileScreen(
-                username: userModel.username,
+                username: userModel.name,
                 email: userModel.email,
-                desaId: userModel.desaId,
+                desaId: userModel.tps3rId ?? '',
               ),
             ),
             child: Image.asset(REYImages.user, width: 40, height: 40),
@@ -49,7 +49,7 @@ class NewsScreen extends StatelessWidget {
                 scrollInfo.metrics.pixels ==
                     scrollInfo.metrics.maxScrollExtent &&
                 controller.hasMore.value) {
-              controller.getNews();
+              controller.getExternalNews();
             }
             return false;
           },

@@ -158,7 +158,7 @@ class DepositAsusScreen extends StatelessWidget {
                             (option) => option.name == jenisSampah.value,
                           );
                       final berat = double.tryParse(beratSampah.value) ?? 0;
-                      final harga = selectedOption.pricePerKg * berat;
+                      final harga = selectedOption.pointsPerKg * berat;
 
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,7 +309,7 @@ class DepositAsusScreen extends StatelessWidget {
                                   );
                               final berat =
                                   double.tryParse(beratSampah.value) ?? 0;
-                              final harga = selectedOption.pricePerKg * berat;
+                              final harga = selectedOption.pointsPerKg * berat;
 
                               final depositAsusModel = DepositAsusModel(
                                 username: username,
@@ -327,12 +327,13 @@ class DepositAsusScreen extends StatelessWidget {
 
                               final leaderboardModel = LeaderboardModel(
                                 id: '',
-                                totalPoin: harga.toInt(),
-                                jumlahPengumpulan: 1,
-                                available: true,
-                                poinSaatIni: harga.toInt(),
+                                name: username,
+                                points: harga.toInt(),
+                                avatar: null,
+                                locationId:
+                                    '', // You may need to get this from user data
+                                rank: 0, // Will be calculated by the API
                                 userId: userId,
-                                user: User(username: username, role: 'WARGA'),
                               );
 
                               depositAsusController.postDeposit(

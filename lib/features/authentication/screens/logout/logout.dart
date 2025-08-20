@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/authentication/controllers/logout_controller.dart';
+import 'package:eco_waste/features/authentication/controllers/auth_controller.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,7 @@ class LogoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LogoutController logoutController = Get.put(LogoutController());
+    final AuthController authController = Get.put(AuthController());
     return AlertDialog(
       title: Center(
         child: Text(
@@ -31,9 +31,28 @@ class LogoutScreen extends StatelessWidget {
             ),
             const SizedBox(width: REYSizes.spaceBtwItems),
             Expanded(
-              child: ElevatedButton(
-                onPressed: () => logoutController.logout(),
-                child: const Center(child: Text('Yes')),
+              child: Obx(
+                () => ElevatedButton(
+                  onPressed: authController.isLoading.value
+                      ? null
+                      : () async {
+                          await authController.logout();
+                          Get.back(); // Close dialog
+                          // Navigation will be handled by AuthController
+                        },
+                  child: authController.isLoading.value
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : const Center(child: Text('Yes')),
+                ),
               ),
             ),
           ],

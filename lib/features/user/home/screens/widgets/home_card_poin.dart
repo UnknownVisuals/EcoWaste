@@ -21,10 +21,10 @@ class HomeCardPoin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserController userController = Get.put(UserController());
-    userController.refreshUserPoin(userId);
+    userController.refreshUserData();
 
     return Obx(() {
-      final poin = userController.userModel.value.poin;
+      final poin = userController.userModel.value.points;
 
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: REYSizes.defaultSpace),

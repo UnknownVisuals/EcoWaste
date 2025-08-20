@@ -26,15 +26,15 @@ class UserHomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 UserHomeAppBar(
-                  username: userModel.username,
+                  username: userModel.name,
                   userId: userModel.id,
-                  desaId: userModel.desaId,
+                  desaId: userModel.tps3rId ?? '',
                 ),
                 const SizedBox(height: REYSizes.spaceBtwSections),
                 HomeCardPoin(
-                  username: userModel.username,
+                  username: userModel.name,
                   userId: userModel.id,
-                  desaId: userModel.desaId,
+                  desaId: userModel.tps3rId ?? '',
                 ),
                 const SizedBox(height: REYSizes.spaceBtwSections * 2),
               ],
@@ -47,7 +47,7 @@ class UserHomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 // Schedule Carousel
-                HomeScheduleCarousel(desaId: userModel.desaId),
+                HomeScheduleCarousel(desaId: userModel.tps3rId ?? ''),
 
                 // History
                 REYSectionHeading(
@@ -56,7 +56,7 @@ class UserHomeScreen extends StatelessWidget {
                   onPressed: () => Get.to(
                     HistoryScreen(
                       userId: userModel.id,
-                      desaId: userModel.desaId,
+                      desaId: userModel.tps3rId ?? '',
                     ),
                   ),
                 ),

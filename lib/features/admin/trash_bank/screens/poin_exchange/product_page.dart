@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/product_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/reward_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/models/reward_model.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/widgets/product_card.dart'; // Ensure this path is correct
 import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/widgets/cart_bottom_sheet.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/product_details.dart';
@@ -15,8 +16,8 @@ class ProductPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FIX: Corrected controller name for consistency
-    final ProductController cartController = Get.put(ProductController());
+    // FIX: Updated to use RewardController instead of ProductController
+    final RewardController rewardController = Get.put(RewardController());
     final products = List.generate(
       10,
       (index) => {
@@ -37,9 +38,9 @@ class ProductPageScreen extends StatelessWidget {
           Obx(
             () => badges.Badge(
               position: badges.BadgePosition.topEnd(top: -4, end: 4),
-              showBadge: cartController.itemCount > 0,
+              showBadge: rewardController.itemCount > 0,
               badgeContent: Text(
-                cartController.itemCount.toString(),
+                rewardController.itemCount.toString(),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: Colors.white,
                   fontSize: 10,
@@ -88,7 +89,21 @@ class ProductPageScreen extends StatelessWidget {
                 ),
               ),
               onAddToCart: () {
-                cartController.addToCart(product);
+                // Create RewardModel from product data
+                final reward = RewardModel(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  name: product['name']!,
+                  pointsRequired:
+                      10000 +
+                      index *
+                          5000, // Extract numeric value from formatted price
+                  description: 'Sample product description',
+                  imageUrl: product['imageUrl'],
+                  category: 'General',
+                  stock: 10,
+                  isActive: true,
+                );
+                rewardController.addToCart(reward);
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,

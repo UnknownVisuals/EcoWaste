@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 class LanguageController extends GetxController {
   final GetStorage storage = GetStorage();
 
-  // Observable for current language (default to Indonesian)
   final Rx<Locale> currentLocale = const Locale('id', 'ID').obs;
 
   @override
@@ -15,8 +14,7 @@ class LanguageController extends GetxController {
   }
 
   void _loadSavedLanguage() {
-    final savedLanguage =
-        storage.read('language') ?? 'id'; // Default to Indonesian
+    final savedLanguage = storage.read('language') ?? 'id';
     if (savedLanguage == 'id') {
       currentLocale.value = const Locale('id', 'ID');
     } else {

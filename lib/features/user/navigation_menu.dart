@@ -20,10 +20,12 @@ class UserNavigationMenu extends StatelessWidget {
       () => UserModel(
         id: userModel.id,
         email: userModel.email,
-        username: userModel.username,
-        desaId: userModel.desaId,
-        poin: userModel.poin,
         role: userModel.role,
+        name: userModel.name,
+        points: userModel.points,
+        locationId: userModel.locationId,
+        avatar: userModel.avatar,
+        tps3rId: userModel.tps3rId,
       ),
     );
 

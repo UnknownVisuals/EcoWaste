@@ -1,5 +1,5 @@
 import 'package:eco_waste/common/widgets/icon_button.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/deposit/widgets/deposit_confirmation.dart';
+import 'package:eco_waste/features/admin/trash_bank/screens/deposit/widgets/deposit_confirmation.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';

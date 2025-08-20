@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/authentication/controllers/signup_controller.dart';
+import 'package:eco_waste/features/authentication/controllers/auth_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
@@ -10,7 +10,7 @@ class TermAndConditions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SignupController signupController = Get.put(SignupController());
+    final AuthController authController = Get.put(AuthController());
 
     return Obx(
       () => Row(
@@ -19,8 +19,8 @@ class TermAndConditions extends StatelessWidget {
             width: 24,
             height: 24,
             child: Checkbox(
-              value: signupController.agreeTnC.value,
-              onChanged: signupController.toggleAgreeToC,
+              value: authController.agreeTnC.value,
+              onChanged: authController.toggleAgreeToC,
             ),
           ),
           const SizedBox(width: REYSizes.spaceBtwItems),

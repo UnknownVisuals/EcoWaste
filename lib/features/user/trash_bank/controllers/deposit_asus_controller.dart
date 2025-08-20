@@ -12,55 +12,45 @@ import 'package:image_picker/image_picker.dart';
 class DepositAsusController extends GetxController {
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
 
-  RxList<WasteTypeModel> wasteType = <WasteTypeModel>[].obs;
+  RxList<WasteCategoryModel> wasteType = <WasteCategoryModel>[].obs;
   Rx<File?> selectedImage = Rx<File?>(null);
   Rx<bool> isLoading = false.obs;
 
-  RxList<WasteTypeModel> mockWasteTypes = [
-    WasteTypeModel(
+  RxList<WasteCategoryModel> mockWasteTypes = [
+    WasteCategoryModel(
       id: "WT001",
       name: "Plastik",
+      pointsPerKg: 15,
       description:
           "Botol, gelas, dan wadah plastik lainnya. Pastikan dalam keadaan bersih dan kering sebelum disetor.",
-      pricePerKg: 15.0,
-      recyclable: true,
-      hazardous: false,
     ),
-    WasteTypeModel(
+    WasteCategoryModel(
       id: "WT002",
       name: "Kertas",
+      pointsPerKg: 15,
       description:
           "Kertas HVS, koran, majalah, dan kardus. Tidak termasuk kertas thermal atau yang berlapis plastik/lilin.",
-      pricePerKg: 15.0,
-      recyclable: true,
-      hazardous: false,
     ),
-    WasteTypeModel(
+    WasteCategoryModel(
       id: "WT003",
       name: "Kaca",
+      pointsPerKg: 15,
       description:
           "Botol atau wadah kaca bekas sirup, kecap, atau minuman. Pisahkan berdasarkan warna jika memungkinkan.",
-      pricePerKg: 15.0,
-      recyclable: true,
-      hazardous: false,
     ),
-    WasteTypeModel(
+    WasteCategoryModel(
       id: "WT004",
       name: "Organik",
+      pointsPerKg: 10,
       description:
           "Sisa makanan, daun kering, dan sampah dari kebun yang dapat diolah menjadi kompos.",
-      pricePerKg: 10.0,
-      recyclable: true,
-      hazardous: false,
     ),
-    WasteTypeModel(
+    WasteCategoryModel(
       id: "WT005",
       name: "B3",
+      pointsPerKg: 15,
       description:
           "Bahan Berbahaya dan Beracun seperti baterai bekas, lampu, dan sampah elektronik.",
-      pricePerKg: 15.0,
-      recyclable: false,
-      hazardous: true,
     ),
   ].obs;
 
@@ -74,13 +64,11 @@ class DepositAsusController extends GetxController {
     try {
       final response = await httpHelper.postRequest(
         'pengumpulan-sampah',
-        'ADMIN',
         depositAsusModel.toJson(),
       );
 
       final responseLeaderboard = await httpHelper.postRequest(
         'leaderboard',
-        'ADMIN',
         leaderboardModel.toJson(),
       );
 
@@ -90,7 +78,7 @@ class DepositAsusController extends GetxController {
           message: "Data sampah berhasil disetor",
         );
         final UserController userController = Get.find();
-        await userController.refreshUserPoin(depositAsusModel.userId);
+        await userController.refreshUserData();
       } else {
         REYLoaders.errorSnackBar(
           title: "Gagal menyetor sampah",
@@ -118,7 +106,7 @@ class DepositAsusController extends GetxController {
         final jsonData = wasteTypeResponse.body;
 
         wasteType.value = (jsonData as List)
-            .map((item) => WasteTypeModel.fromJson(item))
+            .map((item) => WasteCategoryModel.fromJson(item))
             .toList();
       } else {
         REYLoaders.errorSnackBar(

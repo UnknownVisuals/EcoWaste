@@ -1,23 +1,22 @@
 import 'package:eco_waste/common/widgets/section_heading.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/product_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/reward_controller.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 
 class CartBottomSheet extends StatelessWidget {
   const CartBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ProductController cartController = Get.find<ProductController>();
+    final RewardController cartController = Get.find<RewardController>();
 
     return Container(
       padding: const EdgeInsets.all(REYSizes.defaultSpace),
       child: Obx(() {
-        if (cartController.items.isEmpty) {
+        if (cartController.cartItems.isEmpty) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,9 +65,9 @@ class CartBottomSheet extends StatelessWidget {
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: cartController.items.length,
+                itemCount: cartController.cartItems.length,
                 itemBuilder: (context, index) {
-                  final item = cartController.items[index];
+                  final item = cartController.cartItems[index];
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: ClipRRect(
@@ -76,18 +75,18 @@ class CartBottomSheet extends StatelessWidget {
                         REYSizes.cardRadiusMd,
                       ),
                       child: Image.network(
-                        item['imageUrl'] ?? '',
+                        item.imageUrl ?? '',
                         width: 48,
                         height: 48,
                         fit: BoxFit.cover,
                       ),
                     ),
                     title: Text(
-                      item['name'] ?? '',
+                      item.name,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     subtitle: Text(
-                      item['price'] ?? '',
+                      '${item.pointsRequired} Points',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     trailing: IconButton(
@@ -121,15 +120,11 @@ class CartBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'totalPriceCart'.tr,
+                  'Total Points:',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
-                  NumberFormat.currency(
-                    locale: 'id',
-                    symbol: 'Rp',
-                    decimalDigits: 2,
-                  ).format(cartController.totalPrice),
+                  '${cartController.totalPointsRequired} Points',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],

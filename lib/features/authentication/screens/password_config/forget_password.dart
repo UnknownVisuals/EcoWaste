@@ -1,4 +1,5 @@
-import 'package:eco_waste/features/authentication/screens/password_config/reset_password.dart';
+import 'package:eco_waste/features/authentication/controllers/password_controller.dart';
+import 'package:eco_waste/features/authentication/utils/auth_validators.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -10,44 +11,75 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PasswordController passwordController = Get.put(PasswordController());
+    final TextEditingController emailController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(REYSizes.defaultSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Headings
-              Text(
-                REYTexts.forgetPasswordTitle,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: REYSizes.spaceBtwItems),
-              Text(
-                REYTexts.forgetPasswordSubTitle,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: REYSizes.spaceBtwSections * 2),
+          child: Obx(
+            () => Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Headings
+                  Text(
+                    REYTexts.forgetPasswordTitle,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: REYSizes.spaceBtwItems),
+                  Text(
+                    REYTexts.forgetPasswordSubTitle,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: REYSizes.spaceBtwSections * 2),
 
-              // TextFields
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: REYTexts.email,
-                  prefixIcon: Icon(Iconsax.direct_right),
-                ),
-              ),
-              const SizedBox(height: REYSizes.spaceBtwSections),
+                  // Email TextField
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: REYTexts.email,
+                      prefixIcon: Icon(Iconsax.direct_right),
+                    ),
+                    validator: (value) => AuthValidators.validateEmail(value),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  const SizedBox(height: REYSizes.spaceBtwSections),
 
-              // Submit Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.off(const ResetPasswordScreen()),
-                  child: const Text(REYTexts.submit),
-                ),
+                  // Submit Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: passwordController.isLoading.value
+                          ? null
+                          : () {
+                              if (formKey.currentState?.validate() ?? false) {
+                                passwordController.forgotPassword(
+                                  email: emailController.text.trim(),
+                                );
+                              }
+                            },
+                      child: passwordController.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : const Text(REYTexts.submit),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

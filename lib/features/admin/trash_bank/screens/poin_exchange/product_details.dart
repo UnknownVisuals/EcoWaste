@@ -1,7 +1,8 @@
 import 'package:badges/badges.dart' as badges; // <-- Import the badges package
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/widgets/cart_bottom_sheet.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/product_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/reward_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/models/reward_model.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductController cartController = Get.find<ProductController>();
+    final RewardController cartController = Get.find<RewardController>();
 
     return Scaffold(
       appBar: REYAppBar(
@@ -89,11 +90,15 @@ class ProductDetailsPage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                cartController.addToCart({
-                  'name': name,
-                  'price': price,
-                  'imageUrl': imageUrl,
-                });
+                final reward = RewardModel(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  name: name,
+                  pointsRequired:
+                      int.tryParse(price.replaceAll(RegExp(r'[^0-9]'), '')) ??
+                      0,
+                  imageUrl: imageUrl,
+                );
+                cartController.addToCart(reward);
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,

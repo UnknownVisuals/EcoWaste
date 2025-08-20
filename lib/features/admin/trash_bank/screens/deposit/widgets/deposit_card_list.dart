@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/admin/trash_bank/controllers/admin_waste_transaction_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/widgets/deposit_card.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -11,24 +11,29 @@ class DepositCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DepositController controller = Get.put(DepositController());
-    controller.getDeposit(userId: userId);
+    final AdminWasteTransactionController controller = Get.put(
+      AdminWasteTransactionController(),
+    );
 
     return Obx(
       () => Column(
         spacing: REYSizes.spaceBtwItems / 2,
-        children: controller.deposit.map((deposit) {
+        children: controller.pendingTransactions.map((transaction) {
           return DepositCard(
-            id: deposit.id,
-            desaId: deposit.desaId,
-            berat: deposit.berat,
-            jenisSampah: deposit.jenisSampah,
-            poin: deposit.poin,
-            waktu: deposit.waktu,
-            rt: deposit.rt,
-            rw: deposit.rw,
-            userId: deposit.userId,
-            available: deposit.available,
+            id: transaction.id,
+            desaId: transaction.tps3rId,
+            berat: transaction.totalWeight.toString(),
+            jenisSampah: transaction.items.isNotEmpty
+                ? transaction.items.first.categoryId
+                : '',
+            poin: transaction.totalPoints,
+            waktu: transaction.createdAt != null
+                ? DateTime.tryParse(transaction.createdAt!) ?? DateTime.now()
+                : DateTime.now(),
+            rt: '',
+            rw: '',
+            userId: transaction.userId,
+            available: transaction.status == 'PENDING',
           );
         }).toList(),
       ),

@@ -32,9 +32,9 @@ class LeaderboardScreen extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.to(
               ProfileScreen(
-                username: userModel.username,
+                username: userModel.name,
                 email: userModel.email,
-                desaId: userModel.desaId,
+                desaId: userModel.tps3rId ?? '',
               ),
             ),
             child: Image.asset(REYImages.user, width: 40, height: 40),
@@ -58,29 +58,30 @@ class LeaderboardScreen extends StatelessWidget {
             child: Column(
               children: [
                 Column(
-                  children: leaderboardController.leaderboard.asMap().entries.map((
-                    entry,
-                  ) {
-                    var item = entry.value;
-                    int index = entry.key;
-                    Color? color;
+                  children: leaderboardController.leaderboard
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                        var item = entry.value;
+                        int index = entry.key;
+                        Color? color;
 
-                    if (index == 0) {
-                      color = REYColors.firstPodium;
-                    } else if (index == 1) {
-                      color = REYColors.secondPodium;
-                    } else if (index == 2) {
-                      color = REYColors.thirdPodium;
-                    }
+                        if (index == 0) {
+                          color = REYColors.firstPodium;
+                        } else if (index == 1) {
+                          color = REYColors.secondPodium;
+                        } else if (index == 2) {
+                          color = REYColors.thirdPodium;
+                        }
 
-                    return LeaderboardCard(
-                      username: item.user.username,
-                      jumlahPengumpulan:
-                          '${item.jumlahPengumpulan.toString().padLeft(2, '0')} kali pengumpulan',
-                      totalPoin: item.totalPoin.toString(),
-                      color: color,
-                    );
-                  }).toList(),
+                        return LeaderboardCard(
+                          username: item.name,
+                          jumlahPengumpulan: 'Rank #${item.rank}',
+                          totalPoin: item.points.toString(),
+                          color: color,
+                        );
+                      })
+                      .toList(),
                 ),
               ],
             ),

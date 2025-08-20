@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/waste_transaction_controller.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,16 +8,18 @@ class DepositConfirmationScreen extends StatelessWidget {
     super.key,
     required this.title,
     required this.message,
-    required this.depositId,
-    required this.depositValue,
+    required this.transactionId,
+    required this.shouldProcess,
   });
 
-  final String title, message, depositId;
-  final bool depositValue;
+  final String title, message, transactionId;
+  final bool shouldProcess;
 
   @override
   Widget build(BuildContext context) {
-    final DepositController depositController = Get.put(DepositController());
+    final WasteTransactionController transactionController = Get.put(
+      WasteTransactionController(),
+    );
 
     return AlertDialog(
       title: Center(
@@ -40,10 +42,9 @@ class DepositConfirmationScreen extends StatelessWidget {
             const SizedBox(width: REYSizes.spaceBtwItems),
             Expanded(
               child: ElevatedButton(
-                onPressed: () => depositController.confirmDeposit(
-                  depositId: depositId,
-                  depositValue: depositValue,
-                ),
+                onPressed: () => shouldProcess
+                    ? transactionController.processTransaction(transactionId)
+                    : transactionController.cancelTransaction(transactionId),
                 child: const Center(child: Text('Iya')),
               ),
             ),

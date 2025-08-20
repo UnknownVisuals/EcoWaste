@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart' as badges; // <-- Import the badges package
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/widgets/cart_bottom_sheet.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/product_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/reward_controller.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +21,7 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductController cartController = Get.find<ProductController>();
+    final RewardController rewardController = Get.find<RewardController>();
 
     return Scaffold(
       appBar: REYAppBar(
@@ -31,9 +31,9 @@ class ProductDetailsPage extends StatelessWidget {
           Obx(
             () => badges.Badge(
               position: badges.BadgePosition.topEnd(top: -4, end: 4),
-              showBadge: cartController.itemCount > 0,
+              showBadge: rewardController.itemCount > 0,
               badgeContent: Text(
-                cartController.itemCount.toString(),
+                rewardController.itemCount.toString(),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: Colors.white,
                   fontSize: 10,
@@ -89,16 +89,18 @@ class ProductDetailsPage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                cartController.addToCart({
-                  'name': name,
-                  'price': price,
-                  'imageUrl': imageUrl,
-                });
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (_) => const CartBottomSheet(),
+                // Find reward by name and add to cart
+                final reward = rewardController.rewards.firstWhereOrNull(
+                  (r) => r.name == name,
                 );
+                if (reward != null) {
+                  rewardController.addToCart(reward);
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => const CartBottomSheet(),
+                  );
+                }
               },
               child: const Text('Tambah ke Keranjang'),
             ),

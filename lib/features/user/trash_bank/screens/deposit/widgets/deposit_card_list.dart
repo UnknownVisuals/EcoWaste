@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/waste_transaction_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/widgets/deposit_card.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -11,24 +11,33 @@ class DepositCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DepositController controller = Get.put(DepositController());
-    controller.getDeposit(userId: userId);
+    final WasteTransactionController controller = Get.put(
+      WasteTransactionController(),
+    );
+    controller.getTransactions(userId: userId);
 
     return Obx(
       () => Column(
         spacing: REYSizes.spaceBtwItems / 2,
-        children: controller.deposit.map((deposit) {
+        children: controller.transactions.map((transaction) {
           return DepositCard(
-            id: deposit.id,
-            desaId: deposit.desaId,
-            berat: deposit.berat,
-            jenisSampah: deposit.jenisSampah,
-            poin: deposit.poin,
-            waktu: deposit.waktu,
-            rt: deposit.rt,
-            rw: deposit.rw,
-            userId: deposit.userId,
-            available: deposit.available,
+            id: transaction.id,
+            desaId: '', // Map from TPS3R if needed
+            berat: transaction.totalWeight.toString(),
+            jenisSampah: transaction.items.isNotEmpty
+                ? controller
+                          .getCategoryById(transaction.items.first.categoryId)
+                          ?.name ??
+                      'Unknown'
+                : 'No items',
+            poin: transaction.totalPoints,
+            waktu: transaction.createdAt != null
+                ? DateTime.tryParse(transaction.createdAt!) ?? DateTime.now()
+                : DateTime.now(),
+            rt: '', // Map from user or TPS3R if needed
+            rw: '', // Map from user or TPS3R if needed
+            userId: transaction.userId,
+            available: transaction.status == 'processed',
           );
         }).toList(),
       ),

@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/waste_transaction_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/history/widgets/history_card.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
@@ -12,8 +12,10 @@ class HistoryCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DepositController controller = Get.put(DepositController());
-    controller.getDeposit(userId: userId);
+    final WasteTransactionController controller = Get.put(
+      WasteTransactionController(),
+    );
+    controller.getTransactions(userId: userId);
 
     return Obx(
       () => controller.isLoading.value
@@ -24,17 +26,28 @@ class HistoryCardList extends StatelessWidget {
             )
           : Column(
               spacing: REYSizes.spaceBtwItems / 2,
-              children: controller.deposit.map((deposit) {
+              children: controller.transactions.map((transaction) {
                 return HistoryCard(
-                  desaId: deposit.desaId,
-                  berat: deposit.berat,
-                  jenisSampah: deposit.jenisSampah,
-                  poin: deposit.poin,
-                  waktu: deposit.waktu,
-                  rt: deposit.rt,
-                  rw: deposit.rw,
-                  userId: deposit.userId,
-                  available: deposit.available,
+                  desaId: '', // Will need to map from TPS3R
+                  berat: transaction.totalWeight.toString(),
+                  jenisSampah: transaction.items.isNotEmpty
+                      ? controller
+                                .getCategoryById(
+                                  transaction.items.first.categoryId,
+                                )
+                                ?.name ??
+                            'Unknown'
+                      : 'No items',
+                  poin: transaction.totalPoints,
+                  waktu: transaction.createdAt != null
+                      ? DateTime.tryParse(transaction.createdAt!) ??
+                            DateTime.now()
+                      : DateTime.now(),
+                  rt: '', // Will need to map from user or TPS3R
+                  rw: '', // Will need to map from user or TPS3R
+                  userId: transaction.userId,
+                  available: transaction.status == 'processed',
+                  deposit: transaction, // Pass the transaction object
                 );
               }).toList(),
             ),

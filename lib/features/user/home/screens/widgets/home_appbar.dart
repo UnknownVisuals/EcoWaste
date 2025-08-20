@@ -1,6 +1,6 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/common/widgets/notification_menu_icon.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/deposit_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/waste_transaction_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/deposit_only.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
@@ -19,11 +19,14 @@ class UserHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DepositController controller = Get.put(DepositController());
+    final WasteTransactionController controller = Get.put(
+      WasteTransactionController(),
+    );
 
-    int availableCount = controller.deposit
+    int availableCount = controller.transactions
         .where(
-          (deposit) => deposit.available == false && deposit.userId == userId,
+          (transaction) =>
+              transaction.status == 'pending' && transaction.userId == userId,
         )
         .length;
 

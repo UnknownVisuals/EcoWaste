@@ -92,8 +92,8 @@ class DepositCard extends StatelessWidget {
                           return DepositConfirmationScreen(
                             title: 'cancel'.tr,
                             message: 'Yakin membatalkan setoran sampah?',
-                            depositId: id,
-                            depositValue: false,
+                            transactionId: id,
+                            shouldProcess: false,
                           );
                         },
                       );
@@ -115,8 +115,8 @@ class DepositCard extends StatelessWidget {
                           return DepositConfirmationScreen(
                             title: 'confirm'.tr,
                             message: 'Pastikan semua data sudah benar!',
-                            depositId: id,
-                            depositValue: true,
+                            transactionId: id,
+                            shouldProcess: true,
                           );
                         },
                       );

@@ -193,6 +193,9 @@ class AppTranslations extends Translations {
       // Common UI text
       'viewReport': 'View Report',
       'defaultViewAll': 'View all',
+      'balance': 'Balance',
+      'noHistoryFound': 'No history found',
+      'allUsersHistory': 'All Users History',
     },
     'id_ID': {
       // Global Texts
@@ -384,6 +387,9 @@ class AppTranslations extends Translations {
       // Common UI text
       'viewReport': 'Lihat Laporan',
       'defaultViewAll': 'Lihat semua',
+      'balance': 'Saldo',
+      'noHistoryFound': 'Tidak ada riwayat ditemukan',
+      'allUsersHistory': 'Riwayat Semua Pengguna',
     },
   };
 }

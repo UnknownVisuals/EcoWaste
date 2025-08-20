@@ -1,12 +1,7 @@
 import 'package:eco_waste/common/styles/spacing_styles.dart';
-import 'package:eco_waste/common/widgets/form_divider.dart';
-import 'package:eco_waste/common/widgets/social_button.dart';
 import 'package:eco_waste/features/authentication/screens/login/widgets/login_form.dart';
 import 'package:eco_waste/features/authentication/screens/login/widgets/login_header.dart';
-import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -25,11 +20,11 @@ class LoginScreen extends StatelessWidget {
             const LoginForm(),
 
             // Divider
-            REYFormDivider(dividerText: REYTexts.orSignInWith.capitalize!),
-            const SizedBox(height: REYSizes.spaceBtwSections),
+            // REYFormDivider(dividerText: REYTexts.orSignInWith.capitalize!),
+            // const SizedBox(height: REYSizes.spaceBtwSections),
 
             // Signin with Socials
-            const REYSocialButtons(),
+            // const REYSocialButtons(),
           ],
         ),
       ),

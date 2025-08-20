@@ -8,7 +8,6 @@ import 'package:eco_waste/controllers/language_controller.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/authentication/screens/logout/logout.dart';
 import 'package:eco_waste/features/admin/personalization/screens/settings/address.dart';
-import 'package:eco_waste/features/admin/personalization/screens/profile/profile.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/deposit/deposit_only.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/history/history.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -47,9 +46,9 @@ class SettingsScreen extends StatelessWidget {
 
                   // Profile Card
                   REYUserProfileTile(
-                    username: userModel.username,
+                    username: userModel.name,
                     email: userModel.email,
-                    desaId: userModel.desaId,
+                    desaId: userModel.tps3rId ?? '',
                   ),
                   const SizedBox(height: REYSizes.spaceBtwSections),
                 ],
@@ -68,25 +67,13 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems),
                   REYSettingsMenuTile(
-                    icon: Iconsax.user,
-                    title: 'profile'.tr,
-                    subTitle: 'profileSubtitle'.tr,
-                    onTap: () => Get.to(
-                      ProfileScreen(
-                        username: userModel.username,
-                        email: userModel.email,
-                        desaId: userModel.desaId,
-                      ),
-                    ),
-                  ),
-                  REYSettingsMenuTile(
                     icon: Iconsax.receipt,
                     title: 'history'.tr,
                     subTitle: 'historySubtitle'.tr,
                     onTap: () => Get.to(
                       HistoryScreen(
                         userId: userModel.id,
-                        desaId: userModel.desaId,
+                        desaId: userModel.tps3rId ?? '',
                       ),
                     ),
                   ),
@@ -97,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => Get.to(
                       DepositOnly(
                         userId: userModel.id,
-                        desaId: userModel.desaId,
+                        desaId: userModel.tps3rId ?? '',
                       ),
                     ),
                   ),
@@ -106,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
                     title: 'address'.tr,
                     subTitle: 'addressSubtitle'.tr,
                     onTap: () =>
-                        Get.to(AddressScreen(desaId: userModel.desaId)),
+                        Get.to(AddressScreen(desaId: userModel.tps3rId ?? '')),
                   ),
 
                   // App Settings

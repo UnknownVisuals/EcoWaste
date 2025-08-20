@@ -1,25 +1,36 @@
-class WasteTypeModel {
-  WasteTypeModel({
+class WasteCategoryModel {
+  WasteCategoryModel({
     required this.id,
     required this.name,
-    required this.description,
-    required this.pricePerKg,
-    required this.recyclable,
-    required this.hazardous,
+    required this.pointsPerKg,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  final String id, name, description;
-  final double pricePerKg;
-  final bool recyclable, hazardous;
+  final String id, name;
+  final int pointsPerKg;
+  final String? description, createdAt, updatedAt;
 
-  factory WasteTypeModel.fromJson(Map<String, dynamic> json) {
-    return WasteTypeModel(
-      id: json['id'],
-      name: json['name'],
+  factory WasteCategoryModel.fromJson(Map<String, dynamic> json) {
+    return WasteCategoryModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      pointsPerKg: json['pointsPerKg'] ?? 0,
       description: json['description'],
-      pricePerKg: double.parse(json['pricePerKg']),
-      recyclable: json['recyclable'],
-      hazardous: json['hazardous'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'pointsPerKg': pointsPerKg,
+      'description': description,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
   }
 }
