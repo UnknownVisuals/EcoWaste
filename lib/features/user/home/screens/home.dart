@@ -1,20 +1,16 @@
 import 'package:eco_waste/common/widgets/primary_header_container.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
-import 'package:eco_waste/features/authentication/models/user_model.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/history/history.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/history/widgets/history_card_list.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
 import 'package:eco_waste/features/user/home/screens/widgets/home_appbar.dart';
 import 'package:eco_waste/features/user/home/screens/widgets/home_card_poin.dart';
-import 'package:eco_waste/features/user/home/screens/widgets/home_schedule_carousel.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_history_card_list_preview.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserHomeScreen extends StatelessWidget {
-  const UserHomeScreen({super.key, required this.userModel});
-
-  final UserModel userModel;
+  const UserHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +21,9 @@ class UserHomeScreen extends StatelessWidget {
           REYPrimaryHeaderContainer(
             child: Column(
               children: [
-                UserHomeAppBar(
-                  username: userModel.username,
-                  userId: userModel.id,
-                  desaId: userModel.desaId,
-                ),
+                UserHomeAppBar(),
                 const SizedBox(height: REYSizes.spaceBtwSections),
-                HomeCardPoin(
-                  username: userModel.username,
-                  userId: userModel.id,
-                  desaId: userModel.desaId,
-                ),
+                HomeCardPoin(),
                 const SizedBox(height: REYSizes.spaceBtwSections * 2),
               ],
             ),
@@ -47,23 +35,18 @@ class UserHomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 // Schedule Carousel
-                HomeScheduleCarousel(desaId: userModel.desaId),
+                // HomeScheduleCarousel(desaId: user.locationId),
 
                 // History
                 REYSectionHeading(
-                  title: 'Riwayat',
+                  title: 'transactions'.tr,
                   showActionButton: true,
-                  onPressed: () => Get.to(
-                    HistoryScreen(
-                      userId: userModel.id,
-                      desaId: userModel.desaId,
-                    ),
-                  ),
+                  onPressed: () => Get.to(HistoryScreen()),
                 ),
                 SizedBox(
                   height: REYDeviceUtils.getScreenHeight() * 0.5,
                   child: SingleChildScrollView(
-                    child: HistoryCardList(userId: userModel.id),
+                    child: TransactionHistoryCardListPreview(),
                   ),
                 ),
               ],

@@ -1,11 +1,12 @@
 import 'package:eco_waste/controllers/theme_controller.dart';
 import 'package:eco_waste/controllers/language_controller.dart';
-import 'package:eco_waste/features/authentication/models/user_model.dart';
+import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:eco_waste/features/user/navigation_menu.dart';
-import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/utils/constants/text_strings.dart';
+import 'package:eco_waste/utils/http/http_client.dart';
+import 'package:eco_waste/utils/local_storage/storage_utility.dart';
 import 'package:eco_waste/utils/theme/theme.dart';
 import 'package:eco_waste/utils/translations/app_translations.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +17,27 @@ import 'package:get_storage/get_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Get.put(ThemeController());
-  Get.put(LanguageController());
+  // Initialize storage first
   await dotenv.load(fileName: ".env");
   await GetStorage.init();
-  final GetStorage storage = GetStorage();
-  bool seenOnboarding = storage.read('hasSeenOnboarding') ?? false;
-  bool rememberMe = storage.read('rememberMe') ?? false;
-  final storedUser = storage.read('user');
 
-  runApp(
-    App(
-      seenOnboarding: seenOnboarding,
-      rememberMe: rememberMe,
-      storedUser: storedUser,
-    ),
-  );
+  // Initialize other controllers
+  Get.put(ThemeController());
+  Get.put(LanguageController());
+  Get.put(REYHttpHelper());
+
+  // Load session cookie before initializing UserController
+  REYHttpHelper.loadSessionCookie();
+
+  // Initialize UserController after storage is ready
+  Get.put(UserController());
+
+  final storage = REYLocalStorage();
+  final bool seenOnboarding =
+      storage.readData<bool>('hasSeenOnboarding') ?? false;
+  final bool rememberMe = storage.readData<bool>('rememberMe') ?? false;
+
+  runApp(App(seenOnboarding: seenOnboarding, rememberMe: rememberMe));
 }
 
 class App extends StatelessWidget {
@@ -39,11 +45,9 @@ class App extends StatelessWidget {
     super.key,
     required this.seenOnboarding,
     required this.rememberMe,
-    required this.storedUser,
   });
 
   final bool seenOnboarding, rememberMe;
-  final Map<String, dynamic>? storedUser;
 
   @override
   Widget build(BuildContext context) {
@@ -58,26 +62,28 @@ class App extends StatelessWidget {
         darkTheme: REYAppTheme.darkTheme,
         translations: AppTranslations(),
         locale: languageController.currentLocale.value,
-        fallbackLocale: const Locale(
-          'id',
-          'ID',
-        ), // Default fallback to Indonesian
-        home: seenOnboarding
-            ? (rememberMe && storedUser != null
-                  ? _getNavigationMenu(storedUser!)
-                  : const LoginScreen())
-            : const OnBoardingScreen(),
+        fallbackLocale: const Locale('id', 'ID'),
+        home: _determineHomeScreen(),
       ),
     );
   }
 
-  Widget _getNavigationMenu(Map<String, dynamic> storedUser) {
-    final userModel = UserModel.fromJson(storedUser);
-
-    if (userModel.role == 'ADMIN') {
-      return AdminNavigationMenu(userModel: userModel);
-    } else {
-      return UserNavigationMenu(userModel: userModel);
+  Widget _determineHomeScreen() {
+    if (!seenOnboarding) {
+      return const OnBoardingScreen();
     }
+
+    // Check both rememberMe flag and session cookie existence
+    final storage = REYLocalStorage();
+    final sessionCookie = storage.readData<String>('sessionCookie');
+
+    // If remember me is false or no session cookie, go to login
+    if (!rememberMe || sessionCookie == null) {
+      return const LoginScreen();
+    }
+
+    // If remember me is true and we have a session cookie, go to navigation menu
+    // UserController will fetch fresh user data and handle session validation
+    return const UserNavigationMenu();
   }
 }

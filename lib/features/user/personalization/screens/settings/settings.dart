@@ -5,22 +5,19 @@ import 'package:eco_waste/common/widgets/settings_menu_tile.dart';
 import 'package:eco_waste/common/widgets/user_profile_tile.dart';
 import 'package:eco_waste/controllers/theme_controller.dart';
 import 'package:eco_waste/controllers/language_controller.dart';
-import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/authentication/screens/logout/logout.dart';
 import 'package:eco_waste/features/user/personalization/screens/settings/address.dart';
 import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/deposit/deposit_only.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/history/history.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_only.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.userModel});
-
-  final UserModel userModel;
+class UserSettingsScreen extends StatelessWidget {
+  const UserSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +43,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
 
                   // Profile Card
-                  REYUserProfileTile(
-                    username: userModel.username,
-                    email: userModel.email,
-                    desaId: userModel.desaId,
-                  ),
+                  REYUserProfileTile(),
                   const SizedBox(height: REYSizes.spaceBtwSections),
                 ],
               ),
@@ -71,46 +64,29 @@ class SettingsScreen extends StatelessWidget {
                     icon: Iconsax.user,
                     title: 'profile'.tr,
                     subTitle: 'profileSubtitle'.tr,
-                    onTap: () => Get.to(
-                      ProfileScreen(
-                        username: userModel.username,
-                        email: userModel.email,
-                        desaId: userModel.desaId,
-                      ),
-                    ),
+                    onTap: () => Get.to(ProfileScreen()),
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.receipt,
                     title: 'history'.tr,
                     subTitle: 'historySubtitle'.tr,
-                    onTap: () => Get.to(
-                      HistoryScreen(
-                        userId: userModel.id,
-                        desaId: userModel.desaId,
-                      ),
-                    ),
+                    onTap: () => Get.to(HistoryScreen()),
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.check,
                     title: 'confirmation'.tr,
                     subTitle: 'confirmationSubtitle'.tr,
-                    onTap: () => Get.to(
-                      DepositOnly(
-                        userId: userModel.id,
-                        desaId: userModel.desaId,
-                      ),
-                    ),
+                    onTap: () => Get.to(TransactionsOnly()),
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.location,
                     title: 'address'.tr,
                     subTitle: 'addressSubtitle'.tr,
-                    onTap: () =>
-                        Get.to(AddressScreen(desaId: userModel.desaId)),
+                    onTap: () => Get.to(AddressScreen()),
                   ),
+                  const SizedBox(height: REYSizes.spaceBtwSections),
 
                   // App Settings
-                  const SizedBox(height: REYSizes.spaceBtwSections),
                   REYSectionHeading(
                     title: 'appSettings'.tr,
                     showActionButton: false,
@@ -152,7 +128,7 @@ class SettingsScreen extends StatelessWidget {
                     );
                   }),
 
-                  const SizedBox(height: REYSizes.spaceBtwSections * 2),
+                  const SizedBox(height: REYSizes.spaceBtwSections),
 
                   // Logout Button
                   SizedBox(

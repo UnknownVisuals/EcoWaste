@@ -1,7 +1,7 @@
 import 'package:eco_waste/common/widgets/icon_button.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/deposit_asus/deposit_asus.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/poin_exchange/product_page.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/rewards/rewards.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_page.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -9,22 +9,14 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomeCardPoin extends StatelessWidget {
-  const HomeCardPoin({
-    super.key,
-    required this.username,
-    required this.userId,
-    required this.desaId,
-  });
-
-  final String username, userId, desaId;
+  const HomeCardPoin({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final UserController userController = Get.put(UserController());
-    userController.refreshUserPoin(userId);
+    final UserController userController = Get.find<UserController>();
 
     return Obx(() {
-      final poin = userController.userModel.value.poin;
+      final user = userController.userModel.value;
 
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: REYSizes.defaultSpace),
@@ -49,7 +41,7 @@ class HomeCardPoin extends StatelessWidget {
                     ).textTheme.titleMedium!.copyWith(color: REYColors.white),
                   ),
                   Text(
-                    poin.toString(),
+                    user.points.toString(),
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: REYColors.white,
                     ),
@@ -80,10 +72,9 @@ class HomeCardPoin extends StatelessWidget {
                     icon: Iconsax.send_2,
                     title: 'Setor\nSampah',
                     onPressed: () => Get.to(
-                      DepositAsusScreen(
-                        username: username,
-                        userId: userId,
-                        desaId: desaId,
+                      TransactionsScreen(
+                        userId: user.id,
+                        locationId: user.locationId,
                       ),
                     ),
                   ),
@@ -91,7 +82,7 @@ class HomeCardPoin extends StatelessWidget {
                   REYIconButton(
                     icon: Iconsax.bitcoin_convert,
                     title: 'Tukar\nPoin',
-                    onPressed: () => Get.to(const ProductPageScreen()),
+                    onPressed: () => Get.to(const RewardsScreen()),
                   ),
                 ],
               ),

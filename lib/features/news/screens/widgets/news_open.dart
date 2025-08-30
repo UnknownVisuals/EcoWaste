@@ -12,18 +12,18 @@ class NewsOpen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NewsController controller = Get.find<NewsController>();
-    controller.initializeWebViewController(url);
+    final NewsController newsController = Get.find<NewsController>();
+    newsController.initializeWebViewController(url);
 
     return Scaffold(
       appBar: const REYAppBar(title: Text('Berita'), showBackArrow: true),
       body: Obx(() {
-        if (controller.isWebViewLoading.value) {
+        if (newsController.isWebViewLoading.value) {
           return const Center(
             child: CircularProgressIndicator(color: REYColors.primary),
           );
         } else {
-          return WebViewWidget(controller: controller.webViewController!);
+          return WebViewWidget(controller: newsController.webViewController!);
         }
       }),
     );

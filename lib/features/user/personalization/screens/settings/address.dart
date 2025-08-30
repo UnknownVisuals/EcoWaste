@@ -1,5 +1,6 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/schedule_controller.dart';
+import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,18 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AddressScreen extends StatelessWidget {
-  const AddressScreen({super.key, required this.desaId});
-
-  final String desaId;
+  const AddressScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ScheduleController());
-    final schedule = controller.schedule.firstWhere(
-      (schedule) => schedule.desaId == desaId,
+    final UserController userController = Get.put(UserController());
+    final user = userController.userModel.value;
+
+    final LocationsController locationsController = Get.put(
+      LocationsController(),
+    );
+    final location = locationsController.locations.firstWhere(
+      (location) => location.id == user.locationId,
     );
 
     return Scaffold(
@@ -44,7 +48,7 @@ class AddressScreen extends StatelessWidget {
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                '${schedule.desa.nama}, ${schedule.desa.kecamatan}, ${schedule.desa.kabupaten}, ${schedule.desa.provinsi}',
+                '${location.desa}, ${location.kecamatan}, ${location.kabupaten}',
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),

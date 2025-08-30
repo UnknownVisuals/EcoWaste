@@ -42,21 +42,19 @@ class LoginForm extends StatelessWidget {
               // Password
               TextFormField(
                 controller: passwordController,
-                obscureText: loginController.obscurePassword.value,
+                obscureText: loginController.isObscurePassword.value,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Iconsax.password_check),
                   labelText: 'password'.tr,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      loginController.obscurePassword.value
+                      loginController.isObscurePassword.value
                           ? Iconsax.eye_slash
                           : Iconsax.eye,
                     ),
                     onPressed: loginController.toggleObscurePassword,
                   ),
                 ),
-                validator: (value) => REYValidator.validatePassword(value),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: REYSizes.spaceBtwInputFields / 2),
 
@@ -68,7 +66,7 @@ class LoginForm extends StatelessWidget {
                   Row(
                     children: [
                       Checkbox(
-                        value: loginController.rememberMe.value,
+                        value: loginController.isRememberMe.value,
                         onChanged: loginController.toggleRememberMe,
                       ),
                       Text('rememberMe'.tr),

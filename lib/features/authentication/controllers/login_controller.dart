@@ -1,108 +1,79 @@
+// import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/models/login_model.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
 import 'package:eco_waste/features/user/navigation_menu.dart';
-import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
+  // Dependencies
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
   final UserController userController = Get.put(UserController());
-  final GetStorage storage = GetStorage();
 
+  // States variables
+  Rx<bool> isObscurePassword = true.obs;
+  Rx<bool> isRememberMe = false.obs;
   Rx<bool> isLoading = false.obs;
-  Rx<bool> rememberMe = false.obs;
-  Rx<bool> obscurePassword = true.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    Get.put(userController.userModel.value);
-    _loadUserFromStorage();
+  // Toggle password visibility
+  void toggleObscurePassword() {
+    isObscurePassword.value = !isObscurePassword.value;
   }
 
-  void _loadUserFromStorage() {
-    if (storage.read('rememberMe') == true) {
-      final storedUser = storage.read('user');
-      if (storedUser != null) {
-        userController.userModel.value = UserModel.fromJson(storedUser);
-        if (userController.userModel.value.role == 'ADMIN') {
-          Get.off(
-            AdminNavigationMenu(userModel: userController.userModel.value),
-          );
-        } else {
-          Get.off(
-            UserNavigationMenu(userModel: userController.userModel.value),
-          );
-        }
-      }
-    }
+  // Toggle remember me
+  void toggleRememberMe(bool? value) {
+    isRememberMe.value = value ?? false;
   }
 
+  // Login method
   Future<void> login({required String email, required String password}) async {
     isLoading.value = true;
 
     try {
       final loginModel = LoginModel(email: email, password: password);
-
       final loginResponse = await httpHelper.postRequest(
         'auth/login',
-        'WARGA',
         loginModel.toJson(),
       );
 
+      await REYHttpHelper.setSessionCookie(loginResponse);
+
       if (loginResponse.statusCode == 200) {
         final responseBody = loginResponse.body;
-        final userRole = responseBody['user']['role'] ?? 'WARGA';
 
-        userController.updateUserModel(responseBody['user'], 0);
-        await userController.refreshUserPoin(responseBody['user']['id']);
-
-        if (rememberMe.value) {
-          userController.saveUserToStorage();
-          storage.write(
-            'userRole',
-            userRole,
-          ); // Store user role from API response
-        } else {
-          userController.removeUserFromStorage();
-          storage.remove('userRole');
-        }
-
-        // Navigate based on role from API response
-        if (userController.userModel.value.role == 'ADMIN') {
-          Get.off(
-            AdminNavigationMenu(userModel: userController.userModel.value),
+        if (responseBody['status'] == 'success') {
+          // Set user data immediately in controller
+          userController.userModel.value = UserModel.fromJson(
+            responseBody['data'],
           );
+
+          // Set remember me preference - only store this flag, not user data
+          await userController.setRememberMe(isRememberMe.value);
+
+          if (userController.userModel.value.role == 'ADMIN') {
+            // Get.offAll(() => AdminNavigationMenu());
+            Get.offAll(() => UserNavigationMenu());
+          } else {
+            Get.offAll(() => UserNavigationMenu());
+          }
         } else {
-          Get.off(
-            UserNavigationMenu(userModel: userController.userModel.value),
+          REYLoaders.errorSnackBar(
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'loginFailed'.tr,
-          message: 'identityError'.tr,
+          title: loginResponse.body['status'],
+          message: loginResponse.body['message'],
         );
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(
-        title: 'loginFailed'.tr,
-        message: '${'failedToProcess'.tr}: ${e.toString()}',
-      );
+      REYLoaders.errorSnackBar(title: 'Error', message: e.toString());
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void toggleObscurePassword() {
-    obscurePassword.value = !obscurePassword.value;
-  }
-
-  void toggleRememberMe(bool? value) {
-    rememberMe.value = value ?? false;
   }
 }
