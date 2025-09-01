@@ -1,7 +1,7 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_card_list.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_input.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_tutorial_carousel.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class TransactionsScreen extends StatelessWidget {
               onPressed: () => Get.to(HistoryScreen()),
             ),
             const SizedBox(height: REYSizes.spaceBtwItems),
-            TransactionsCardList(),
+            TransactionsInput(userId: userId, locationId: locationId),
           ],
         ),
       ),

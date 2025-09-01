@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
@@ -84,9 +86,9 @@ class TransactionDetailScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(REYSizes.md),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
+                color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(REYSizes.cardRadiusMd),
-                border: Border.all(color: statusColor.withOpacity(0.3)),
+                border: Border.all(color: statusColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -244,30 +246,15 @@ class TransactionDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(REYSizes.sm),
                         border: Border.all(color: REYColors.grey),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(REYSizes.sm),
-                        child:
-                            transaction.photos[index].startsWith('data:image')
-                            ? Container(
-                                color: REYColors.grey.withOpacity(0.3),
-                                child: const Icon(
-                                  Icons.image,
-                                  color: REYColors.grey,
-                                ),
-                              )
-                            : Image.network(
-                                transaction.photos[index],
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: REYColors.grey.withOpacity(0.3),
-                                    child: const Icon(
-                                      Icons.broken_image,
-                                      color: REYColors.grey,
-                                    ),
-                                  );
-                                },
-                              ),
+                      child: GestureDetector(
+                        onTap: () => _showFullScreenImage(
+                          context,
+                          transaction.photos[index],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(REYSizes.sm),
+                          child: _buildImage(transaction.photos[index]),
+                        ),
                       ),
                     );
                   },
@@ -362,7 +349,7 @@ class TransactionDetailScreen extends StatelessWidget {
             border: Border.all(
               color: REYHelperFunctions.isDarkMode(context)
                   ? REYColors.darkerGrey
-                  : REYColors.grey.withOpacity(0.3),
+                  : REYColors.grey.withValues(alpha: 0.3),
             ),
           ),
           child: Column(
@@ -402,5 +389,71 @@ class TransactionDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Show image in full screen dialog
+  void _showFullScreenImage(BuildContext context, String imageData) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black,
+          child: Stack(
+            children: [
+              Center(child: InteractiveViewer(child: _buildImage(imageData))),
+              Positioned(
+                top: 40,
+                right: 20,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Build image widget that handles both base64 and network images
+  Widget _buildImage(String imageData) {
+    if (imageData.startsWith('data:image')) {
+      // Handle base64 images
+      try {
+        // Extract the base64 part from the data URL
+        final base64String = imageData.split(',').last;
+        final Uint8List bytes = base64Decode(base64String);
+
+        return Image.memory(
+          bytes,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: REYColors.grey.withValues(alpha: 0.3),
+              child: const Icon(Icons.broken_image, color: REYColors.grey),
+            );
+          },
+        );
+      } catch (e) {
+        // If base64 decoding fails, show error icon
+        return Container(
+          color: REYColors.grey.withValues(alpha: 0.3),
+          child: const Icon(Icons.broken_image, color: REYColors.grey),
+        );
+      }
+    } else {
+      // Handle network images
+      return Image.network(
+        imageData,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: REYColors.grey.withValues(alpha: 0.3),
+            child: const Icon(Icons.broken_image, color: REYColors.grey),
+          );
+        },
+      );
+    }
   }
 }

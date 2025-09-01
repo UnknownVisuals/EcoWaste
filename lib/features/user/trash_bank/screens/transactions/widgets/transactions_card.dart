@@ -83,8 +83,8 @@ class TransactionCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: dark
-                  ? REYColors.darkGrey.withOpacity(0.1)
-                  : REYColors.grey.withOpacity(0.1),
+                  ? REYColors.darkGrey.withValues(alpha: 0.1)
+                  : REYColors.grey.withValues(alpha: 0.1),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -105,8 +105,8 @@ class TransactionCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: transaction.type == 'PICKUP'
-                        ? REYColors.primary.withOpacity(0.1)
-                        : REYColors.secondary.withOpacity(0.1),
+                        ? REYColors.primary.withValues(alpha: 0.1)
+                        : REYColors.secondary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(REYSizes.sm),
                   ),
                   child: Text(

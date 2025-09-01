@@ -28,18 +28,6 @@ class TransactionController extends GetxController {
     selectedFilter.value = 'ALL';
   }
 
-  // Simple test method to check API connectivity
-  Future<void> testApiConnectivity() async {
-    try {
-      print('Testing API connectivity...');
-      final response = await httpHelper.getRequest('auth/me');
-      print('Auth test response: ${response.statusCode}');
-      print('Auth test body: ${response.body}');
-    } catch (e) {
-      print('Auth test error: $e');
-    }
-  }
-
   // Get single transaction details and update local cache
   Future<TransactionModel?> fetchTransactionDetails(
     String transactionId,
@@ -48,11 +36,6 @@ class TransactionController extends GetxController {
       final response = await httpHelper.getRequest(
         'waste/transactions/$transactionId',
       );
-
-      print(
-        'Transaction Detail API Endpoint: waste/transactions/$transactionId',
-      );
-      print('Transaction Detail API Response: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final responseBody = response.body;
@@ -72,7 +55,6 @@ class TransactionController extends GetxController {
 
           return updatedTransaction;
         } else {
-          print('API Error: ${responseBody['message']}');
           REYLoaders.errorSnackBar(
             title: responseBody['status'] ?? 'Error',
             message:
@@ -80,14 +62,12 @@ class TransactionController extends GetxController {
           );
         }
       } else {
-        print('HTTP Error: ${response.statusCode}');
         REYLoaders.errorSnackBar(
           title: 'HTTP ${response.statusCode}',
           message: 'Failed to fetch transaction details',
         );
       }
     } catch (e) {
-      print('Exception occurred: $e');
       REYLoaders.errorSnackBar(
         title: 'Error',
         message: 'Failed to load transaction details: ${e.toString()}',
@@ -117,16 +97,12 @@ class TransactionController extends GetxController {
 
       final transactionsResponse = await httpHelper.getRequest(endpoint);
 
-      print('Transaction API Endpoint: $endpoint');
-      print('Transaction API Response: ${transactionsResponse.statusCode}');
-
       if (transactionsResponse.statusCode == 200) {
         final responseBody = transactionsResponse.body;
 
         if (responseBody is Map<String, dynamic> &&
             responseBody['status'] == 'success') {
           final List<dynamic> transactionsJson = responseBody['data'] ?? [];
-          print('Number of transactions received: ${transactionsJson.length}');
 
           List<TransactionModel> allTransactions = transactionsJson
               .map(
@@ -143,12 +119,8 @@ class TransactionController extends GetxController {
             transactions.value = allTransactions
                 .where((transaction) => transaction.userId == userId)
                 .toList();
-            print(
-              'Client-side filtered to user $userId: ${transactions.length} transactions',
-            );
           } else {
             transactions.value = allTransactions;
-            print('Transactions loaded: ${transactions.length} items');
           }
 
           // Sort by creation date (newest first)
@@ -156,24 +128,19 @@ class TransactionController extends GetxController {
 
           // Apply current filter
           applyFilter();
-
-          print('Filtered transactions: ${filteredTransactions.length} items');
         } else {
-          print('API Error: ${responseBody['message']}');
           REYLoaders.errorSnackBar(
             title: responseBody['status'] ?? 'Error',
             message: responseBody['message'] ?? 'Failed to load transactions',
           );
         }
       } else {
-        print('HTTP Error: ${transactionsResponse.statusCode}');
         REYLoaders.errorSnackBar(
           title: 'HTTP ${transactionsResponse.statusCode}',
           message: 'Failed to fetch transactions',
         );
       }
     } catch (e) {
-      print('Exception occurred: $e');
       REYLoaders.errorSnackBar(
         title: 'Error',
         message: 'Failed to load transactions: ${e.toString()}',
@@ -200,9 +167,6 @@ class TransactionController extends GetxController {
   }
 
   void applyFilter() {
-    print('🔍 Applying filter: ${selectedFilter.value}');
-    print('📊 Total transactions: ${transactions.length}');
-
     if (selectedFilter.value == 'ALL') {
       filteredTransactions.value = List.from(transactions);
     } else {
@@ -226,9 +190,6 @@ class TransactionController extends GetxController {
         }
       }).toList();
     }
-    print(
-      '🎯 Filter applied: ${selectedFilter.value}, Results: ${filteredTransactions.length}',
-    );
 
     // Print transaction statuses for debugging
     if (transactions.isNotEmpty) {
@@ -237,7 +198,6 @@ class TransactionController extends GetxController {
         final status = transaction.status.toUpperCase();
         statusCounts[status] = (statusCounts[status] ?? 0) + 1;
       }
-      print('📈 Transaction status counts: $statusCounts');
     }
   }
 
