@@ -3,7 +3,7 @@
 /// This class contains all the App Images in String formats.
 class REYImages {
   // -- App Logos
-  static const String logo = "assets/logos/ecowaste.png";
+  static const String logo = "assets/logos/greenapps.png";
 
   // -- Social Logos
   static const String google = "assets/logos/google.png";

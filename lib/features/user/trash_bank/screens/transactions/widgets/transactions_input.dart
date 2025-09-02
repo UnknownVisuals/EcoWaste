@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:eco_waste/features/user/trash_bank/controllers/waste_category_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
 import 'package:eco_waste/controllers/camera_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/popups/loaders.dart';
+import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class TransactionsInput extends StatelessWidget {
@@ -38,9 +39,6 @@ class TransactionsInput extends StatelessWidget {
 
     // Location controller
     final TextEditingController locationController = TextEditingController();
-
-    // Weight controller
-    final TextEditingController weightController = TextEditingController();
 
     // Fetch waste categories when widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -110,29 +108,28 @@ class TransactionsInput extends StatelessWidget {
         const SizedBox(height: REYSizes.spaceBtwInputFields),
 
         // Weight Input
-        TextFormField(
-          controller: weightController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-          ],
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.scale),
-            labelText: 'Berat Sampah (kg)',
-            hintText: 'Masukkan berat dalam kg (contoh: 2.5)',
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Berat sampah harus diisi';
-            }
-            final weight = double.tryParse(value);
-            if (weight == null || weight <= 0) {
-              return 'Berat harus berupa angka positif';
-            }
-            return null;
-          },
-        ),
-
+        // TextFormField(
+        //   controller: weightController,
+        //   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        //   inputFormatters: [
+        //     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+        //   ],
+        //   decoration: InputDecoration(
+        //     prefixIcon: const Icon(Icons.scale),
+        //     labelText: 'Berat Sampah (kg)',
+        //     hintText: 'Masukkan berat dalam kg (contoh: 2.5)',
+        //   ),
+        //   validator: (value) {
+        //     if (value == null || value.isEmpty) {
+        //       return 'Berat sampah harus diisi';
+        //     }
+        //     final weight = double.tryParse(value);
+        //     if (weight == null || weight <= 0) {
+        //       return 'Berat harus berupa angka positif';
+        //     }
+        //     return null;
+        //   },
+        // ),
         const SizedBox(height: REYSizes.spaceBtwInputFields),
 
         // Location Detail
@@ -174,81 +171,168 @@ class TransactionsInput extends StatelessWidget {
 
         const SizedBox(height: REYSizes.spaceBtwInputFields),
 
-        // Upload Picture
+        // Upload Picture Section
+        REYSectionHeading(
+          title: 'Upload Foto Bukti',
+          showActionButton: cameraController.selectedImage.value != null,
+          buttonTitle: 'Hapus Foto',
+          onPressed: () {
+            cameraController.selectedImage.value = null;
+          },
+        ),
+
+        const SizedBox(height: REYSizes.spaceBtwItems),
+
+        // Image Preview
         Obx(
-          () => Column(
+          () => GestureDetector(
+            onTap: () => _showImagePickerBottomSheet(context, cameraController),
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+                color: Colors.grey.shade50,
+              ),
+              child: cameraController.selectedImage.value != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        cameraController.selectedImage.value!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.image_outlined,
+                          size: 48,
+                          color: Colors.grey.shade400,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Tap untuk menambah gambar',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: REYSizes.spaceBtwItems),
+
+        // Action Buttons
+        Obx(
+          () => Row(
             children: [
-              if (cameraController.selectedImage.value != null)
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      cameraController.selectedImage.value!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: cameraController.selectedImage.value != null
+                      ? () => _showImagePickerBottomSheet(
+                          context,
+                          cameraController,
+                        )
+                      : null,
+                  child: const Text('Ganti Gambar'),
                 ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () =>
-                          cameraController.captureImageWithCamera(),
-                      icon: const Icon(Icons.camera_alt),
-                      label: const Text('Ambil Foto'),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => cameraController.pickImageFromGallery(),
-                      icon: const Icon(Icons.photo_library),
-                      label: const Text('Pilih Galeri'),
-                    ),
-                  ),
-                ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: transactionController.isLoading.value
+                      ? null
+                      : () => _submitTransaction(
+                          context,
+                          transactionController,
+                          selectedWasteCategory,
+                          selectedTransactionType,
+                          locationController,
+                          selectedDate,
+                          cameraController,
+                        ),
+                  child: transactionController.isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Buat Transaksi'),
+                ),
               ),
             ],
           ),
         ),
-
-        const SizedBox(height: REYSizes.spaceBtwSections),
-
-        // Submit Button
-        Obx(
-          () => SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: transactionController.isLoading.value
-                  ? null
-                  : () => _submitTransaction(
-                      context,
-                      transactionController,
-                      selectedWasteCategory,
-                      selectedTransactionType,
-                      weightController,
-                      locationController,
-                      selectedDate,
-                      cameraController,
-                    ),
-              child: transactionController.isLoading.value
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Buat Transaksi'),
-            ),
-          ),
-        ),
       ],
+    );
+  }
+
+  void _showImagePickerBottomSheet(
+    BuildContext context,
+    CameraController cameraController,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(REYSizes.defaultSpace),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // Title
+              Text(
+                'Pilih Gambar',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+              // Camera Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    cameraController.captureImageWithCamera();
+                  },
+                  icon: const Icon(Icons.camera_alt),
+                  label: const Text('Ambil dari Kamera'),
+                ),
+              ),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+              // Gallery Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    cameraController.pickImageFromGallery();
+                  },
+                  icon: const Icon(Icons.photo_library),
+                  label: const Text('Pilih dari Galeri'),
+                ),
+              ),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -257,45 +341,48 @@ class TransactionsInput extends StatelessWidget {
     TransactionController transactionController,
     RxString selectedWasteCategory,
     RxString selectedTransactionType,
-    TextEditingController weightController,
     TextEditingController locationController,
     Rx<DateTime?> selectedDate,
     CameraController cameraController,
   ) async {
     // Validation
     if (selectedWasteCategory.value.isEmpty) {
-      Get.snackbar('Error', 'Pilih jenis sampah terlebih dahulu');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Pilih jenis sampah terlebih dahulu',
+      );
       return;
     }
 
     if (selectedTransactionType.value.isEmpty) {
-      Get.snackbar('Error', 'Pilih tipe transaksi terlebih dahulu');
-      return;
-    }
-
-    if (weightController.text.isEmpty) {
-      Get.snackbar('Error', 'Masukkan berat sampah');
-      return;
-    }
-
-    final weight = double.tryParse(weightController.text);
-    if (weight == null || weight <= 0) {
-      Get.snackbar('Error', 'Berat sampah harus berupa angka positif');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Pilih tipe transaksi terlebih dahulu',
+      );
       return;
     }
 
     if (locationController.text.isEmpty) {
-      Get.snackbar('Error', 'Masukkan detail lokasi');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Masukkan detail lokasi',
+      );
       return;
     }
 
     if (selectedDate.value == null) {
-      Get.snackbar('Error', 'Pilih tanggal transaksi');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Pilih tanggal transaksi',
+      );
       return;
     }
 
     if (cameraController.selectedImage.value == null) {
-      Get.snackbar('Error', 'Ambil foto bukti sampah');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Ambil foto bukti sampah',
+      );
       return;
     }
 
@@ -305,7 +392,10 @@ class TransactionsInput extends StatelessWidget {
       final bytes = await cameraController.selectedImage.value!.readAsBytes();
       base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
     } catch (e) {
-      Get.snackbar('Error', 'Gagal memproses gambar: ${e.toString()}');
+      REYLoaders.errorSnackBar(
+        title: 'Error',
+        message: 'Gagal memproses gambar: ${e.toString()}',
+      );
       return;
     }
 
@@ -322,7 +412,6 @@ class TransactionsInput extends StatelessWidget {
       locationId: locationId,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      actualWeight: weight, // Store the initial weight
     );
 
     // Create transaction
@@ -332,7 +421,6 @@ class TransactionsInput extends StatelessWidget {
       // Clear form after successful submission
       selectedWasteCategory.value = '';
       selectedTransactionType.value = '';
-      weightController.clear();
       locationController.clear();
       selectedDate.value = null;
       cameraController.selectedImage.value = null;
