@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
+import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';

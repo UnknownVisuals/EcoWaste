@@ -72,15 +72,6 @@ class HistoryScreen extends StatelessWidget {
                         transactionController.selectedFilter.value == 'PENDING',
                     onTap: () => transactionController.setFilter('PENDING'),
                   ),
-                  REYChipFilter(
-                    chipFilterString: 'cancelled'.tr,
-                    chipFilterColor: REYColors.error,
-                    chipFilterIcon: Iconsax.close_circle,
-                    isSelected:
-                        transactionController.selectedFilter.value ==
-                        'REJECTED',
-                    onTap: () => transactionController.setFilter('REJECTED'),
-                  ),
                   const SizedBox(width: REYSizes.spaceBtwItems),
                 ],
               ),

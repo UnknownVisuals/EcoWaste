@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
+import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
@@ -229,19 +227,34 @@ class TransactionDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               SizedBox(
-                height: 100,
+                height:
+                    (MediaQuery.of(context).size.width -
+                        (REYSizes.defaultSpace * 2) -
+                        (REYSizes.sm * (transaction.photos.length - 1))) /
+                    transaction.photos.length /
+                    16 *
+                    9,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: transaction.photos.length,
                   itemBuilder: (context, index) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final totalHorizontalPadding = REYSizes.defaultSpace * 2;
+                    final totalSpacing =
+                        REYSizes.sm * (transaction.photos.length - 1);
+                    final itemWidth =
+                        (screenWidth - totalHorizontalPadding - totalSpacing) /
+                        transaction.photos.length;
+                    final itemHeight = itemWidth / 16 * 9; // 16:9 aspect ratio
+
                     return Container(
                       margin: EdgeInsets.only(
                         right: index < transaction.photos.length - 1
                             ? REYSizes.sm
                             : 0,
                       ),
-                      width: 100,
-                      height: 100,
+                      width: itemWidth,
+                      height: itemHeight,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(REYSizes.sm),
                         border: Border.all(color: REYColors.grey),
@@ -262,61 +275,63 @@ class TransactionDetailScreen extends StatelessWidget {
               ),
             ],
 
+            const SizedBox(height: REYSizes.spaceBtwSections),
+
             // Action buttons for pending transactions
-            if (transaction.status.toUpperCase() == 'PENDING') ...[
-              const SizedBox(height: REYSizes.spaceBtwSections),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () async {
-                        final controller = Get.find<TransactionController>();
-                        await controller.cancelTransaction(transaction.id);
-                        Get.back(); // Go back after action
-                      },
-                      icon: const Icon(
-                        Iconsax.close_circle,
-                        color: REYColors.error,
-                      ),
-                      label: Text(
-                        'cancel'.tr,
-                        style: TextStyle(color: REYColors.error),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: REYColors.error),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: REYSizes.md,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: REYSizes.spaceBtwItems),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        final controller = Get.find<TransactionController>();
-                        await controller.processTransaction(transaction.id);
-                        Get.back(); // Go back after action
-                      },
-                      icon: const Icon(
-                        Iconsax.tick_circle,
-                        color: REYColors.white,
-                      ),
-                      label: Text(
-                        'confirm'.tr,
-                        style: TextStyle(color: REYColors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: REYColors.success,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: REYSizes.md,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            // if (transaction.status.toUpperCase() == 'PENDING') ...[
+            //   const SizedBox(height: REYSizes.spaceBtwSections),
+            //   Row(
+            //     children: [
+            //       Expanded(
+            //         child: OutlinedButton.icon(
+            //           onPressed: () async {
+            //             final controller = Get.find<TransactionController>();
+            //             await controller.cancelTransaction(transaction.id);
+            //             Get.back(); // Go back after action
+            //           },
+            //           icon: const Icon(
+            //             Iconsax.close_circle,
+            //             color: REYColors.error,
+            //           ),
+            //           label: Text(
+            //             'cancel'.tr,
+            //             style: TextStyle(color: REYColors.error),
+            //           ),
+            //           style: OutlinedButton.styleFrom(
+            //             side: const BorderSide(color: REYColors.error),
+            //             padding: const EdgeInsets.symmetric(
+            //               vertical: REYSizes.md,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       const SizedBox(width: REYSizes.spaceBtwItems),
+            //       Expanded(
+            //         child: ElevatedButton.icon(
+            //           onPressed: () async {
+            //             final controller = Get.find<TransactionController>();
+            //             await controller.processTransaction(transaction.id);
+            //             Get.back(); // Go back after action
+            //           },
+            //           icon: const Icon(
+            //             Iconsax.tick_circle,
+            //             color: REYColors.white,
+            //           ),
+            //           label: Text(
+            //             'confirm'.tr,
+            //             style: TextStyle(color: REYColors.white),
+            //           ),
+            //           style: ElevatedButton.styleFrom(
+            //             backgroundColor: REYColors.success,
+            //             padding: const EdgeInsets.symmetric(
+            //               vertical: REYSizes.md,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ],
           ],
         ),
       ),

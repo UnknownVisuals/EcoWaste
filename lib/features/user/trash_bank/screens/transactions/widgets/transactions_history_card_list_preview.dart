@@ -19,18 +19,16 @@ class TransactionHistoryCardListPreview extends StatelessWidget {
     );
     final UserController userController = Get.find<UserController>();
 
-    // Ensure transactions are fetched if not already loaded
-    if (transactionController.transactions.isEmpty &&
-        !transactionController.isLoading.value) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final userId = userController.userModel.value.id;
-        if (userId.isNotEmpty) {
-          transactionController.fetchTransactions(userId: userId);
-        }
-      });
-    }
-
     return Obx(() {
+      // Ensure transactions are fetched when user data becomes available
+      final userId = userController.userModel.value.id;
+      if (userId.isNotEmpty &&
+          transactionController.transactions.isEmpty &&
+          !transactionController.isLoading.value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          transactionController.fetchTransactions(userId: userId);
+        });
+      }
       if (transactionController.isLoading.value) {
         return const Center(
           child: CircularProgressIndicator(color: REYColors.primary),

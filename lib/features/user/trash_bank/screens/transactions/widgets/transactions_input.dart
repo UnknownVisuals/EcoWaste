@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:eco_waste/features/user/trash_bank/controllers/waste_category_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
 import 'package:eco_waste/controllers/camera_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
+import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';

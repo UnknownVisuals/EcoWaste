@@ -16,13 +16,16 @@ class TransactionsCardList extends StatelessWidget {
     );
     final UserController userController = Get.find<UserController>();
 
-    // Fetch transactions with current user ID
-    final userId = userController.userModel.value.id;
-    if (userId.isNotEmpty && transactionController.transactions.isEmpty) {
-      transactionController.fetchTransactions(userId: userId);
-    }
-
     return Obx(() {
+      // Fetch transactions with current user ID when user data becomes available
+      final userId = userController.userModel.value.id;
+      if (userId.isNotEmpty &&
+          transactionController.transactions.isEmpty &&
+          !transactionController.isLoading.value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          transactionController.fetchTransactions(userId: userId);
+        });
+      }
       if (transactionController.isLoading.value) {
         return const Center(
           child: CircularProgressIndicator(color: REYColors.primary),

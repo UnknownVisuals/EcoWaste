@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/trash_bank/models/transaction_model.dart';
+import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_detail.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
