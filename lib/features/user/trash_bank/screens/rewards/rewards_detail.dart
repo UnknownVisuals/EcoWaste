@@ -24,6 +24,7 @@ class RewardsDetail extends StatelessWidget {
         title: Text(
           reward.name,
           style: Theme.of(context).textTheme.headlineSmall,
+          overflow: TextOverflow.ellipsis,
         ),
         actions: [
           Obx(
@@ -88,52 +89,53 @@ class RewardsDetail extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        reward.name,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: REYSizes.spaceBtwItems / 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: REYSizes.md,
-                          vertical: REYSizes.xs,
-                        ),
-                        decoration: BoxDecoration(
-                          color: reward.stock > 0
-                              ? REYColors.grey
-                              : REYColors.error,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          reward.stock > 0
-                              ? '${'stock'.tr} ${reward.stock}'
-                              : 'outOfStock'.tr,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: reward.stock > 0
-                                    ? REYColors.textPrimary
-                                    : REYColors.textWhite,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    reward.name,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Iconsax.coin_1,
-                      size: REYSizes.iconMd,
-                      color: REYColors.primary,
+                    Row(
+                      children: [
+                        const Icon(
+                          Iconsax.coin_1,
+                          size: REYSizes.iconSm,
+                          color: REYColors.primary,
+                        ),
+                        const SizedBox(width: REYSizes.spaceBtwItems / 4),
+                        Text(
+                          reward.pointsRequired.toString(),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: REYSizes.spaceBtwItems / 4),
-                    Text(
-                      reward.pointsRequired.toString(),
-                      style: Theme.of(context).textTheme.headlineSmall,
+                    const SizedBox(height: REYSizes.spaceBtwItems / 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: REYSizes.sm,
+                        vertical: REYSizes.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: reward.stock > 0
+                            ? REYColors.grey
+                            : REYColors.error,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        reward.stock > 0
+                            ? '${'stock'.tr} ${reward.stock}'
+                            : 'outOfStock'.tr,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: reward.stock > 0
+                                  ? REYColors.textPrimary
+                                  : REYColors.textWhite,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
                     ),
                   ],
                 ),
