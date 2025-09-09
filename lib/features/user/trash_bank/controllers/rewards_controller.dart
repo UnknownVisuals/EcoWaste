@@ -7,6 +7,7 @@ class RewardsController extends GetxController {
   REYHttpHelper httpHelper = Get.put(REYHttpHelper());
 
   RxList<RewardsModel> rewards = RxList<RewardsModel>();
+  RxList<RewardsModel> cartRewards = RxList<RewardsModel>();
 
   Rx<bool> isLoading = false.obs;
 
@@ -41,5 +42,55 @@ class RewardsController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // Cart Management Methods
+  void addToCart(RewardsModel reward) {
+    if (reward.stock > 0) {
+      // Check if reward is already in cart
+      if (!cartRewards.any((item) => item.id == reward.id)) {
+        cartRewards.add(reward);
+        REYLoaders.successSnackBar(
+          title: 'addToCart'.tr,
+          message: '${reward.name} ${'addedToCart'.tr}',
+        );
+      } else {
+        REYLoaders.warningSnackBar(
+          title: 'alreadyInCart'.tr,
+          message: '${reward.name} ${'isAlreadyInCart'.tr}',
+        );
+      }
+    } else {
+      REYLoaders.errorSnackBar(
+        title: 'outOfStock'.tr,
+        message: '${reward.name} ${'isOutOfStock'.tr}',
+      );
+    }
+  }
+
+  void removeFromCart(RewardsModel reward) {
+    cartRewards.removeWhere((item) => item.id == reward.id);
+    REYLoaders.successSnackBar(
+      title: 'removedFromCart'.tr,
+      message: '${reward.name} ${'removedFromCartMessage'.tr}',
+    );
+  }
+
+  void clearCart() {
+    cartRewards.clear();
+    REYLoaders.successSnackBar(
+      title: 'cartCleared'.tr,
+      message: 'cartClearedMessage'.tr,
+    );
+  }
+
+  bool isInCart(RewardsModel reward) {
+    return cartRewards.any((item) => item.id == reward.id);
+  }
+
+  int get cartItemCount => cartRewards.length;
+
+  int get totalCartPoints {
+    return cartRewards.fold(0, (sum, reward) => sum + reward.pointsRequired);
   }
 }

@@ -3,7 +3,7 @@ import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
 import 'package:eco_waste/features/user/home/screens/widgets/home_appbar.dart';
 import 'package:eco_waste/features/user/home/screens/widgets/home_card_poin.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_history_card_list_preview.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_history_list_preview.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class UserHomeScreen extends StatelessWidget {
                 SizedBox(
                   height: REYDeviceUtils.getScreenHeight() * 0.5,
                   child: SingleChildScrollView(
-                    child: TransactionHistoryCardListPreview(),
+                    child: TransactionHistoryListPreview(),
                   ),
                 ),
               ],

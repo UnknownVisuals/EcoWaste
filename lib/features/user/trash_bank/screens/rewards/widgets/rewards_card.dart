@@ -1,4 +1,5 @@
-import 'package:eco_waste/common/widgets/rounded_container.dart';
+import 'package:eco_waste/features/user/trash_bank/controllers/rewards_controller.dart';
+import 'package:eco_waste/features/user/trash_bank/models/rewards_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
@@ -13,20 +14,23 @@ class RewardsCard extends StatelessWidget {
     required this.description,
     required this.pointsRequired,
     required this.stock,
-    required this.icon,
+    required this.image,
     this.onTap,
+    this.reward,
   });
 
   final String name;
   final String description;
   final int pointsRequired;
   final int stock;
-  final String icon;
+  final String image;
   final VoidCallback? onTap;
+  final RewardsModel? reward;
 
   @override
   Widget build(BuildContext context) {
     final bool dark = REYHelperFunctions.isDarkMode(context);
+    final RewardsController rewardsController = Get.find<RewardsController>();
 
     return GestureDetector(
       onTap: onTap,
@@ -34,23 +38,30 @@ class RewardsCard extends StatelessWidget {
         width: 180,
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
+          color: dark ? REYColors.dark : REYColors.light,
           borderRadius: BorderRadius.circular(REYSizes.productImageRadius),
-          color: dark ? REYColors.darkerGrey : REYColors.white,
+          border: Border.all(
+            color: dark ? REYColors.darkerGrey : REYColors.grey,
+            width: 1,
+          ),
         ),
         child: Column(
           children: [
-            // Reward Icon/Image
-            REYRoundedContainer(
-              height: 120,
-              padding: const EdgeInsets.all(REYSizes.sm),
-              backgroundColor: dark ? REYColors.darkerGrey : REYColors.white,
+            // Reward Image
+            AspectRatio(
+              aspectRatio: 4 / 3,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(
                   REYSizes.productImageRadius,
                 ),
-                child: Image.network(icon, fit: BoxFit.cover),
+                child: Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
+
             // Reward Details
             Padding(
               padding: const EdgeInsets.all(REYSizes.sm),
@@ -61,51 +72,108 @@ class RewardsCard extends StatelessWidget {
                     name,
                     style: Theme.of(context).textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                    maxLines: 1,
                     textAlign: TextAlign.left,
                   ),
-                  const SizedBox(height: REYSizes.spaceBtwItems / 4),
                   Text(
                     description,
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: REYSizes.spaceBtwItems / 2),
+
+                  const SizedBox(height: REYSizes.spaceBtwItems),
+
+                  // Row with Points/Stock Column and Add to Cart Icon
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
+                      // Left Column: Points and Stock
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Iconsax.coin_1,
-                            size: 16,
-                            color: REYColors.primary,
+                          // Points
+                          Row(
+                            children: [
+                              const Icon(
+                                Iconsax.coin_1,
+                                size: REYSizes.iconSm,
+                                color: REYColors.primary,
+                              ),
+                              const SizedBox(width: REYSizes.xs),
+                              Text(
+                                pointsRequired.toString(),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            pointsRequired.toString(),
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          const SizedBox(height: REYSizes.xs),
+
+                          // Stock
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: REYSizes.sm,
+                              vertical: REYSizes.xs,
+                            ),
+                            decoration: BoxDecoration(
+                              color: stock > 0
+                                  ? REYColors.grey
+                                  : REYColors.error,
+                              borderRadius: BorderRadius.circular(
+                                REYSizes.borderRadiusMd,
+                              ),
+                            ),
+                            child: Text(
+                              stock > 0
+                                  ? '${'stock'.tr} $stock'
+                                  : 'outOfStock'.tr,
+                              style: Theme.of(context).textTheme.labelMedium
+                                  ?.copyWith(
+                                    color: stock > 0
+                                        ? REYColors.textPrimary
+                                        : REYColors.textWhite,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
+
+                      // Right: Add to Cart Plus Icon
+                      if (reward != null)
+                        Obx(
+                          () => GestureDetector(
+                            onTap:
+                                stock > 0 &&
+                                    !rewardsController.isInCart(reward!)
+                                ? () => rewardsController.addToCart(reward!)
+                                : null,
+                            child: Container(
+                              padding: const EdgeInsets.all(REYSizes.md / 1.5),
+                              decoration: BoxDecoration(
+                                color: rewardsController.isInCart(reward!)
+                                    ? REYColors.primary
+                                    : (stock > 0
+                                          ? REYColors.primary
+                                          : REYColors.grey),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(REYSizes.md),
+                                  topRight: Radius.circular(REYSizes.xs),
+                                  bottomLeft: Radius.circular(REYSizes.xs),
+                                  bottomRight: Radius.circular(REYSizes.md),
+                                ),
+                              ),
+                              child: Icon(
+                                rewardsController.isInCart(reward!)
+                                    ? Iconsax.box_tick
+                                    : Iconsax.add,
+                                size: REYSizes.iconMd,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: stock > 0
-                              ? REYColors.success
-                              : REYColors.error,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          stock > 0 ? '${'stock'.tr} $stock' : 'outOfStock'.tr,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(color: Colors.white),
-                        ),
-                      ),
                     ],
                   ),
                 ],

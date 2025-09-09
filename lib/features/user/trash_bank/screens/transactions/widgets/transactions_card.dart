@@ -74,21 +74,11 @@ class TransactionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(REYSizes.md),
         decoration: BoxDecoration(
-          color: dark ? REYColors.dark : REYColors.white,
+          color: dark ? REYColors.dark : REYColors.light,
           border: Border.all(
             color: dark ? REYColors.darkerGrey : REYColors.grey,
-            width: 0.5,
           ),
           borderRadius: BorderRadius.circular(REYSizes.cardRadiusMd),
-          boxShadow: [
-            BoxShadow(
-              color: dark
-                  ? REYColors.darkGrey.withValues(alpha: 0.1)
-                  : REYColors.grey.withValues(alpha: 0.1),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,8 +90,8 @@ class TransactionCard extends StatelessWidget {
                 // Transaction Type
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: REYSizes.sm,
-                    vertical: REYSizes.xs,
+                    horizontal: REYSizes.md,
+                    vertical: REYSizes.sm,
                   ),
                   decoration: BoxDecoration(
                     color: transaction.type == 'PICKUP'
@@ -115,20 +105,21 @@ class TransactionCard extends StatelessWidget {
                       color: transaction.type == 'PICKUP'
                           ? REYColors.primary
                           : REYColors.secondary,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+
                 // Status
                 Row(
                   children: [
-                    Icon(statusIcon, size: 16, color: statusColor),
-                    const SizedBox(width: REYSizes.xs),
+                    Icon(statusIcon, size: REYSizes.iconSm, color: statusColor),
+                    const SizedBox(width: REYSizes.spaceBtwItems / 2),
                     Text(
                       statusText,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: statusColor,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -149,7 +140,7 @@ class TransactionCard extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: REYSizes.sm),
+                  const SizedBox(width: REYSizes.spaceBtwItems),
                   Expanded(
                     child: Text(
                       transaction.wasteCategory!.name,
@@ -167,8 +158,12 @@ class TransactionCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Iconsax.location, size: 16, color: REYColors.darkGrey),
-                const SizedBox(width: REYSizes.sm),
+                Icon(
+                  Iconsax.location,
+                  size: REYSizes.iconSm,
+                  color: REYColors.darkGrey,
+                ),
+                const SizedBox(width: REYSizes.spaceBtwItems / 2),
                 Expanded(
                   child: Text(
                     transaction.locationDetail,
@@ -182,8 +177,12 @@ class TransactionCard extends StatelessWidget {
             // Scheduled Date
             Row(
               children: [
-                Icon(Iconsax.calendar, size: 16, color: REYColors.darkGrey),
-                const SizedBox(width: REYSizes.sm),
+                Icon(
+                  Iconsax.calendar,
+                  size: REYSizes.iconSm,
+                  color: REYColors.darkGrey,
+                ),
+                const SizedBox(width: REYSizes.spaceBtwItems / 2),
                 Text(
                   DateFormat(
                     'dd MMM yyyy, HH:mm',
@@ -208,13 +207,12 @@ class TransactionCard extends StatelessWidget {
                       children: [
                         Text(
                           'Weight',
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(color: REYColors.darkGrey),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         Text(
-                          '${transaction.actualWeight!.toStringAsFixed(1)} kg',
+                          '${transaction.actualWeight!.toStringAsFixed(2)} kg',
                           style: Theme.of(context).textTheme.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w600),
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -225,14 +223,13 @@ class TransactionCard extends StatelessWidget {
                       children: [
                         Text(
                           'pointsEarned'.tr,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(color: REYColors.darkGrey),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         Row(
                           children: [
                             Icon(
                               Iconsax.coin_1,
-                              size: 16,
+                              size: REYSizes.iconSm,
                               color: REYColors.primary,
                             ),
                             const SizedBox(width: REYSizes.xs),
@@ -240,7 +237,7 @@ class TransactionCard extends StatelessWidget {
                               transaction.points.toString(),
                               style: Theme.of(context).textTheme.titleSmall
                                   ?.copyWith(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.bold,
                                     color: REYColors.primary,
                                   ),
                             ),

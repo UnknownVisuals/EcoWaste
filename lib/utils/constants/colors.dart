@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class REYColors {
   // App theme colors
   static const Color primary = Color(0xFF2ECC71);
-  static const Color secondary = Color(0xFFFFE24B);
+  static const Color secondary = Color(0xFFE69500);
   static const Color accent = Color(0xFFb0c7ff);
 
   // Podium Colors

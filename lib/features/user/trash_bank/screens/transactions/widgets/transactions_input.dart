@@ -7,8 +7,10 @@ import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/common/widgets/image_picker_bottom_sheet.dart';
+import 'package:eco_waste/common/widgets/image_preview_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class TransactionsInput extends StatelessWidget {
   const TransactionsInput({
@@ -29,16 +31,10 @@ class TransactionsInput extends StatelessWidget {
       TransactionController(),
     );
 
-    // Selected waste category
+    // Selected Input Values
     final RxString selectedWasteCategory = ''.obs;
-
-    // Selected transaction type
     final RxString selectedTransactionType = ''.obs;
-
-    // Selected date
     final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
-
-    // Location controller
     final TextEditingController locationController = TextEditingController();
 
     // Fetch waste categories when widget is built
@@ -70,7 +66,7 @@ class TransactionsInput extends StatelessWidget {
               selectedWasteCategory.value = newValue ?? '';
             },
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.delete_outline),
+              prefixIcon: const Icon(Iconsax.trash),
               labelText: 'wasteType'.tr,
             ),
           ),
@@ -100,7 +96,7 @@ class TransactionsInput extends StatelessWidget {
               selectedTransactionType.value = newValue ?? '';
             },
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.swap_horiz),
+              prefixIcon: const Icon(Iconsax.arrow_swap_horizontal),
               labelText: 'transactionType'.tr,
             ),
           ),
@@ -108,36 +104,11 @@ class TransactionsInput extends StatelessWidget {
 
         const SizedBox(height: REYSizes.spaceBtwInputFields),
 
-        // Weight Input
-        // TextFormField(
-        //   controller: weightController,
-        //   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        //   inputFormatters: [
-        //     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-        //   ],
-        //   decoration: InputDecoration(
-        //     prefixIcon: const Icon(Icons.scale),
-        //     labelText: 'Berat Sampah (kg)',
-        //     hintText: 'Masukkan berat dalam kg (contoh: 2.5)',
-        //   ),
-        //   validator: (value) {
-        //     if (value == null || value.isEmpty) {
-        //       return 'Berat sampah harus diisi';
-        //     }
-        //     final weight = double.tryParse(value);
-        //     if (weight == null || weight <= 0) {
-        //       return 'Berat harus berupa angka positif';
-        //     }
-        //     return null;
-        //   },
-        // ),
-        const SizedBox(height: REYSizes.spaceBtwInputFields),
-
         // Location Detail
         TextFormField(
           controller: locationController,
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.location_on_outlined),
+            prefixIcon: const Icon(Iconsax.location),
             labelText: 'locationDetail'.tr,
             alignLabelWithHint: true,
           ),
@@ -161,7 +132,7 @@ class TransactionsInput extends StatelessWidget {
               }
             },
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.calendar_today),
+              prefixIcon: const Icon(Iconsax.calendar_1),
               labelText: 'selectDate'.tr,
               hintText: selectedDate.value != null
                   ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}'
@@ -170,16 +141,18 @@ class TransactionsInput extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: REYSizes.spaceBtwInputFields),
+        const SizedBox(height: REYSizes.spaceBtwSections),
 
         // Upload Picture Section
-        REYSectionHeading(
-          title: 'uploadProof'.tr,
-          showActionButton: cameraController.selectedImage.value != null,
-          buttonTitle: 'removePhoto'.tr,
-          onPressed: () {
-            cameraController.selectedImage.value = null;
-          },
+        Obx(
+          () => REYSectionHeading(
+            title: 'uploadProof'.tr,
+            showActionButton: cameraController.selectedImage.value != null,
+            buttonTitle: 'removePhoto'.tr,
+            onPressed: () {
+              cameraController.selectedImage.value = null;
+            },
+          ),
         ),
 
         const SizedBox(height: REYSizes.spaceBtwItems),
@@ -187,46 +160,59 @@ class TransactionsInput extends StatelessWidget {
         // Image Preview
         Obx(
           () => GestureDetector(
-            onTap: () => REYImagePickerBottomSheet.show(context: context),
-            child: Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade300),
-                color: Colors.grey.shade50,
-              ),
-              child: cameraController.selectedImage.value != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        cameraController.selectedImage.value!,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image_outlined,
-                          size: 48,
-                          color: Colors.grey.shade400,
+            onTap: () {
+              if (cameraController.selectedImage.value == null) {
+                REYImagePickerBottomSheet.show(context: context);
+              } else {
+                REYImagePreviewDialog.showFile(
+                  context: context,
+                  imageFile: cameraController.selectedImage.value!,
+                );
+              }
+            },
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(REYSizes.borderRadiusMd),
+                  border: Border.all(color: Colors.grey.shade300),
+                  color: Colors.grey.shade50,
+                ),
+                child: cameraController.selectedImage.value != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          REYSizes.borderRadiusMd,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'tapToAddImage'.tr,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 14,
+                        child: Image.file(
+                          cameraController.selectedImage.value!,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Iconsax.image,
+                            size: REYSizes.iconLg * 1.5,
+                            color: Colors.grey.shade400,
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(height: REYSizes.sm),
+                          Text(
+                            'tapToAddImage'.tr,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: REYSizes.fontSizeSm,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
             ),
           ),
         ),
 
-        const SizedBox(height: REYSizes.spaceBtwItems),
+        const SizedBox(height: REYSizes.spaceBtwSections),
 
         // Action Buttons
         Obx(
@@ -240,7 +226,7 @@ class TransactionsInput extends StatelessWidget {
                   child: Text('changeImage'.tr),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: REYSizes.spaceBtwItems),
               Expanded(
                 child: ElevatedButton(
                   onPressed: transactionController.isLoading.value
@@ -256,16 +242,18 @@ class TransactionsInput extends StatelessWidget {
                         ),
                   child: transactionController.isLoading.value
                       ? const SizedBox(
-                          height: 20,
-                          width: 20,
+                          height: REYSizes.md + 4,
+                          width: REYSizes.md + 4,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text('createTransaction'.tr),
+                      : Text('submit'.tr),
                 ),
               ),
             ],
           ),
         ),
+
+        const SizedBox(height: REYSizes.spaceBtwSections),
       ],
     );
   }

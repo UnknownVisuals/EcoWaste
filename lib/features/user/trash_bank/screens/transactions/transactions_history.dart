@@ -2,7 +2,7 @@ import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/common/widgets/chip_filter.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_history_card_list.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_history_list.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +83,7 @@ class TransactionsHistoryScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(REYSizes.defaultSpace),
-              child: Column(children: [TransactionHistoryCardList()]),
+              child: Column(children: [TransactionHistoryList()]),
             ),
           ),
         ],

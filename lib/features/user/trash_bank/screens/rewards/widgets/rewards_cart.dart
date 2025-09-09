@@ -1,5 +1,6 @@
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/rewards_controller.dart';
+import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,26 @@ import 'package:iconsax/iconsax.dart';
 class RewardsCart extends StatelessWidget {
   const RewardsCart({super.key});
 
+  /// Static method to show the cart as a bottom sheet
+  static void showCartBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(REYSizes.cardRadiusLg),
+        ),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        expand: false,
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          child: const RewardsCart(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final RewardsController rewardsController = Get.find<RewardsController>();
@@ -16,14 +37,13 @@ class RewardsCart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(REYSizes.defaultSpace),
       child: Obx(() {
-        // For demonstration, let's assume rewardsController has a cartRewards RxList<RewardsModel> for cart items
-        final cartRewards = rewardsController.rewards
-            .where((r) => r.stock > 0)
-            .toList(); // Replace with actual cart logic
+        final cartRewards = rewardsController.cartRewards;
+
+        // If cart is empty, show empty state
         if (cartRewards.isEmpty) {
           return Column(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: REYSizes.spaceBtwSections),
               const Icon(
@@ -31,7 +51,7 @@ class RewardsCart extends StatelessWidget {
                 size: REYSizes.iconLg * 2,
                 color: Colors.grey,
               ),
-              const SizedBox(height: REYSizes.spaceBtwItems),
+              const SizedBox(height: REYSizes.spaceBtwSections),
               Text(
                 'cartEmpty'.tr,
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -42,56 +62,64 @@ class RewardsCart extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: REYSizes.spaceBtwSections * 2),
+              const SizedBox(height: REYSizes.spaceBtwSections),
             ],
           );
         }
+
+        // If cart has items, show the list
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            REYSectionHeading(title: 'yourCart'.tr, showActionButton: false),
+            REYSectionHeading(
+              title: 'yourCart'.tr,
+              showActionButton: true,
+              buttonTitle: 'remove'.tr,
+              onPressed: () => rewardsController.clearCart(),
+            ),
+
             const SizedBox(height: REYSizes.spaceBtwItems),
+
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: cartRewards.length,
                 itemBuilder: (context, index) {
                   final reward = cartRewards[index];
+
                   return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        REYSizes.cardRadiusMd,
-                      ),
-                      child: Image.network(
-                        reward.icon,
-                        width: 48,
-                        height: 48,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
                     title: Text(
                       reward.name,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    subtitle: Text(
-                      '${reward.pointsRequired} poin',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    subtitle: Row(
+                      children: [
+                        const Icon(
+                          Iconsax.coin_1,
+                          size: REYSizes.iconSm,
+                          color: REYColors.primary,
+                        ),
+                        const SizedBox(width: REYSizes.xs),
+                        Text(
+                          reward.pointsRequired.toString(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
                     ),
                     trailing: IconButton(
                       icon: const Icon(Iconsax.trash, color: Colors.red),
-                      onPressed: () {
-                        /* Remove from cart logic here */
-                      },
+                      onPressed: () => rewardsController.removeFromCart(reward),
                     ),
                   );
                 },
               ),
             ),
+
             const SizedBox(height: REYSizes.spaceBtwItems),
             const Divider(),
             const SizedBox(height: REYSizes.spaceBtwItems / 2),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -113,16 +141,16 @@ class RewardsCart extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
-                  cartRewards
-                      .fold<int>(0, (sum, r) => sum + r.pointsRequired)
-                      .toString(),
+                  rewardsController.totalCartPoints.toString(),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
+
             const SizedBox(height: REYSizes.spaceBtwItems / 2),
             const Divider(),
             const SizedBox(height: REYSizes.spaceBtwSections),
+
             ElevatedButton(
               onPressed: () {
                 Get.back();
@@ -133,7 +161,8 @@ class RewardsCart extends StatelessWidget {
               },
               child: Text('checkout'.tr),
             ),
-            const SizedBox(height: REYSizes.spaceBtwSections * 2),
+
+            const SizedBox(height: REYSizes.spaceBtwSections),
           ],
         );
       }),

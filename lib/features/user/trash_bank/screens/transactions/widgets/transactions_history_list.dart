@@ -6,8 +6,8 @@ import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TransactionHistoryCardList extends StatelessWidget {
-  const TransactionHistoryCardList({super.key});
+class TransactionHistoryList extends StatelessWidget {
+  const TransactionHistoryList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class TransactionHistoryCardList extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: transactionController.filteredTransactions.length,
         separatorBuilder: (context, index) =>
-            const SizedBox(height: REYSizes.spaceBtwItems / 2),
+            const SizedBox(height: REYSizes.spaceBtwItems),
         itemBuilder: (context, index) {
           final transaction = transactionController.filteredTransactions[index];
           return TransactionCard(transaction: transaction);

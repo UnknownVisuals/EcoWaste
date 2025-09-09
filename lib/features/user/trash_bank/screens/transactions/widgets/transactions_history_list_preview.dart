@@ -6,8 +6,8 @@ import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TransactionHistoryCardListPreview extends StatelessWidget {
-  const TransactionHistoryCardListPreview({super.key, this.maxItems = 3});
+class TransactionHistoryListPreview extends StatelessWidget {
+  const TransactionHistoryListPreview({super.key, this.maxItems = 3});
 
   final int maxItems;
 
@@ -22,6 +22,7 @@ class TransactionHistoryCardListPreview extends StatelessWidget {
     return Obx(() {
       // Ensure transactions are fetched when user data becomes available
       final userId = userController.userModel.value.id;
+
       if (userId.isNotEmpty &&
           transactionController.transactions.isEmpty &&
           !transactionController.isLoading.value) {
@@ -29,6 +30,7 @@ class TransactionHistoryCardListPreview extends StatelessWidget {
           transactionController.fetchTransactions(userId: userId);
         });
       }
+
       if (transactionController.isLoading.value) {
         return const Center(
           child: CircularProgressIndicator(color: REYColors.primary),
@@ -70,7 +72,7 @@ class TransactionHistoryCardListPreview extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: recentTransactions.length,
         separatorBuilder: (context, index) =>
-            const SizedBox(height: REYSizes.spaceBtwItems / 2),
+            const SizedBox(height: REYSizes.spaceBtwItems),
         itemBuilder: (context, index) {
           final transaction = recentTransactions[index];
           return TransactionCard(transaction: transaction);

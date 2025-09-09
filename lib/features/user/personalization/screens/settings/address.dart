@@ -46,6 +46,7 @@ class AddressScreen extends StatelessWidget {
               Text(
                 'collectWasteAt'.tr,
                 style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(

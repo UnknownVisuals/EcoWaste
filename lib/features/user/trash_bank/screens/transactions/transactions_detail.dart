@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:eco_waste/common/widgets/appbar.dart';
+import 'package:eco_waste/common/widgets/image_preview_dialog.dart';
+import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/widgets/transactions_info_row.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -14,29 +16,6 @@ class TransactionDetailScreen extends StatelessWidget {
   const TransactionDetailScreen({super.key, required this.transaction});
 
   final TransactionModel transaction;
-
-  /// Safely parse color string to Color object
-  Color _parseColor(String colorString) {
-    try {
-      if (colorString.isEmpty) return REYColors.primary;
-
-      // Remove # if present and add 0xFF prefix
-      String cleanColor = colorString.replaceFirst('#', '');
-
-      // Ensure it's a valid hex color (6 characters)
-      if (cleanColor.length == 6) {
-        return Color(int.parse('0xFF$cleanColor', radix: 16));
-      } else if (cleanColor.length == 8) {
-        // Handle ARGB format
-        return Color(int.parse('0x$cleanColor', radix: 16));
-      } else {
-        return REYColors.primary; // fallback
-      }
-    } catch (e) {
-      // If any parsing error occurs, return default color
-      return REYColors.primary;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +34,6 @@ class TransactionDetailScreen extends StatelessWidget {
         statusColor = REYColors.success;
         statusIcon = Iconsax.tick_circle;
         statusText = 'completed'.tr;
-        break;
-      case 'CANCELLED':
-        statusColor = REYColors.error;
-        statusIcon = Iconsax.close_circle;
-        statusText = 'cancelled'.tr;
         break;
       default:
         statusColor = REYColors.grey;
@@ -87,12 +61,12 @@ class TransactionDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(REYSizes.cardRadiusMd),
-                border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+                border: Border.all(color: statusColor.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
-                  Icon(statusIcon, color: statusColor, size: 24),
-                  const SizedBox(width: REYSizes.sm),
+                  Icon(statusIcon, color: statusColor),
+                  const SizedBox(width: REYSizes.spaceBtwItems),
                   Text(
                     statusText,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -103,359 +77,159 @@ class TransactionDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
+
             const SizedBox(height: REYSizes.spaceBtwSections),
 
-            // Transaction Info
-            _buildInfoSection(context, 'Transaction Information', [
-              _buildInfoRow('Transaction ID', transaction.id),
-              _buildInfoRow(
-                'Type',
-                transaction.type == 'PICKUP' ? 'pickUp'.tr : 'dropOff'.tr,
-              ),
-              _buildInfoRow(
-                'Scheduled Date',
-                DateFormat(
+            // Transaction Information
+            REYSectionHeading(title: 'Transaction Information'),
+            const SizedBox(height: REYSizes.spaceBtwItems),
+            TransactionsInfoRow(title: 'Transaction ID', value: transaction.id),
+            TransactionsInfoRow(
+              title: 'Type',
+              value: transaction.type == 'PICKUP' ? 'pickUp'.tr : 'dropOff'.tr,
+            ),
+            TransactionsInfoRow(
+              title: 'Scheduled Date',
+              value: DateFormat(
+                'dd MMM yyyy, HH:mm',
+              ).format(transaction.scheduledDate),
+            ),
+            TransactionsInfoRow(
+              title: 'Created Date',
+              value: DateFormat(
+                'dd MMM yyyy, HH:mm',
+              ).format(transaction.createdAt),
+            ),
+            if (transaction.completedDate != null)
+              TransactionsInfoRow(
+                title: 'Completed Date',
+                value: DateFormat(
                   'dd MMM yyyy, HH:mm',
-                ).format(transaction.scheduledDate),
+                ).format(transaction.completedDate!),
               ),
-              _buildInfoRow(
-                'Created Date',
-                DateFormat('dd MMM yyyy, HH:mm').format(transaction.createdAt),
-              ),
-              if (transaction.completedDate != null)
-                _buildInfoRow(
-                  'Completed Date',
-                  DateFormat(
-                    'dd MMM yyyy, HH:mm',
-                  ).format(transaction.completedDate!),
-                ),
-            ]),
 
-            // Location Info
-            _buildInfoSection(context, 'locationInformation'.tr, [
-              _buildInfoRow('locationDetail'.tr, transaction.locationDetail),
-            ]),
+            const SizedBox(height: REYSizes.spaceBtwSections),
 
-            // Waste Category Info
+            // Location Information
+            REYSectionHeading(title: 'locationInformation'.tr),
+            const SizedBox(height: REYSizes.spaceBtwItems),
+            TransactionsInfoRow(
+              title: 'locationDetail'.tr,
+              value: transaction.locationDetail,
+            ),
+
+            const SizedBox(height: REYSizes.spaceBtwSections),
+
+            // Waste Category Information
             if (transaction.wasteCategory != null) ...[
-              _buildInfoSection(context, 'Waste Category', [
-                _buildInfoRow('Category', transaction.wasteCategory!.name),
-                _buildInfoRow(
-                  'Description',
-                  transaction.wasteCategory!.description,
-                ),
-                _buildInfoRow(
-                  'Points per Kg',
-                  '${transaction.wasteCategory!.pointsPerKg}',
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Color: ',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: _parseColor(transaction.wasteCategory!.color),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: REYColors.grey),
-                      ),
-                    ),
-                    const SizedBox(width: REYSizes.sm),
-                    Text(
-                      transaction.wasteCategory!.color,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ]),
+              REYSectionHeading(title: 'Waste Category'),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+              TransactionsInfoRow(
+                title: 'Category',
+                value: transaction.wasteCategory!.name,
+              ),
+              TransactionsInfoRow(
+                title: 'Description',
+                value: transaction.wasteCategory!.description,
+              ),
+              TransactionsInfoRow(
+                title: 'Points per Kg',
+                value: '${transaction.wasteCategory!.pointsPerKg}',
+              ),
+              TransactionsInfoRow(
+                title: 'Color',
+                value: transaction.wasteCategory!.color,
+              ),
             ],
 
-            // User Info
+            const SizedBox(height: REYSizes.spaceBtwSections),
+
+            // User Information
             if (transaction.user != null) ...[
-              _buildInfoSection(context, 'User Information', [
-                _buildInfoRow('Name', transaction.user!.name),
-                _buildInfoRow('User ID', transaction.user!.id),
-              ]),
+              REYSectionHeading(title: 'User Information'),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+              TransactionsInfoRow(title: 'Name', value: transaction.user!.name),
+              TransactionsInfoRow(
+                title: 'User ID',
+                value: transaction.user!.id,
+              ),
             ],
 
-            // Results (for completed transactions)
+            const SizedBox(height: REYSizes.spaceBtwSections),
+
+            // Transaction Results (for completed transactions)
             if (transaction.status == 'COMPLETED') ...[
-              _buildInfoSection(context, 'Transaction Results', [
-                if (transaction.actualWeight != null)
-                  _buildInfoRow(
-                    'actualWeight'.tr,
-                    '${transaction.actualWeight!.toStringAsFixed(2)} ${'kg'.tr}',
-                  ),
-                if (transaction.points != null)
-                  Row(
-                    children: [
-                      Text(
-                        '${'pointsEarned'.tr}: ',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Icon(Iconsax.coin_1, size: 16, color: REYColors.primary),
-                      const SizedBox(width: REYSizes.xs),
-                      Text(
-                        transaction.points.toString(),
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: REYColors.primary,
-                            ),
-                      ),
-                    ],
-                  ),
-                if (transaction.notes != null && transaction.notes!.isNotEmpty)
-                  _buildInfoRow('Notes', transaction.notes!),
-              ]),
+              REYSectionHeading(title: 'Transaction Results'),
+              const SizedBox(height: REYSizes.spaceBtwItems),
+              if (transaction.actualWeight != null)
+                TransactionsInfoRow(
+                  title: 'actualWeight'.tr,
+                  value:
+                      '${transaction.actualWeight!.toStringAsFixed(2)} ${'kg'.tr}',
+                ),
+              if (transaction.points != null)
+                TransactionsInfoRow(
+                  title: 'pointsEarned'.tr,
+                  value: transaction.points.toString(),
+                ),
+              if (transaction.notes != null && transaction.notes!.isNotEmpty)
+                TransactionsInfoRow(title: 'Notes', value: transaction.notes!),
+              const SizedBox(height: REYSizes.spaceBtwSections),
             ],
 
             // Photos
             if (transaction.photos.isNotEmpty) ...[
-              const SizedBox(height: REYSizes.spaceBtwSections),
-              Text(
-                'Photos',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
+              REYSectionHeading(title: 'Photos'),
               const SizedBox(height: REYSizes.spaceBtwItems),
-              SizedBox(
-                height:
-                    (MediaQuery.of(context).size.width -
-                        (REYSizes.defaultSpace * 2) -
-                        (REYSizes.sm * (transaction.photos.length - 1))) /
-                    transaction.photos.length /
-                    16 *
-                    9,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: transaction.photos.length,
-                  itemBuilder: (context, index) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final totalHorizontalPadding = REYSizes.defaultSpace * 2;
-                    final totalSpacing =
-                        REYSizes.sm * (transaction.photos.length - 1);
-                    final itemWidth =
-                        (screenWidth - totalHorizontalPadding - totalSpacing) /
-                        transaction.photos.length;
-                    final itemHeight = itemWidth / 16 * 9; // 16:9 aspect ratio
-
-                    return Container(
-                      margin: EdgeInsets.only(
-                        right: index < transaction.photos.length - 1
-                            ? REYSizes.sm
-                            : 0,
-                      ),
-                      width: itemWidth,
-                      height: itemHeight,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(REYSizes.sm),
-                        border: Border.all(color: REYColors.grey),
-                      ),
-                      child: GestureDetector(
-                        onTap: () => _showFullScreenImage(
-                          context,
-                          transaction.photos[index],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(REYSizes.sm),
-                          child: _buildImage(transaction.photos[index]),
-                        ),
-                      ),
-                    );
-                  },
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () => REYImagePreviewDialog.showData(
+                      context: context,
+                      imageData: transaction.photos.first,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(REYSizes.sm),
+                      child: _buildImageThumbnail(transaction.photos.first),
+                    ),
+                  ),
                 ),
               ),
+              const SizedBox(height: REYSizes.spaceBtwSections),
             ],
-
-            const SizedBox(height: REYSizes.spaceBtwSections),
-
-            // Action buttons for pending transactions
-            // if (transaction.status.toUpperCase() == 'PENDING') ...[
-            //   const SizedBox(height: REYSizes.spaceBtwSections),
-            //   Row(
-            //     children: [
-            //       Expanded(
-            //         child: OutlinedButton.icon(
-            //           onPressed: () async {
-            //             final controller = Get.find<TransactionController>();
-            //             await controller.cancelTransaction(transaction.id);
-            //             Get.back(); // Go back after action
-            //           },
-            //           icon: const Icon(
-            //             Iconsax.close_circle,
-            //             color: REYColors.error,
-            //           ),
-            //           label: Text(
-            //             'cancel'.tr,
-            //             style: TextStyle(color: REYColors.error),
-            //           ),
-            //           style: OutlinedButton.styleFrom(
-            //             side: const BorderSide(color: REYColors.error),
-            //             padding: const EdgeInsets.symmetric(
-            //               vertical: REYSizes.md,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //       const SizedBox(width: REYSizes.spaceBtwItems),
-            //       Expanded(
-            //         child: ElevatedButton.icon(
-            //           onPressed: () async {
-            //             final controller = Get.find<TransactionController>();
-            //             await controller.processTransaction(transaction.id);
-            //             Get.back(); // Go back after action
-            //           },
-            //           icon: const Icon(
-            //             Iconsax.tick_circle,
-            //             color: REYColors.white,
-            //           ),
-            //           label: Text(
-            //             'confirm'.tr,
-            //             style: TextStyle(color: REYColors.white),
-            //           ),
-            //           style: ElevatedButton.styleFrom(
-            //             backgroundColor: REYColors.success,
-            //             padding: const EdgeInsets.symmetric(
-            //               vertical: REYSizes.md,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoSection(
-    BuildContext context,
-    String title,
-    List<Widget> children,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: REYSizes.spaceBtwItems),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(REYSizes.md),
-          decoration: BoxDecoration(
-            color: REYHelperFunctions.isDarkMode(context)
-                ? REYColors.dark
-                : REYColors.light,
-            borderRadius: BorderRadius.circular(REYSizes.cardRadiusMd),
-            border: Border.all(
-              color: REYHelperFunctions.isDarkMode(context)
-                  ? REYColors.darkerGrey
-                  : REYColors.grey.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: children
-                .map(
-                  (child) => Padding(
-                    padding: const EdgeInsets.only(bottom: REYSizes.sm),
-                    child: child,
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        const SizedBox(height: REYSizes.spaceBtwSections),
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Builder(
-      builder: (context) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              '$label:',
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
-            ),
-          ),
-          Expanded(
-            child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Show image in full screen dialog
-  void _showFullScreenImage(BuildContext context, String imageData) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.black,
-          child: Stack(
-            children: [
-              Center(child: InteractiveViewer(child: _buildImage(imageData))),
-              Positioned(
-                top: 40,
-                right: 20,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  /// Build image widget that handles both base64 and network images
-  Widget _buildImage(String imageData) {
+  /// Build image thumbnail that handles both File and base64/network images
+  Widget _buildImageThumbnail(String imageData) {
     if (imageData.startsWith('data:image')) {
       // Handle base64 images
       try {
-        // Extract the base64 part from the data URL
         final base64String = imageData.split(',').last;
         final Uint8List bytes = base64Decode(base64String);
-
         return Image.memory(
           bytes,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               color: REYColors.grey.withValues(alpha: 0.3),
-              child: const Icon(Icons.broken_image, color: REYColors.grey),
+              child: const Center(
+                child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
+              ),
             );
           },
         );
       } catch (e) {
-        // If base64 decoding fails, show error icon
         return Container(
           color: REYColors.grey.withValues(alpha: 0.3),
-          child: const Icon(Icons.broken_image, color: REYColors.grey),
+          child: const Center(
+            child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
+          ),
         );
       }
     } else {
@@ -466,7 +240,9 @@ class TransactionDetailScreen extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: REYColors.grey.withValues(alpha: 0.3),
-            child: const Icon(Icons.broken_image, color: REYColors.grey),
+            child: const Center(
+              child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
+            ),
           );
         },
       );

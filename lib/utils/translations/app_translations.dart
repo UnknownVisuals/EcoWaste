@@ -149,6 +149,7 @@ class AppTranslations extends Translations {
     'confirmationSubtitle': 'Review and confirm deposits',
     'addressSubtitle': 'Find convenient collection locations',
     'darkModeSubtitle': 'Optimize display for your comfort',
+    'adjustDisplayAmbientLighting': 'Adjust display for ambient lighting',
 
     // ═══════════════════════════════════════════════════════════════════════
     // ADMIN PANEL
@@ -233,6 +234,9 @@ class AppTranslations extends Translations {
     'removePhoto': 'Remove Photo',
     'changePhoto': 'Change Photo',
     'tapToUpload': 'Tap to upload photo',
+    'uploadProof': 'Upload Photo Proof',
+    'takePhotoProof': 'Take photo of waste proof',
+    'failedToProcessImage': 'Failed to process image',
 
     // Transaction Types
     'transactionType': 'Transaction Type',
@@ -275,6 +279,14 @@ class AppTranslations extends Translations {
     'totalItems': 'Total items:',
     'totalPriceCart': 'Total points:',
     'checkout': 'Redeem Now',
+    'addedToCart': 'has been added to cart!',
+    'alreadyInCart': 'Already in Cart',
+    'isAlreadyInCart': 'is already in your cart.',
+    'removedFromCart': 'Removed from Cart',
+    'removedFromCartMessage': 'has been removed from cart.',
+    'cartCleared': 'Cart Cleared',
+    'cartClearedMessage': 'All items have been removed from your cart.',
+    'isOutOfStock': 'is currently out of stock.',
 
     // Product Information
     'stock': 'Stock:',
@@ -282,9 +294,7 @@ class AppTranslations extends Translations {
     'productDescription':
         'Discover amazing eco-rewards! Product details, features, and benefits will be displayed here.',
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // COMMON UI ELEMENTS
-    // ═══════════════════════════════════════════════════════════════════════
+    // Common UI elements
     'changeImage': 'Change Image',
     'createTransaction': 'Create Transaction',
     'selectDate': 'Select Date',
@@ -294,6 +304,11 @@ class AppTranslations extends Translations {
     'selectImage': 'Select Image',
     'noDataFound': 'No Data Found!',
     'somethingWentWrong': 'Something went wrong.',
+    'locationDetail': 'Location Detail',
+    'tapToSelectDate': 'Tap to select date',
+    'enterLocationDetail': 'Enter location detail',
+    'viewReport': 'View Report',
+    'defaultViewAll': 'View all',
 
     // Additional validation messages
     'emailRequired': 'Email is required.',
@@ -605,6 +620,14 @@ class AppTranslations extends Translations {
     'totalItems': 'Total item:',
     'totalPriceCart': 'Total poin:',
     'checkout': 'Tukar Sekarang',
+    'addedToCart': 'telah ditambahkan ke keranjang!',
+    'alreadyInCart': 'Sudah di Keranjang',
+    'isAlreadyInCart': 'sudah ada di keranjang Anda.',
+    'removedFromCart': 'Dihapus dari Keranjang',
+    'removedFromCartMessage': 'telah dihapus dari keranjang.',
+    'cartCleared': 'Keranjang Dikosongkan',
+    'cartClearedMessage': 'Semua item telah dihapus dari keranjang Anda.',
+    'isOutOfStock': 'sedang tidak tersedia.',
 
     // Product Information
     'stock': 'Stok:',
