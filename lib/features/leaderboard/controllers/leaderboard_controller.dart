@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/leaderboard/models/leaderboard_model.dart';
+import 'package:eco_waste/features/leaderboard/models/leaderboard_model.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';

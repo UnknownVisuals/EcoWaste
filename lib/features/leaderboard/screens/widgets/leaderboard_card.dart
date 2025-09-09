@@ -1,4 +1,4 @@
-import 'package:eco_waste/features/user/leaderboard/models/leaderboard_model.dart';
+import 'package:eco_waste/features/leaderboard/models/leaderboard_model.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
@@ -42,16 +42,9 @@ class LeaderboardCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Rank number
-            Container(
+            SizedBox(
               width: 30,
               height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color ?? Colors.transparent,
-                border: color == null
-                    ? Border.all(color: REYColors.grey)
-                    : null,
-              ),
               child: Center(
                 child: Text(
                   rank.toString(),

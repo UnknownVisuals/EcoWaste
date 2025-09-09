@@ -1,6 +1,6 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/features/user/leaderboard/controllers/leaderboard_controller.dart';
-import 'package:eco_waste/features/user/leaderboard/screens/widgets/leaderboard_card.dart';
+import 'package:eco_waste/features/leaderboard/controllers/leaderboard_controller.dart';
+import 'package:eco_waste/features/leaderboard/screens/widgets/leaderboard_card.dart';
 import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
