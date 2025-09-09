@@ -41,7 +41,7 @@ class UserHomeScreen extends StatelessWidget {
                 REYSectionHeading(
                   title: 'transactions'.tr,
                   showActionButton: true,
-                  onPressed: () => Get.to(HistoryScreen()),
+                  onPressed: () => Get.to(TransactionsHistoryScreen()),
                 ),
                 SizedBox(
                   height: REYDeviceUtils.getScreenHeight() * 0.5,

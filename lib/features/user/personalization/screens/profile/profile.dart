@@ -3,7 +3,9 @@ import 'package:eco_waste/common/widgets/circular_image.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/user/personalization/screens/profile/widgets/profile_menu.dart';
+import 'package:eco_waste/common/widgets/image_picker_bottom_sheet.dart';
 import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
+import 'package:eco_waste/controllers/camera_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
@@ -15,23 +17,22 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserController userController = Get.find<UserController>();
+    final UserController userController = Get.put(UserController());
     final LocationsController locationsController = Get.put(
       LocationsController(),
     );
+    final CameraController cameraController = Get.put(CameraController());
 
-    // Fetch user data if not already loaded
     if (userController.userModel.value.id.isEmpty) {
       userController.fetchCurrentUser();
     }
 
-    // Fetch locations if not already loaded
     if (locationsController.locations.isEmpty) {
       locationsController.fetchLocations();
     }
 
     return Scaffold(
-      appBar: const REYAppBar(showBackArrow: true, title: Text('Profil')),
+      appBar: REYAppBar(showBackArrow: true, title: Text('profile'.tr)),
       body: Obx(() {
         final user = userController.userModel.value;
 
@@ -57,20 +58,40 @@ class ProfileScreen extends StatelessWidget {
                   width: double.infinity,
                   child: Column(
                     children: [
-                      user.avatar.isNotEmpty
-                          ? REYCircularImage(
-                              image: user.avatar,
+                      Obx(() {
+                        // Check if user has selected a new image
+                        if (cameraController.selectedImage.value != null) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.file(
+                              cameraController.selectedImage.value!,
                               width: 100,
                               height: 100,
-                              isNetworkImage: true,
-                            )
-                          : const REYCircularImage(
-                              image: REYImages.user,
-                              width: 100,
-                              height: 100,
+                              fit: BoxFit.cover,
                             ),
+                          );
+                        }
+                        // Show existing avatar or default
+                        else if (user.avatar.isNotEmpty) {
+                          return REYCircularImage(
+                            image: user.avatar,
+                            width: 100,
+                            height: 100,
+                            isNetworkImage: true,
+                          );
+                        }
+                        // Show default avatar
+                        else {
+                          return const REYCircularImage(
+                            image: REYImages.user,
+                            width: 100,
+                            height: 100,
+                          );
+                        }
+                      }),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            REYImagePickerBottomSheet.show(context: context),
                         child: const Text(
                           'Ubah gambar profil',
                           style: TextStyle(color: REYColors.primary),
@@ -86,28 +107,39 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: REYSizes.spaceBtwSections),
 
                 // Profile Info
-                const REYSectionHeading(title: 'Informasi profil'),
+                REYSectionHeading(title: 'profileInformation'.tr),
                 const SizedBox(height: REYSizes.spaceBtwItems),
 
-                ProfileMenu(title: 'Nama', value: user.name, onPressed: () {}),
                 ProfileMenu(
-                  title: 'Email',
+                  title: 'name'.tr,
+                  value: user.name,
+                  onPressed: () {},
+                ),
+                ProfileMenu(
+                  title: 'email'.tr,
                   value: user.email,
                   onPressed: () {},
                 ),
                 ProfileMenu(
-                  title: 'Desa',
-                  value: location?.desa ?? 'Unknown',
+                  title: 'rtRw'.tr,
+                  value: user.rt.isEmpty && user.rw.isEmpty
+                      ? '--/--'
+                      : '${user.rt.isEmpty ? '--' : user.rt}/${user.rw.isEmpty ? '--' : user.rw}',
                   onPressed: () {},
                 ),
                 ProfileMenu(
-                  title: 'Kecamatan',
-                  value: location?.kecamatan ?? 'Unknown',
+                  title: 'village'.tr,
+                  value: location?.desa ?? 'unknown'.tr,
                   onPressed: () {},
                 ),
                 ProfileMenu(
-                  title: 'Kabupaten/Kota',
-                  value: location?.kabupaten ?? 'Unknown',
+                  title: 'district'.tr,
+                  value: location?.kecamatan ?? 'unknown'.tr,
+                  onPressed: () {},
+                ),
+                ProfileMenu(
+                  title: 'kabupatenKota'.tr,
+                  value: location?.kabupaten ?? 'unknown'.tr,
                   onPressed: () {},
                 ),
               ],

@@ -40,13 +40,13 @@ class CameraController extends GetxController {
         selectedImage.value = File(pickedFile.path);
       } else {
         REYLoaders.errorSnackBar(
-          title: "Gagal mengambil gambar",
-          message: "Tidak ada gambar yang diambil",
+          title: 'failedToTakePhoto'.tr,
+          message: 'noPhotoTaken'.tr,
         );
       }
     } catch (e) {
       REYLoaders.errorSnackBar(
-        title: "Gagal mengambil gambar",
+        title: 'failedToTakePhoto'.tr,
         message: e.toString(),
       );
     }

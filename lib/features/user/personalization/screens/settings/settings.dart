@@ -7,8 +7,6 @@ import 'package:eco_waste/controllers/theme_controller.dart';
 import 'package:eco_waste/controllers/language_controller.dart';
 import 'package:eco_waste/features/authentication/screens/logout/logout.dart';
 import 'package:eco_waste/features/user/personalization/screens/settings/address.dart';
-import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_only.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
@@ -61,22 +59,10 @@ class UserSettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems),
                   REYSettingsMenuTile(
-                    icon: Iconsax.user,
-                    title: 'profile'.tr,
-                    subTitle: 'profileSubtitle'.tr,
-                    onTap: () => Get.to(ProfileScreen()),
-                  ),
-                  REYSettingsMenuTile(
                     icon: Iconsax.receipt,
                     title: 'history'.tr,
                     subTitle: 'historySubtitle'.tr,
-                    onTap: () => Get.to(HistoryScreen()),
-                  ),
-                  REYSettingsMenuTile(
-                    icon: Iconsax.check,
-                    title: 'confirmation'.tr,
-                    subTitle: 'confirmationSubtitle'.tr,
-                    onTap: () => Get.to(TransactionsOnly()),
+                    onTap: () => Get.to(TransactionsHistoryScreen()),
                   ),
                   REYSettingsMenuTile(
                     icon: Iconsax.location,
@@ -98,7 +84,7 @@ class UserSettingsScreen extends StatelessWidget {
                     return REYSettingsMenuTile(
                       icon: Iconsax.moon,
                       title: 'darkMode'.tr,
-                      subTitle: 'Sesuaikan tampilan dengan cahaya sekitar',
+                      subTitle: 'adjustDisplayAmbientLighting'.tr,
                       trailing: Switch(
                         value: isDark,
                         onChanged: (value) {

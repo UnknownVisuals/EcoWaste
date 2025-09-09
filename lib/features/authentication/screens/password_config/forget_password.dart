@@ -1,6 +1,5 @@
 import 'package:eco_waste/features/authentication/screens/password_config/reset_password.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -20,21 +19,21 @@ class ForgetPasswordScreen extends StatelessWidget {
             children: [
               // Headings
               Text(
-                REYTexts.forgetPasswordTitle,
+                'forgetPasswordTitle'.tr,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                REYTexts.forgetPasswordSubTitle,
+                'forgetPasswordSubTitle'.tr,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: REYSizes.spaceBtwSections * 2),
 
               // TextFields
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: REYTexts.email,
-                  prefixIcon: Icon(Iconsax.direct_right),
+                decoration: InputDecoration(
+                  labelText: 'email'.tr,
+                  prefixIcon: const Icon(Iconsax.direct_right),
                 ),
               ),
               const SizedBox(height: REYSizes.spaceBtwSections),
@@ -44,7 +43,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Get.off(const ResetPasswordScreen()),
-                  child: const Text(REYTexts.submit),
+                  child: Text('submit'.tr),
                 ),
               ),
             ],

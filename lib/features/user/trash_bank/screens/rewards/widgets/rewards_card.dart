@@ -3,6 +3,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class RewardsCard extends StatelessWidget {
@@ -100,7 +101,7 @@ class RewardsCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          stock > 0 ? 'Stok: $stock' : 'Habis',
+                          stock > 0 ? '${'stock'.tr} $stock' : 'outOfStock'.tr,
                           style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(color: Colors.white),
                         ),

@@ -38,7 +38,7 @@ class TransactionsScreen extends StatelessWidget {
             REYSectionHeading(
               title: 'transactions'.tr,
               showActionButton: true,
-              onPressed: () => Get.to(HistoryScreen()),
+              onPressed: () => Get.to(TransactionsHistoryScreen()),
             ),
             const SizedBox(height: REYSizes.spaceBtwItems),
             TransactionsInput(userId: userId, locationId: locationId),

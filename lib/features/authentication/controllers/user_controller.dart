@@ -71,8 +71,8 @@ class UserController extends GetxController {
           // We don't save user data to storage anymore - only session token is persisted
         } else {
           REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'Error',
-            message: responseBody['message'] ?? 'Failed to fetch user data',
+            title: responseBody['status'] ?? 'error'.tr,
+            message: responseBody['message'] ?? 'failedToFetchUserData'.tr,
           );
         }
       } else if (response.statusCode == 401) {
@@ -83,14 +83,14 @@ class UserController extends GetxController {
       } else {
         REYLoaders.errorSnackBar(
           title: 'HTTP ${response.statusCode}',
-          message: response.body['message'] ?? 'Failed to fetch user data',
+          message: response.body['message'] ?? 'failedToFetchUserData'.tr,
         );
       }
     } catch (e) {
       // On network error, don't immediately clear session unless it's auth related
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Failed to fetch user data: ${e.toString()}',
+        title: 'error'.tr,
+        message: '${'failedToFetchUserData'.tr}: ${e.toString()}',
       );
     } finally {
       isLoading.value = false;

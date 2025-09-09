@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class TransactionsHistoryScreen extends StatelessWidget {
+  const TransactionsHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

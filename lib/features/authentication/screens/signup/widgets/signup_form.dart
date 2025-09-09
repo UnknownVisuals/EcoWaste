@@ -2,7 +2,6 @@ import 'package:eco_waste/features/authentication/controllers/signup_controller.
 import 'package:eco_waste/features/authentication/screens/signup/verify_email.dart';
 import 'package:eco_waste/features/authentication/screens/signup/widgets/term_and_conditions.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,9 +22,9 @@ class SignupForm extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   expands: false,
-                  decoration: const InputDecoration(
-                    labelText: REYTexts.firstName,
-                    prefixIcon: Icon(Iconsax.user),
+                  decoration: InputDecoration(
+                    labelText: 'firstName'.tr,
+                    prefixIcon: const Icon(Iconsax.user),
                   ),
                 ),
               ),
@@ -33,9 +32,9 @@ class SignupForm extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   expands: false,
-                  decoration: const InputDecoration(
-                    labelText: REYTexts.lastName,
-                    prefixIcon: Icon(Iconsax.user),
+                  decoration: InputDecoration(
+                    labelText: 'lastName'.tr,
+                    prefixIcon: const Icon(Iconsax.user),
                   ),
                 ),
               ),
@@ -46,9 +45,9 @@ class SignupForm extends StatelessWidget {
           // Username
           TextFormField(
             expands: false,
-            decoration: const InputDecoration(
-              labelText: REYTexts.username,
-              prefixIcon: Icon(Iconsax.user_edit),
+            decoration: InputDecoration(
+              labelText: 'username'.tr,
+              prefixIcon: const Icon(Iconsax.user_edit),
             ),
           ),
           const SizedBox(height: REYSizes.spaceBtwInputFields),
@@ -56,9 +55,9 @@ class SignupForm extends StatelessWidget {
           // Email
           TextFormField(
             expands: false,
-            decoration: const InputDecoration(
-              labelText: REYTexts.email,
-              prefixIcon: Icon(Iconsax.direct),
+            decoration: InputDecoration(
+              labelText: 'email'.tr,
+              prefixIcon: const Icon(Iconsax.direct),
             ),
           ),
           const SizedBox(height: REYSizes.spaceBtwInputFields),
@@ -66,9 +65,9 @@ class SignupForm extends StatelessWidget {
           // Phone Number
           TextFormField(
             expands: false,
-            decoration: const InputDecoration(
-              labelText: REYTexts.phoneNo,
-              prefixIcon: Icon(Iconsax.call),
+            decoration: InputDecoration(
+              labelText: 'phoneNo'.tr,
+              prefixIcon: const Icon(Iconsax.call),
             ),
           ),
           const SizedBox(height: REYSizes.spaceBtwInputFields),
@@ -79,7 +78,7 @@ class SignupForm extends StatelessWidget {
               expands: false,
               obscureText: signupController.obscurePassword.value,
               decoration: InputDecoration(
-                labelText: REYTexts.password,
+                labelText: 'password'.tr,
                 prefixIcon: const Icon(Iconsax.password_check),
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -103,7 +102,7 @@ class SignupForm extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () => Get.to(const VerifyEmailScreen()),
-              child: const Text(REYTexts.createAccount),
+              child: Text('createAccount'.tr),
             ),
           ),
         ],

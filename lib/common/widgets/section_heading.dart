@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class REYSectionHeading extends StatelessWidget {
   const REYSectionHeading({
     super.key,
     this.onPressed,
     this.textColor,
-    this.buttonTitle = 'Lihat semua',
+    this.buttonTitle,
     required this.title,
     this.showActionButton = false,
   });
 
   final Color? textColor;
   final bool showActionButton;
-  final String title, buttonTitle;
+  final String title;
+  final String? buttonTitle;
   final void Function()? onPressed;
 
   @override
@@ -32,7 +34,7 @@ class REYSectionHeading extends StatelessWidget {
           TextButton(
             onPressed: onPressed,
             child: Text(
-              buttonTitle,
+              buttonTitle ?? 'defaultViewAll'.tr,
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ),

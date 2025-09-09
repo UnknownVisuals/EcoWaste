@@ -4,7 +4,6 @@ import 'package:eco_waste/features/authentication/controllers/user_controller.da
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:eco_waste/features/user/navigation_menu.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/local_storage/storage_utility.dart';
 import 'package:eco_waste/utils/theme/theme.dart';
@@ -56,7 +55,7 @@ class App extends StatelessWidget {
 
     return Obx(
       () => GetMaterialApp(
-        title: REYTexts.appName,
+        title: 'appName'.tr,
         themeMode: themeController.theme,
         theme: REYAppTheme.lightTheme,
         darkTheme: REYAppTheme.darkTheme,

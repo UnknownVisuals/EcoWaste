@@ -4,6 +4,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
@@ -85,12 +86,12 @@ class HistoryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '$formattedDate WIB',
+                    formattedDate + ' ' + 'wib'.tr,
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems / 4),
                   Text(
-                    '${berat}Kg $jenisSampah',
+                    berat + 'kg'.tr + ' ' + jenisSampah,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: REYSizes.spaceBtwItems / 4),

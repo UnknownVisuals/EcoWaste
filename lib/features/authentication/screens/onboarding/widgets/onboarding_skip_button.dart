@@ -17,7 +17,7 @@ class OnBoardingSkipButton extends StatelessWidget {
       right: REYSizes.defaultSpace,
       child: TextButton(
         onPressed: controller.skipPage,
-        child: const Text('Skip', style: TextStyle(color: REYColors.primary)),
+        child: Text('skip'.tr, style: TextStyle(color: REYColors.primary)),
       ),
     );
   }

@@ -26,14 +26,14 @@ class LogoutScreen extends StatelessWidget {
             Expanded(
               child: OutlinedButton(
                 onPressed: () => Get.back(),
-                child: const Center(child: Text('No')),
+                child: Center(child: Text('no'.tr)),
               ),
             ),
             const SizedBox(width: REYSizes.spaceBtwItems),
             Expanded(
               child: ElevatedButton(
                 onPressed: () => logoutController.logout(),
-                child: const Center(child: Text('Yes')),
+                child: Center(child: Text('yes'.tr)),
               ),
             ),
           ],

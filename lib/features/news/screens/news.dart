@@ -17,7 +17,7 @@ class NewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: REYAppBar(
         title: Text(
-          'Berita',
+          'news'.tr,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         actions: [

@@ -33,12 +33,12 @@ class RewardsCart extends StatelessWidget {
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                'Keranjang Anda kosong',
+                'cartEmpty'.tr,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                'Tambahkan reward ke keranjang untuk melanjutkan.',
+                'addToCartMessage'.tr,
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -50,7 +50,7 @@ class RewardsCart extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            REYSectionHeading(title: 'Keranjang Anda', showActionButton: false),
+            REYSectionHeading(title: 'yourCart'.tr, showActionButton: false),
             const SizedBox(height: REYSizes.spaceBtwItems),
             Flexible(
               child: ListView.builder(
@@ -96,7 +96,7 @@ class RewardsCart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total item:',
+                  'totalItems'.tr,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
@@ -109,7 +109,7 @@ class RewardsCart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total Poin',
+                  'points'.tr,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
@@ -127,11 +127,11 @@ class RewardsCart extends StatelessWidget {
               onPressed: () {
                 Get.back();
                 REYLoaders.errorSnackBar(
-                  title: 'Checkout',
-                  message: 'Fitur checkout belum diimplementasikan.',
+                  title: 'checkout'.tr,
+                  message: 'checkoutNotImplemented'.tr,
                 );
               },
-              child: const Text('Checkout'),
+              child: Text('checkout'.tr),
             ),
             const SizedBox(height: REYSizes.spaceBtwSections * 2),
           ],

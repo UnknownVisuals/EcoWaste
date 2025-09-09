@@ -4,7 +4,6 @@ import 'package:eco_waste/features/authentication/screens/onboarding/widgets/onb
 import 'package:eco_waste/features/authentication/screens/onboarding/widgets/onboarding_page.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/widgets/onboarding_skip_button.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,21 +21,21 @@ class OnBoardingScreen extends StatelessWidget {
           PageView(
             controller: controller.pageController,
             onPageChanged: controller.updatePageIndicator,
-            children: const [
+            children: [
               OnBoardingPage(
                 image: REYImages.onBoardingImage1,
-                title: REYTexts.onBoardingTitle1,
-                subTitle: REYTexts.onBoardingSubTitle1,
+                title: 'onBoardingTitle1'.tr,
+                subTitle: 'onBoardingSubTitle1'.tr,
               ),
               OnBoardingPage(
                 image: REYImages.onBoardingImage2,
-                title: REYTexts.onBoardingTitle2,
-                subTitle: REYTexts.onBoardingSubTitle2,
+                title: 'onBoardingTitle2'.tr,
+                subTitle: 'onBoardingSubTitle2'.tr,
               ),
               OnBoardingPage(
                 image: REYImages.onBoardingImage3,
-                title: REYTexts.onBoardingTitle3,
-                subTitle: REYTexts.onBoardingSubTitle3,
+                title: 'onBoardingTitle3'.tr,
+                subTitle: 'onBoardingSubTitle3'.tr,
               ),
             ],
           ),

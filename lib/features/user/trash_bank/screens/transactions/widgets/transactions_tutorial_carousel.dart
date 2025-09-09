@@ -16,17 +16,17 @@ class DepositTutorialCarousel extends StatelessWidget {
     final homeController = Get.put(UserHomeController());
 
     List<Widget> items = [
-      const DepositTutorialCard(
+      DepositTutorialCard(
         imagePath: REYImages.trashDeposit1,
-        text: 'Pilah sampah yang terkumpul!',
+        text: 'tutorialStep1'.tr,
       ),
-      const DepositTutorialCard(
+      DepositTutorialCard(
         imagePath: REYImages.trashDeposit2,
-        text: 'Catat semua jenis sampah pada aplikasi....',
+        text: 'tutorialStep2'.tr,
       ),
-      const DepositTutorialCard(
+      DepositTutorialCard(
         imagePath: REYImages.trashDeposit3,
-        text: 'Saldo akan bertambah setelah dikumpulkan!',
+        text: 'tutorialStep3'.tr,
       ),
     ];
 

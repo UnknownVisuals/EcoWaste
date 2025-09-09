@@ -26,7 +26,7 @@ class DepositImageBottomSheet extends StatelessWidget {
                 const Icon(Iconsax.image),
                 const SizedBox(width: REYSizes.spaceBtwItems),
                 Text(
-                  'Pilih dari Galeri',
+                  'chooseFromGallery'.tr,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],

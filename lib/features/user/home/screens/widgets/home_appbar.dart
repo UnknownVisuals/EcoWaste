@@ -4,7 +4,6 @@ import 'package:eco_waste/features/authentication/controllers/user_controller.da
 import 'package:eco_waste/features/user/trash_bank/controllers/transactions_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_history.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,13 +34,13 @@ class UserHomeAppBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              REYTexts.homeAppbarTitle,
+              'homeAppbarTitle'.tr,
               style: Theme.of(
                 context,
               ).textTheme.labelMedium!.apply(color: REYColors.white),
             ),
             Text(
-              'Hello, ${user.name}!',
+              '${'hello'.tr}, ${user.name}!',
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall!.apply(color: REYColors.white),
@@ -51,7 +50,7 @@ class UserHomeAppBar extends StatelessWidget {
         ),
         actions: [
           REYNotificationCounterIcon(
-            onPressed: () => Get.to(HistoryScreen()),
+            onPressed: () => Get.to(TransactionsHistoryScreen()),
             iconColor: REYColors.white,
             availableCount: pendingCount,
           ),

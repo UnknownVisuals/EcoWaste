@@ -49,17 +49,17 @@ class TransactionCard extends StatelessWidget {
       case 'PENDING':
         statusColor = REYColors.warning;
         statusIcon = Iconsax.clock;
-        statusText = 'Pending';
+        statusText = 'pending'.tr;
         break;
       case 'COMPLETED':
         statusColor = REYColors.success;
         statusIcon = Iconsax.tick_circle;
-        statusText = 'Completed';
+        statusText = 'completed'.tr;
         break;
       case 'CANCELLED':
         statusColor = REYColors.error;
         statusIcon = Iconsax.close_circle;
-        statusText = 'Cancelled';
+        statusText = 'cancelled'.tr;
         break;
       default:
         statusColor = REYColors.grey;
@@ -110,7 +110,7 @@ class TransactionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(REYSizes.sm),
                   ),
                   child: Text(
-                    transaction.type == 'PICKUP' ? 'Pickup' : 'Drop Off',
+                    transaction.type == 'PICKUP' ? 'pickUp'.tr : 'dropOff'.tr,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: transaction.type == 'PICKUP'
                           ? REYColors.primary
@@ -224,7 +224,7 @@ class TransactionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Points Earned',
+                          'pointsEarned'.tr,
                           style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(color: REYColors.darkGrey),
                         ),

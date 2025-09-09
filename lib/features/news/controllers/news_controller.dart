@@ -61,19 +61,19 @@ class NewsController extends GetxController {
           }
         } else {
           REYLoaders.errorSnackBar(
-            title: "Gagal memuat berita",
-            message: "Status tidak berhasil: ${newsResponseModel.status}",
+            title: 'loadNewsError'.tr,
+            message: '${'statusNotSuccessful'.tr}: ${newsResponseModel.status}',
           );
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: "Gagal memuat berita",
-          message: "Response tidak valid: ${newsResponse.statusCode}",
+          title: 'loadNewsError'.tr,
+          message: '${'responseNotValid'.tr}: ${newsResponse.statusCode}',
         );
       }
     } catch (e) {
       REYLoaders.errorSnackBar(
-        title: "Gagal memuat berita",
+        title: 'loadNewsError'.tr,
         message: e.toString(),
       );
     } finally {

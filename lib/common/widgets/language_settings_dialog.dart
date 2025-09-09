@@ -4,8 +4,8 @@ import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LanguageSettingsDialog extends StatelessWidget {
-  const LanguageSettingsDialog({super.key});
+class REYLanguageSettingsDialog extends StatelessWidget {
+  const REYLanguageSettingsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

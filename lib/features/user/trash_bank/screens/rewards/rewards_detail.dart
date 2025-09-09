@@ -1,6 +1,7 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:eco_waste/features/user/trash_bank/models/rewards_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -70,7 +71,9 @@ class RewardsDetail extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    reward.stock > 0 ? 'Stok: ${reward.stock}' : 'Habis',
+                    reward.stock > 0
+                        ? '${'stock'.tr} ${reward.stock}'
+                        : 'outOfStock'.tr,
                     style: Theme.of(
                       context,
                     ).textTheme.labelMedium?.copyWith(color: Colors.white),

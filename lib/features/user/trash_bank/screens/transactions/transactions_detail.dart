@@ -6,6 +6,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
@@ -48,17 +49,17 @@ class TransactionDetailScreen extends StatelessWidget {
       case 'PENDING':
         statusColor = REYColors.warning;
         statusIcon = Iconsax.clock;
-        statusText = 'Pending';
+        statusText = 'pending'.tr;
         break;
       case 'COMPLETED':
         statusColor = REYColors.success;
         statusIcon = Iconsax.tick_circle;
-        statusText = 'Completed';
+        statusText = 'completed'.tr;
         break;
       case 'CANCELLED':
         statusColor = REYColors.error;
         statusIcon = Iconsax.close_circle;
-        statusText = 'Cancelled';
+        statusText = 'cancelled'.tr;
         break;
       default:
         statusColor = REYColors.grey;
@@ -69,7 +70,7 @@ class TransactionDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: REYAppBar(
         title: Text(
-          'Transaction Detail',
+          'transactionDetail'.tr,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         showBackArrow: true,
@@ -109,7 +110,7 @@ class TransactionDetailScreen extends StatelessWidget {
               _buildInfoRow('Transaction ID', transaction.id),
               _buildInfoRow(
                 'Type',
-                transaction.type == 'PICKUP' ? 'Pickup' : 'Drop Off',
+                transaction.type == 'PICKUP' ? 'pickUp'.tr : 'dropOff'.tr,
               ),
               _buildInfoRow(
                 'Scheduled Date',
@@ -131,8 +132,8 @@ class TransactionDetailScreen extends StatelessWidget {
             ]),
 
             // Location Info
-            _buildInfoSection(context, 'Location Information', [
-              _buildInfoRow('Location Detail', transaction.locationDetail),
+            _buildInfoSection(context, 'locationInformation'.tr, [
+              _buildInfoRow('locationDetail'.tr, transaction.locationDetail),
             ]),
 
             // Waste Category Info
@@ -187,14 +188,14 @@ class TransactionDetailScreen extends StatelessWidget {
               _buildInfoSection(context, 'Transaction Results', [
                 if (transaction.actualWeight != null)
                   _buildInfoRow(
-                    'Actual Weight',
-                    '${transaction.actualWeight!.toStringAsFixed(2)} kg',
+                    'actualWeight'.tr,
+                    '${transaction.actualWeight!.toStringAsFixed(2)} ${'kg'.tr}',
                   ),
                 if (transaction.points != null)
                   Row(
                     children: [
                       Text(
-                        'Points Earned: ',
+                        '${'pointsEarned'.tr}: ',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),

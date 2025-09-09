@@ -36,7 +36,7 @@ class TransactionHistoryCardList extends StatelessWidget {
       if (transactionController.filteredTransactions.isEmpty) {
         String emptyMessage;
         if (transactionController.transactions.isEmpty) {
-          emptyMessage = 'No transaction history available';
+          emptyMessage = 'noTransactionHistoryAvailable'.tr;
         } else {
           // There are transactions but none match the current filter
           final filterName =
@@ -47,7 +47,7 @@ class TransactionHistoryCardList extends StatelessWidget {
                 'REJECTED': 'rejected',
               }[transactionController.selectedFilter.value] ??
               'selected';
-          emptyMessage = 'No $filterName transactions found';
+          emptyMessage = '${'noFilteredTransactionsFound'.tr} ($filterName)';
         }
 
         return Center(
@@ -65,8 +65,8 @@ class TransactionHistoryCardList extends StatelessWidget {
               const SizedBox(height: REYSizes.spaceBtwItems / 2),
               Text(
                 transactionController.transactions.isEmpty
-                    ? 'Your transactions will appear here'
-                    : 'Try selecting a different filter',
+                    ? 'yourTransactionsWillAppearHere'.tr
+                    : 'trySelectingDifferentFilter'.tr,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: REYColors.grey),

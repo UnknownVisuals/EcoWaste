@@ -1,7 +1,7 @@
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
@@ -15,12 +15,12 @@ class LoginHeader extends StatelessWidget {
         children: [
           const Image(height: 150, image: AssetImage(REYImages.logo)),
           Text(
-            REYTexts.loginTitle,
+            'loginTitle'.tr,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: REYSizes.sm),
           Text(
-            REYTexts.loginSubTitle,
+            'loginSubTitle'.tr,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],

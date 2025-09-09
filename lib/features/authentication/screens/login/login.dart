@@ -4,7 +4,6 @@ import 'package:eco_waste/common/widgets/social_button.dart';
 import 'package:eco_waste/features/authentication/screens/login/widgets/login_form.dart';
 import 'package:eco_waste/features/authentication/screens/login/widgets/login_header.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +24,7 @@ class LoginScreen extends StatelessWidget {
             const LoginForm(),
 
             // Divider
-            REYFormDivider(dividerText: REYTexts.orSignInWith.capitalize!),
+            REYFormDivider(dividerText: 'orSignInWith'.tr.capitalize!),
             const SizedBox(height: REYSizes.spaceBtwSections),
 
             // Signin with Socials

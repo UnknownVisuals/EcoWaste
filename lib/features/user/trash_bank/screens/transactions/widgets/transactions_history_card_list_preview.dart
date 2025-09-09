@@ -43,14 +43,14 @@ class TransactionHistoryCardListPreview extends StatelessWidget {
               Icon(Icons.history, size: 48, color: REYColors.grey),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                'No transaction history available',
+                'noTransactionHistoryAvailable'.tr,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(color: REYColors.grey),
               ),
               const SizedBox(height: REYSizes.spaceBtwItems / 2),
               Text(
-                'Your transactions will appear here',
+                'yourTransactionsWillAppearHere'.tr,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: REYColors.grey),

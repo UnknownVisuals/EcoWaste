@@ -31,7 +31,7 @@ class DepositConfirmationScreen extends StatelessWidget {
             Expanded(
               child: OutlinedButton(
                 onPressed: () => Get.back(),
-                child: const Center(child: Text('Tidak')),
+                child: Center(child: Text('no'.tr)),
               ),
             ),
             const SizedBox(width: REYSizes.spaceBtwItems),
@@ -40,7 +40,7 @@ class DepositConfirmationScreen extends StatelessWidget {
                 onPressed: () {
                   // Handle confirmation action
                 },
-                child: const Center(child: Text('Iya')),
+                child: Center(child: Text('yes'.tr)),
               ),
             ),
           ],

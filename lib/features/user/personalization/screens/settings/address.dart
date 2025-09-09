@@ -18,6 +18,7 @@ class AddressScreen extends StatelessWidget {
     final LocationsController locationsController = Get.put(
       LocationsController(),
     );
+
     final location = locationsController.locations.firstWhere(
       (location) => location.id == user.locationId,
     );
@@ -26,7 +27,7 @@ class AddressScreen extends StatelessWidget {
       appBar: REYAppBar(
         showBackArrow: true,
         title: Text(
-          'Riwayat',
+          'address'.tr,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
@@ -43,7 +44,7 @@ class AddressScreen extends StatelessWidget {
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                "Kumpulkan sampahmu di",
+                'collectWasteAt'.tr,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),

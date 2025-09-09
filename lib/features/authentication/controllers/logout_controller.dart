@@ -43,7 +43,7 @@ class LogoutController extends GetxController {
         );
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(title: 'Error', message: e.toString());
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
     } finally {
       isLoading.value = false;
     }

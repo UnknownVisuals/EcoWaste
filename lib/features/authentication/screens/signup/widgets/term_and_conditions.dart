@@ -1,7 +1,6 @@
 import 'package:eco_waste/features/authentication/controllers/signup_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,11 +28,11 @@ class TermAndConditions extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: '${REYTexts.iAgreeTo} ',
+                    text: '${'iAgreeTo'.tr} ',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   TextSpan(
-                    text: REYTexts.privacyPolicy,
+                    text: 'privacyPolicy'.tr,
                     style: Theme.of(context).textTheme.bodyMedium!.apply(
                       color: REYColors.primary,
                       decoration: TextDecoration.underline,
@@ -41,11 +40,11 @@ class TermAndConditions extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ' ${REYTexts.and} ',
+                    text: ' ${'and'.tr} ',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   TextSpan(
-                    text: REYTexts.termsOfUse,
+                    text: 'termsOfUse'.tr,
                     style: Theme.of(context).textTheme.bodyMedium!.apply(
                       color: REYColors.primary,
                       decoration: TextDecoration.underline,

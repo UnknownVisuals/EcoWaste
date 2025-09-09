@@ -32,7 +32,7 @@ class HistoryDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: REYAppBar(
         title: Text(
-          'Detail Setoran',
+          'depositDetail'.tr,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         showBackArrow: true,
@@ -86,12 +86,12 @@ class HistoryDetailPage extends StatelessWidget {
 
             // Details of the deposit
             Text(
-              '$formattedDate WIB',
+              formattedDate + ' ' + 'wib'.tr,
               style: Theme.of(context).textTheme.labelSmall,
             ),
             const SizedBox(height: REYSizes.spaceBtwItems / 4),
             Text(
-              '${berat}Kg $jenisSampah',
+              berat + 'kg'.tr + ' ' + jenisSampah,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: REYSizes.spaceBtwItems / 4),

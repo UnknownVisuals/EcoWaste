@@ -1,7 +1,6 @@
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +35,13 @@ class ResetPasswordScreen extends StatelessWidget {
 
               // Title & Subtitle
               Text(
-                REYTexts.changeYourPasswordTitle,
+                'changeYourPasswordTitle'.tr,
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
-                REYTexts.changeYourPasswordSubTitle,
+                'changeYourPasswordSubTitle'.tr,
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -53,7 +52,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Get.offAll(const LoginScreen()),
-                  child: const Text(REYTexts.rContinue),
+                  child: Text('continue'.tr),
                 ),
               ),
               const SizedBox(height: REYSizes.spaceBtwItems),
@@ -61,7 +60,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () {},
-                  child: const Text(REYTexts.resendEmail),
+                  child: Text('resendEmail'.tr),
                 ),
               ),
             ],

@@ -1,11 +1,11 @@
 import 'package:eco_waste/common/styles/spacing_styles.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
-import 'package:eco_waste/utils/constants/text_strings.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({
+class REYSuccessScreen extends StatelessWidget {
+  const REYSuccessScreen({
     super.key,
     required this.image,
     required this.title,
@@ -50,7 +50,7 @@ class SuccessScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: onPressed,
-                  child: const Text(REYTexts.rContinue),
+                  child: Text('continue'.tr),
                 ),
               ),
             ],

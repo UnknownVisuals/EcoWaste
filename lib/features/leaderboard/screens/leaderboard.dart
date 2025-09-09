@@ -28,7 +28,7 @@ class UserLeaderboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: REYAppBar(
         title: Text(
-          'Peringkat',
+          'leaderboard'.tr,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         actions: [

@@ -1,7 +1,7 @@
 import 'package:eco_waste/common/widgets/icon_button.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/user/trash_bank/screens/rewards/rewards.dart';
-import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions_page.dart';
+import 'package:eco_waste/features/user/trash_bank/screens/transactions/transactions.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class HomeCardPoin extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Saldo',
+                    'balance'.tr,
                     style: Theme.of(
                       context,
                     ).textTheme.titleMedium!.copyWith(color: REYColors.white),
@@ -55,7 +55,7 @@ class HomeCardPoin extends StatelessWidget {
                       ),
                       const SizedBox(width: REYSizes.sm / 2),
                       Text(
-                        'Poin',
+                        'points'.tr,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: REYColors.white,
                         ),
@@ -70,7 +70,7 @@ class HomeCardPoin extends StatelessWidget {
                 children: [
                   REYIconButton(
                     icon: Iconsax.send_2,
-                    title: 'Setor\nSampah',
+                    title: 'depositWasteShort'.tr,
                     onPressed: () => Get.to(
                       TransactionsScreen(
                         userId: user.id,
@@ -81,7 +81,7 @@ class HomeCardPoin extends StatelessWidget {
                   const SizedBox(width: REYSizes.spaceBtwItems),
                   REYIconButton(
                     icon: Iconsax.bitcoin_convert,
-                    title: 'Tukar\nPoin',
+                    title: 'exchangePoints'.tr,
                     onPressed: () => Get.to(const RewardsScreen()),
                   ),
                 ],

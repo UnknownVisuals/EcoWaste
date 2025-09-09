@@ -6,6 +6,7 @@ import 'package:eco_waste/features/user/trash_bank/models/transactions_model.dar
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
+import 'package:eco_waste/common/widgets/image_picker_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -83,16 +84,16 @@ class TransactionsInput extends StatelessWidget {
             value: selectedTransactionType.value.isEmpty
                 ? null
                 : selectedTransactionType.value,
-            items: const [
+            items: [
               DropdownMenuItem<String>(
                 value: 'DROPOFF',
                 alignment: AlignmentDirectional.center,
-                child: Text('Drop Off (Antar)'),
+                child: Text('dropOff'.tr),
               ),
               DropdownMenuItem<String>(
                 value: 'PICKUP',
                 alignment: AlignmentDirectional.center,
-                child: Text('Pick Up (Jemput)'),
+                child: Text('pickUp'.tr),
               ),
             ],
             onChanged: (newValue) {
@@ -100,7 +101,7 @@ class TransactionsInput extends StatelessWidget {
             },
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.swap_horiz),
-              labelText: 'Tipe Transaksi',
+              labelText: 'transactionType'.tr,
             ),
           ),
         ),
@@ -137,7 +138,7 @@ class TransactionsInput extends StatelessWidget {
           controller: locationController,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.location_on_outlined),
-            labelText: 'Detail Lokasi',
+            labelText: 'locationDetail'.tr,
             alignLabelWithHint: true,
           ),
         ),
@@ -161,10 +162,10 @@ class TransactionsInput extends StatelessWidget {
             },
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.calendar_today),
-              labelText: 'Pilih Tanggal',
+              labelText: 'selectDate'.tr,
               hintText: selectedDate.value != null
                   ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}'
-                  : 'Tap untuk pilih tanggal',
+                  : 'tapToSelectDate'.tr,
             ),
           ),
         ),
@@ -173,9 +174,9 @@ class TransactionsInput extends StatelessWidget {
 
         // Upload Picture Section
         REYSectionHeading(
-          title: 'Upload Foto Bukti',
+          title: 'uploadProof'.tr,
           showActionButton: cameraController.selectedImage.value != null,
-          buttonTitle: 'Hapus Foto',
+          buttonTitle: 'removePhoto'.tr,
           onPressed: () {
             cameraController.selectedImage.value = null;
           },
@@ -186,7 +187,7 @@ class TransactionsInput extends StatelessWidget {
         // Image Preview
         Obx(
           () => GestureDetector(
-            onTap: () => _showImagePickerBottomSheet(context, cameraController),
+            onTap: () => REYImagePickerBottomSheet.show(context: context),
             child: Container(
               height: 200,
               width: double.infinity,
@@ -213,7 +214,7 @@ class TransactionsInput extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Tap untuk menambah gambar',
+                          'tapToAddImage'.tr,
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 14,
@@ -234,12 +235,9 @@ class TransactionsInput extends StatelessWidget {
               Expanded(
                 child: OutlinedButton(
                   onPressed: cameraController.selectedImage.value != null
-                      ? () => _showImagePickerBottomSheet(
-                          context,
-                          cameraController,
-                        )
+                      ? () => REYImagePickerBottomSheet.show(context: context)
                       : null,
-                  child: const Text('Ganti Gambar'),
+                  child: Text('changeImage'.tr),
                 ),
               ),
               const SizedBox(width: 16),
@@ -262,77 +260,13 @@ class TransactionsInput extends StatelessWidget {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Buat Transaksi'),
+                      : Text('createTransaction'.tr),
                 ),
               ),
             ],
           ),
         ),
       ],
-    );
-  }
-
-  void _showImagePickerBottomSheet(
-    BuildContext context,
-    CameraController cameraController,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(REYSizes.defaultSpace),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle bar
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              // Title
-              Text(
-                'Pilih Gambar',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: REYSizes.spaceBtwItems),
-              // Camera Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    cameraController.captureImageWithCamera();
-                  },
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text('Ambil dari Kamera'),
-                ),
-              ),
-              const SizedBox(height: REYSizes.spaceBtwItems),
-              // Gallery Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    cameraController.pickImageFromGallery();
-                  },
-                  icon: const Icon(Icons.photo_library),
-                  label: const Text('Pilih dari Galeri'),
-                ),
-              ),
-              const SizedBox(height: REYSizes.spaceBtwItems),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -348,41 +282,38 @@ class TransactionsInput extends StatelessWidget {
     // Validation
     if (selectedWasteCategory.value.isEmpty) {
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Pilih jenis sampah terlebih dahulu',
+        title: 'error'.tr,
+        message: 'selectWasteTypeFirst'.tr,
       );
       return;
     }
 
     if (selectedTransactionType.value.isEmpty) {
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Pilih tipe transaksi terlebih dahulu',
+        title: 'error'.tr,
+        message: 'selectTransactionTypeFirst'.tr,
       );
       return;
     }
 
     if (locationController.text.isEmpty) {
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Masukkan detail lokasi',
+        title: 'error'.tr,
+        message: 'enterLocationDetail'.tr,
       );
       return;
     }
 
     if (selectedDate.value == null) {
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Pilih tanggal transaksi',
+        title: 'error'.tr,
+        message: 'selectTransactionDate'.tr,
       );
       return;
     }
 
     if (cameraController.selectedImage.value == null) {
-      REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Ambil foto bukti sampah',
-      );
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: 'takePhotoProof'.tr);
       return;
     }
 
@@ -393,8 +324,8 @@ class TransactionsInput extends StatelessWidget {
       base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
     } catch (e) {
       REYLoaders.errorSnackBar(
-        title: 'Error',
-        message: 'Gagal memproses gambar: ${e.toString()}',
+        title: 'error'.tr,
+        message: 'failedToProcessImage'.tr,
       );
       return;
     }

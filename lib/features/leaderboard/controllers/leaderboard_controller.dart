@@ -37,8 +37,8 @@ class LeaderboardController extends GetxController {
           leaderboard.sort((a, b) => a.rank.compareTo(b.rank));
         } else {
           REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'Error',
-            message: responseBody['message'] ?? 'Failed to load leaderboard',
+            title: responseBody['status'] ?? 'error'.tr,
+            message: responseBody['message'] ?? 'failedToLoadLeaderboard'.tr,
           );
         }
       } else {
@@ -46,13 +46,13 @@ class LeaderboardController extends GetxController {
           title: 'HTTP ${leaderboardResponse.statusCode}',
           message:
               leaderboardResponse.body['message'] ??
-              'Failed to fetch leaderboard',
+              'failedToLoadLeaderboard'.tr,
         );
       }
     } catch (e) {
       REYLoaders.errorSnackBar(
-        title: "Error",
-        message: "Failed to load leaderboard: ${e.toString()}",
+        title: 'error'.tr,
+        message: '${'failedToLoadLeaderboard'.tr}: ${e.toString()}',
       );
     } finally {
       isLoading.value = false;

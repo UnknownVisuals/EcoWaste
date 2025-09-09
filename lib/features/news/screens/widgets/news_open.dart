@@ -18,7 +18,7 @@ class NewsOpen extends StatelessWidget {
     return Scaffold(
       appBar: REYAppBar(
         title: Text(
-          'Berita',
+          'news'.tr,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         showBackArrow: true,
