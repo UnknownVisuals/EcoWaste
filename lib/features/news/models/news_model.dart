@@ -26,3 +26,28 @@ class NewsModel {
     );
   }
 }
+
+class NewsResponse {
+  final String status;
+  final int totalResults;
+  final List<NewsModel> results;
+  final String? nextPage;
+
+  NewsResponse({
+    required this.status,
+    required this.totalResults,
+    required this.results,
+    this.nextPage,
+  });
+
+  factory NewsResponse.fromJson(Map<String, dynamic> json) {
+    return NewsResponse(
+      status: json['status'] ?? '',
+      totalResults: json['totalResults'] ?? 0,
+      results: (json['results'] as List? ?? [])
+          .map((data) => NewsModel.fromJson(data as Map<String, dynamic>))
+          .toList(),
+      nextPage: json['nextPage'],
+    );
+  }
+}

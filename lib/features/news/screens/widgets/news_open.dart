@@ -16,7 +16,13 @@ class NewsOpen extends StatelessWidget {
     newsController.initializeWebViewController(url);
 
     return Scaffold(
-      appBar: const REYAppBar(title: Text('Berita'), showBackArrow: true),
+      appBar: REYAppBar(
+        title: Text(
+          'Berita',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        showBackArrow: true,
+      ),
       body: Obx(() {
         if (newsController.isWebViewLoading.value) {
           return const Center(

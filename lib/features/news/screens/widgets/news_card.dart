@@ -42,40 +42,58 @@ class NewsCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                if (imageUrl.isNotEmpty)
-                  Container(
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(REYSizes.sm),
                       color: Colors.white,
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      cacheManager: CacheManager(
-                        Config(
-                          'customCacheKey',
-                          stalePeriod: const Duration(days: 7),
-                          maxNrOfCacheObjects: 100,
-                        ),
-                      ),
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: REYColors.primary,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
+                    child: imageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            cacheManager: CacheManager(
+                              Config(
+                                'customCacheKey',
+                                stalePeriod: const Duration(days: 7),
+                                maxNrOfCacheObjects: 100,
+                              ),
+                            ),
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: REYColors.primary,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  size: 48,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(
+                                Icons.image_not_supported,
+                                size: 48,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
                   ),
-                if (imageUrl.isEmpty)
-                  Container(
-                    height: 180,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(REYSizes.sm),
-                      color: Colors.grey[200],
-                    ),
-                    child: const Center(child: Icon(Icons.image_not_supported)),
-                  ),
+                ),
                 const SizedBox(height: REYSizes.sm * 1.5),
                 Text(
                   title.isNotEmpty ? title : '-',

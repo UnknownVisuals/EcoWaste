@@ -10,10 +10,10 @@ class NewsController extends GetxController {
   final RxList<NewsModel> newsList = <NewsModel>[].obs;
 
   Rx<bool> isLoading = false.obs;
-  Rx<bool> hasMore = false.obs;
+  Rx<bool> hasMore = true.obs;
+  Rx<bool> isLoadingMore = false.obs;
 
-  int page = 1;
-  final int pageSize = 5;
+  String? nextPageToken;
 
   WebViewController? webViewController;
   Rx<bool> isWebViewLoading = false.obs;
@@ -24,41 +24,51 @@ class NewsController extends GetxController {
     getNews();
   }
 
-  void getNews() async {
-    if (isLoading.value) return;
-    isLoading.value = true;
+  void getNews({bool isLoadMore = false}) async {
+    if (isLoadMore && isLoadingMore.value) return;
+    if (!isLoadMore && isLoading.value) return;
+
+    if (isLoadMore) {
+      isLoadingMore.value = true;
+    } else {
+      isLoading.value = true;
+      newsList.clear();
+      nextPageToken = null;
+    }
 
     REYHttpHelper.setBaseUrl('https://newsdata.io/api/1/');
 
     try {
-      final newsResponse = await httpHelper.getRequest(
-        "latest?apikey=${dotenv.env['NEWS_API_KEY']}&q=sampah",
-      );
+      String url = "latest?apikey=${dotenv.env['NEWS_API_KEY']}&q=sampah";
 
-      List<dynamic>? articles;
-      if (newsResponse.statusCode == 200 &&
-          newsResponse.body is Map &&
-          newsResponse.body['results'] is List) {
-        articles = newsResponse.body['results'] as List;
+      // Add nextPage parameter if this is a load more request
+      if (isLoadMore && nextPageToken != null) {
+        url += "&page=$nextPageToken";
       }
 
-      if (articles != null) {
-        List<NewsModel> fetchedNews = articles
-            .map((data) => NewsModel.fromJson(data as Map<String, dynamic>))
-            .toList();
+      final newsResponse = await httpHelper.getRequest(url);
 
-        if (fetchedNews.length < pageSize) {
-          hasMore.value = false;
+      if (newsResponse.statusCode == 200 && newsResponse.body is Map) {
+        final newsResponseModel = NewsResponse.fromJson(newsResponse.body);
+
+        if (newsResponseModel.status == 'success') {
+          if (newsResponseModel.results.isNotEmpty) {
+            newsList.addAll(newsResponseModel.results);
+            nextPageToken = newsResponseModel.nextPage;
+            hasMore.value = nextPageToken != null;
+          } else {
+            hasMore.value = false;
+          }
         } else {
-          hasMore.value = true;
+          REYLoaders.errorSnackBar(
+            title: "Gagal memuat berita",
+            message: "Status tidak berhasil: ${newsResponseModel.status}",
+          );
         }
-
-        newsList.addAll(fetchedNews);
-        page++;
       } else {
         REYLoaders.errorSnackBar(
           title: "Gagal memuat berita",
-          message: "Format data tidak sesuai: ${newsResponse.body}",
+          message: "Response tidak valid: ${newsResponse.statusCode}",
         );
       }
     } catch (e) {
@@ -67,9 +77,23 @@ class NewsController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      isLoading.value = false;
+      if (isLoadMore) {
+        isLoadingMore.value = false;
+      } else {
+        isLoading.value = false;
+      }
       REYHttpHelper.setBaseUrl('https://api.greenappstelkom.id/api');
     }
+  }
+
+  void loadMoreNews() {
+    if (hasMore.value && !isLoadingMore.value) {
+      getNews(isLoadMore: true);
+    }
+  }
+
+  void refreshNews() {
+    getNews(isLoadMore: false);
   }
 
   void initializeWebViewController(String url) async {
