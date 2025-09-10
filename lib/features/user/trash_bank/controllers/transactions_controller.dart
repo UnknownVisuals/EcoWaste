@@ -16,6 +16,7 @@ class TransactionController extends GetxController {
 
   // States variable
   Rx<bool> isLoading = false.obs;
+  Rx<bool> hasInitialFetch = false.obs;
 
   @override
   void onInit() {
@@ -83,8 +84,16 @@ class TransactionController extends GetxController {
   }) async {
     try {
       // Skip loading if we already have data and not forcing refresh
-      if (!forceRefresh && transactions.isNotEmpty && !isLoading.value) {
+      // Or if we've already done the initial fetch for this user (even if no data was found)
+      if (!forceRefresh &&
+          (transactions.isNotEmpty || hasInitialFetch.value) &&
+          !isLoading.value) {
         return;
+      }
+
+      // Reset initial fetch flag if forcing refresh
+      if (forceRefresh) {
+        hasInitialFetch.value = false;
       }
 
       isLoading.value = true;
@@ -125,6 +134,9 @@ class TransactionController extends GetxController {
 
           // Sort by creation date (newest first)
           transactions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+          // Mark that initial fetch is complete
+          hasInitialFetch.value = true;
 
           // Apply current filter
           applyFilter();
