@@ -1,5 +1,5 @@
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
-import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
+import 'package:eco_waste/features/personalization/screens/profile/profile.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';

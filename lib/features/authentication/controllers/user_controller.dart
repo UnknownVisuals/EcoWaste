@@ -25,13 +25,11 @@ class UserController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxBool isSessionValid = true.obs;
-  final RxBool isInitialized =
-      false.obs; // Track if initial session check is done
+  final RxBool isInitialized = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-
     // Add a small delay to ensure GetStorage is fully initialized
     Future.delayed(const Duration(milliseconds: 100), () {
       _initializeSession();

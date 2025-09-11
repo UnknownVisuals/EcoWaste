@@ -1,51 +1,41 @@
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:badges/badges.dart' as badges;
 
-class REYNotificationCounterIcon extends StatelessWidget {
-  const REYNotificationCounterIcon({
+class REYNotificationCounter extends StatelessWidget {
+  const REYNotificationCounter({
     super.key,
-    required this.availableCount,
-    required this.iconColor,
-    required this.onPressed,
+    required this.child,
+    this.badgeCount = 0,
+    this.showBadgeWhenZero = false,
   });
 
-  final int availableCount;
-  final Color iconColor;
-  final VoidCallback onPressed;
+  final Widget child;
+  final int badgeCount;
+  final bool showBadgeWhenZero;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Icon(Iconsax.notification, color: iconColor),
+    return badges.Badge(
+      position: badges.BadgePosition.topEnd(top: 0, end: 2),
+      showBadge: showBadgeWhenZero ? true : badgeCount > 0,
+      badgeContent: Text(
+        badgeCount.toString(),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
         ),
-        availableCount == 0
-            ? const SizedBox.shrink()
-            : Positioned(
-                top: 4,
-                right: 4,
-                child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    color: REYColors.error,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Center(
-                    child: Text(
-                      availableCount.toString(),
-                      style: Theme.of(context).textTheme.labelLarge!.apply(
-                        color: REYColors.white,
-                        fontSizeFactor: 0.8,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-      ],
+      ),
+      badgeAnimation: badges.BadgeAnimation.scale(
+        animationDuration: const Duration(milliseconds: 100),
+        curve: Curves.elasticInOut,
+      ),
+      badgeStyle: badges.BadgeStyle(
+        shape: badges.BadgeShape.circle,
+        badgeColor: REYColors.error,
+        padding: const EdgeInsets.all(6),
+      ),
+      child: child,
     );
   }
 }

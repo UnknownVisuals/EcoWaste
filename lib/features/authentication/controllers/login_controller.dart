@@ -2,7 +2,7 @@
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/models/login_model.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
-import 'package:eco_waste/features/user/navigation_menu.dart';
+import 'package:eco_waste/features/navigation_menu.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
@@ -52,12 +52,7 @@ class LoginController extends GetxController {
           // Set remember me preference - only store this flag, not user data
           await userController.setRememberMe(isRememberMe.value);
 
-          if (userController.userModel.value.role == 'ADMIN') {
-            // Get.offAll(() => AdminNavigationMenu());
-            Get.offAll(() => UserNavigationMenu());
-          } else {
-            Get.offAll(() => UserNavigationMenu());
-          }
+          Get.offAll(() => NavigationMenu());
         } else {
           REYLoaders.errorSnackBar(
             title: responseBody['status'],

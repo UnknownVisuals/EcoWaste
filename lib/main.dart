@@ -3,7 +3,7 @@ import 'package:eco_waste/controllers/language_controller.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/authentication/screens/onboarding/onboarding.dart';
-import 'package:eco_waste/features/user/navigation_menu.dart';
+import 'package:eco_waste/features/navigation_menu.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/local_storage/storage_utility.dart';
 import 'package:eco_waste/utils/theme/theme.dart';
@@ -83,6 +83,6 @@ class App extends StatelessWidget {
 
     // If remember me is true and we have a session cookie, go to navigation menu
     // UserController will fetch fresh user data and handle session validation
-    return const UserNavigationMenu();
+    return const NavigationMenu();
   }
 }

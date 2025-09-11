@@ -1,16 +1,16 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/features/leaderboard/controllers/leaderboard_controller.dart';
 import 'package:eco_waste/features/leaderboard/screens/widgets/leaderboard_card.dart';
-import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
+import 'package:eco_waste/features/personalization/screens/profile/profile.dart';
+import 'package:eco_waste/features/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class UserLeaderboardScreen extends StatelessWidget {
-  const UserLeaderboardScreen({super.key});
+class LeaderboardScreen extends StatelessWidget {
+  const LeaderboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

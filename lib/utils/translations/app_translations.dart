@@ -202,6 +202,7 @@ class AppTranslations extends Translations {
     'confirm': 'Confirm',
     'save': 'Save',
     'delete': 'Delete',
+    'remove': 'Remove',
     'yes': 'Yes',
     'no': 'No',
     'okay': 'Okay',
@@ -384,6 +385,24 @@ class AppTranslations extends Translations {
     'wib': 'WIB',
     'kg': 'kg',
     'locationInformation': 'Location Information',
+
+    // Transaction Details
+    'transactionInformation': 'Transaction Information',
+    'transactionId': 'Transaction ID',
+    'type': 'Type',
+    'scheduledDate': 'Scheduled Date',
+    'createdDate': 'Created Date',
+    'completedDate': 'Completed Date',
+    'wasteCategory': 'Waste Category',
+    'category': 'Category',
+    'description': 'Description',
+    'pointsPerKg': 'Points per Kg',
+    'color': 'Color',
+    'userInformation': 'User Information',
+    'userId': 'User ID',
+    'transactionResults': 'Transaction Results',
+    'notes': 'Notes',
+    'photos': 'Photos',
   };
 
   /// Indonesian translations (id_ID)
@@ -545,6 +564,7 @@ class AppTranslations extends Translations {
     'confirm': 'Konfirmasi',
     'save': 'Simpan',
     'delete': 'Hapus',
+    'remove': 'Hapus',
     'yes': 'Ya',
     'no': 'Tidak',
     'okay': 'Baik',
@@ -739,5 +759,23 @@ class AppTranslations extends Translations {
     'wib': 'WIB',
     'kg': 'kg',
     'locationInformation': 'Informasi Lokasi',
+
+    // Transaction Details
+    'transactionInformation': 'Informasi Transaksi',
+    'transactionId': 'ID Transaksi',
+    'type': 'Tipe',
+    'scheduledDate': 'Tanggal Terjadwal',
+    'createdDate': 'Tanggal Dibuat',
+    'completedDate': 'Tanggal Selesai',
+    'wasteCategory': 'Kategori Sampah',
+    'category': 'Kategori',
+    'description': 'Deskripsi',
+    'pointsPerKg': 'Poin per Kg',
+    'color': 'Warna',
+    'userInformation': 'Informasi Pengguna',
+    'userId': 'ID Pengguna',
+    'transactionResults': 'Hasil Transaksi',
+    'notes': 'Catatan',
+    'photos': 'Foto',
   };
 }

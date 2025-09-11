@@ -1,5 +1,5 @@
 import 'package:eco_waste/features/leaderboard/models/leaderboard_model.dart';
-import 'package:eco_waste/features/user/trash_bank/controllers/locations_controller.dart';
+import 'package:eco_waste/features/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';

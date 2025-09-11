@@ -17,11 +17,13 @@ class LoginHeader extends StatelessWidget {
           Text(
             'loginTitle'.tr,
             style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: REYSizes.sm),
           Text(
             'loginSubTitle'.tr,
             style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
           ),
         ],
       ),

@@ -1,7 +1,7 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
 import 'package:eco_waste/features/news/controllers/news_controller.dart';
 import 'package:eco_waste/features/news/screens/widgets/news_card.dart';
-import 'package:eco_waste/features/user/personalization/screens/profile/profile.dart';
+import 'package:eco_waste/features/personalization/screens/profile/profile.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
