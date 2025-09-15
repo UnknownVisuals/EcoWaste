@@ -206,7 +206,7 @@ class TransactionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Weight',
+                          'weight'.tr,
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                         Text(

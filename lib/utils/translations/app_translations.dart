@@ -110,6 +110,9 @@ class AppTranslations extends Translations {
     // Home Screen
     'homeAppbarTitle': 'Transform waste into wealth!',
     'homeAppbarSubTitle': 'Reynaldhi T. Graha',
+    'goodMorning': 'Good Morning',
+    'goodAfternoon': 'Good Afternoon',
+    'goodEvening': 'Good Evening',
 
     // Navigation Menu
     'home': 'Home',
@@ -121,6 +124,10 @@ class AppTranslations extends Translations {
     // Screen Titles
     'transactionDetail': 'Transaction Detail',
     'depositDetail': 'Deposit Detail',
+
+    // Leaderboard Filters
+    'myVillage': 'My Village',
+    'allVillages': 'All Villages',
 
     // ═══════════════════════════════════════════════════════════════════════
     // SETTINGS & CONFIGURATION
@@ -298,6 +305,7 @@ class AppTranslations extends Translations {
     // Common UI elements
     'changeImage': 'Change Image',
     'createTransaction': 'Create Transaction',
+    'confirmTransaction': 'Confirm Transaction',
     'selectDate': 'Select Date',
     'selectWasteTypeFirst': 'Please select waste type first',
     'selectTransactionTypeFirst': 'Please select transaction type first',
@@ -331,9 +339,9 @@ class AppTranslations extends Translations {
     'checkoutNotImplemented': 'Checkout feature is not yet implemented.',
 
     // Tutorial & Onboarding
-    'tutorialStep1': 'Step 1: Sort your waste like a pro!',
-    'tutorialStep2': 'Step 2: Log each item in the app for maximum impact.',
-    'tutorialStep3': 'Step 3: Watch your rewards balance grow!',
+    'tutorialStep1': 'Step 1:\nSort your waste like a pro!',
+    'tutorialStep2': 'Step 2:\nLog each item in the app for maximum impact.',
+    'tutorialStep3': 'Step 3:\nWatch your rewards balance grow!',
 
     // Missing hardcoded strings found in the app
     'noTransactionHistoryAvailable': 'No transaction history available',
@@ -382,6 +390,7 @@ class AppTranslations extends Translations {
     'balance': 'Balance',
     'pointsEarned': 'Points Earned',
     'actualWeight': 'Actual Weight',
+    'weight': 'Weight',
     'wib': 'WIB',
     'kg': 'kg',
     'locationInformation': 'Location Information',
@@ -479,6 +488,9 @@ class AppTranslations extends Translations {
     // Home
     'homeAppbarTitle': 'Transformasi sampah jadi kekayaan!',
     'homeAppbarSubTitle': 'Reynaldhi T. Graha',
+    'goodMorning': 'Selamat Pagi',
+    'goodAfternoon': 'Selamat Siang',
+    'goodEvening': 'Selamat Malam',
 
     // Navigation
     'home': 'Beranda',
@@ -488,6 +500,10 @@ class AppTranslations extends Translations {
     'settings': 'Pengaturan',
     'transactionDetail': 'Detail Transaksi',
     'depositDetail': 'Detail Setoran',
+
+    // Leaderboard Filters
+    'myVillage': 'Desa Saya',
+    'allVillages': 'Semua Desa',
 
     // Settings
     'account': 'Akun',
@@ -693,6 +709,7 @@ class AppTranslations extends Translations {
 
     // Form Actions & UI
     'createTransaction': 'Buat Transaksi',
+    'confirmTransaction': 'Konfirmasi Transaksi',
     'viewReport': 'Lihat Laporan',
     'defaultViewAll': 'Lihat semua',
 
@@ -711,10 +728,10 @@ class AppTranslations extends Translations {
     'checkoutNotImplemented': 'Fitur checkout belum diimplementasikan.',
 
     // Tutorial steps
-    'tutorialStep1': 'Langkah 1: Pilah sampah seperti seorang ahli!',
+    'tutorialStep1': 'Langkah 1:\nPilah sampah seperti seorang ahli!',
     'tutorialStep2':
-        'Langkah 2: Catat setiap item di aplikasi untuk dampak maksimal.',
-    'tutorialStep3': 'Langkah 3: Saksikan saldo reward Anda bertumbuh!',
+        'Langkah 2:\nCatat setiap item di aplikasi untuk dampak maksimal.',
+    'tutorialStep3': 'Langkah 3:\nSaksikan saldo reward Anda bertumbuh!',
 
     // Missing hardcoded strings found in the app
     'noTransactionHistoryAvailable': 'Tidak ada riwayat transaksi tersedia',
@@ -756,6 +773,7 @@ class AppTranslations extends Translations {
     'balance': 'Saldo',
     'pointsEarned': 'Poin Diperoleh',
     'actualWeight': 'Berat Aktual',
+    'weight': 'Berat',
     'wib': 'WIB',
     'kg': 'kg',
     'locationInformation': 'Informasi Lokasi',

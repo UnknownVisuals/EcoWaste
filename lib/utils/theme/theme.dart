@@ -15,10 +15,15 @@ class REYAppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Poppins',
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: REYColors.primary,
-      brightness: Brightness.light,
-    ).copyWith(surface: REYColors.white, onSurface: REYColors.black),
+    colorScheme:
+        ColorScheme.fromSeed(
+          seedColor: REYColors.primary,
+          brightness: Brightness.light,
+        ).copyWith(
+          surface: REYColors.white,
+          onSurface: REYColors.black,
+          surfaceContainerHigh: REYColors.white,
+        ),
     disabledColor: REYColors.grey,
     textTheme: REYTextTheme.lightTextTheme,
     chipTheme: REYChipTheme.lightChipTheme,
@@ -34,10 +39,15 @@ class REYAppTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Poppins',
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: REYColors.primary,
-      brightness: Brightness.dark,
-    ).copyWith(surface: REYColors.dark, onSurface: REYColors.white),
+    colorScheme:
+        ColorScheme.fromSeed(
+          seedColor: REYColors.primary,
+          brightness: Brightness.dark,
+        ).copyWith(
+          surface: REYColors.dark,
+          onSurface: REYColors.white,
+          surfaceContainerHigh: REYColors.black,
+        ),
     disabledColor: REYColors.grey,
     textTheme: REYTextTheme.darkTextTheme,
     chipTheme: REYChipTheme.darkChipTheme,

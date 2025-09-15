@@ -37,9 +37,18 @@ class LeaderboardCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: REYSizes.spaceBtwItems / 2),
-      child: ListTile(
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
+      child: Container(
+        padding: const EdgeInsets.all(REYSizes.md),
+        decoration: BoxDecoration(
+          color: color ?? defaultColor,
+          borderRadius: BorderRadius.circular(REYSizes.md),
+          border: Border.all(
+            color: dark
+                ? REYColors.darkerGrey
+                : REYColors.grey.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
           children: [
             // Rank number
             SizedBox(
@@ -78,30 +87,36 @@ class LeaderboardCard extends StatelessWidget {
                     )
                   : Image.asset(REYImages.user, width: 50, height: 50),
             ),
-          ],
-        ),
-        title: Text(
-          leaderboardItem.name,
-          style: Theme.of(context).textTheme.titleLarge,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text(
-          locationText,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Iconsax.coin_1, size: REYSizes.iconLg),
-            Text(
-              leaderboardItem.points.toString(),
-              style: Theme.of(context).textTheme.labelLarge,
+            const SizedBox(width: REYSizes.spaceBtwItems),
+            // User info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    leaderboardItem.name,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    locationText,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+            // Points
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Iconsax.coin_1, size: REYSizes.iconLg),
+                Text(
+                  leaderboardItem.points.toString(),
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
             ),
           ],
-        ),
-        tileColor: color ?? defaultColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(REYSizes.md),
         ),
       ),
     );

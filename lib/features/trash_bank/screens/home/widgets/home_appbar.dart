@@ -11,6 +11,18 @@ import 'package:iconsax/iconsax.dart';
 class UserHomeAppBar extends StatelessWidget {
   const UserHomeAppBar({super.key});
 
+  String _getTimeBasedGreeting() {
+    final hour = DateTime.now().hour;
+
+    if (hour >= 5 && hour < 12) {
+      return 'goodMorning'.tr;
+    } else if (hour >= 12 && hour < 17) {
+      return 'goodAfternoon'.tr;
+    } else {
+      return 'goodEvening'.tr;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -35,7 +47,7 @@ class UserHomeAppBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'homeAppbarTitle'.tr,
+              _getTimeBasedGreeting(),
               style: Theme.of(
                 context,
               ).textTheme.labelMedium!.apply(color: REYColors.white),
