@@ -55,13 +55,33 @@ class TransactionsInput extends StatelessWidget {
             items: wasteCategoryController.wasteCategories.map((wasteCategory) {
               return DropdownMenuItem<String>(
                 value: wasteCategory.id,
-                alignment: AlignmentDirectional.center,
-                child: Text(
-                  wasteCategory.name,
-                  style: Theme.of(context).textTheme.titleMedium,
+                alignment: AlignmentDirectional.centerStart,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      wasteCategory.name,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      wasteCategory.description,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const Divider(),
+                  ],
                 ),
               );
             }).toList(),
+            selectedItemBuilder: (BuildContext context) {
+              return wasteCategoryController.wasteCategories.map((
+                wasteCategory,
+              ) {
+                return Text(
+                  wasteCategory.name,
+                  style: Theme.of(context).textTheme.titleMedium,
+                );
+              }).toList();
+            },
             onChanged: (newValue) {
               selectedWasteCategory.value = newValue ?? '';
             },
@@ -115,7 +135,6 @@ class TransactionsInput extends StatelessWidget {
         ),
 
         const SizedBox(height: REYSizes.spaceBtwInputFields),
-
         // Jadwal
         Obx(
           () => TextFormField(
@@ -124,18 +143,32 @@ class TransactionsInput extends StatelessWidget {
               final DateTime? pickedDate = await showDatePicker(
                 context: context,
                 initialDate: selectedDate.value ?? DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 365)),
+                firstDate: DateTime.now().subtract(const Duration(days: 7)),
+                lastDate: DateTime.now().add(const Duration(days: 30)),
               );
               if (pickedDate != null) {
-                selectedDate.value = pickedDate;
+                final TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.fromDateTime(
+                    selectedDate.value ?? DateTime.now(),
+                  ),
+                );
+                if (pickedTime != null) {
+                  selectedDate.value = DateTime(
+                    pickedDate.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    pickedTime.hour,
+                    pickedTime.minute,
+                  );
+                }
               }
             },
             decoration: InputDecoration(
               prefixIcon: const Icon(Iconsax.calendar_1),
               labelText: 'selectDate'.tr,
               hintText: selectedDate.value != null
-                  ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}'
+                  ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year} ${selectedDate.value!.hour.toString().padLeft(2, '0')}:${selectedDate.value!.minute.toString().padLeft(2, '0')}'
                   : 'tapToSelectDate'.tr,
             ),
           ),
