@@ -70,23 +70,18 @@ class LeaderboardController extends GetxController {
           applyFilter();
         } else {
           REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'error'.tr,
-            message: responseBody['message'] ?? 'failedToLoadLeaderboard'.tr,
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${leaderboardResponse.statusCode}',
-          message:
-              leaderboardResponse.body['message'] ??
-              'failedToLoadLeaderboard'.tr,
+          title: leaderboardResponse.body['status'],
+          message: leaderboardResponse.body['message'],
         );
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(
-        title: 'error'.tr,
-        message: '${'failedToLoadLeaderboard'.tr}: ${e.toString()}',
-      );
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
     } finally {
       isLoading.value = false;
     }

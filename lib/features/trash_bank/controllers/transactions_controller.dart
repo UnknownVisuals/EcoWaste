@@ -51,28 +51,24 @@ class TransactionController extends GetxController {
           final index = transactions.indexWhere((tx) => tx.id == transactionId);
           if (index != -1) {
             transactions[index] = updatedTransaction;
-            applyFilter(); // Reapply filter to update UI
+            applyFilter();
           }
 
           return updatedTransaction;
         } else {
           REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'error'.tr,
-            message:
-                responseBody['message'] ?? 'failedToLoadTransactionDetails'.tr,
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${response.statusCode}',
-          message: 'failedToFetchTransactionDetails'.tr,
+          title: response.body['status'],
+          message: response.body['message'],
         );
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(
-        title: 'error'.tr,
-        message: '${'failedToLoadTransactionDetails'.tr}: ${e.toString()}',
-      );
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
     }
     return null;
   }
@@ -142,21 +138,18 @@ class TransactionController extends GetxController {
           applyFilter();
         } else {
           REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'error'.tr,
-            message: responseBody['message'] ?? 'failedToLoadTransactions'.tr,
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${transactionsResponse.statusCode}',
-          message: 'failedToFetchTransactions'.tr,
+          title: transactionsResponse.body['status'],
+          message: transactionsResponse.body['message'],
         );
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(
-        title: 'error'.tr,
-        message: '${'failedToLoadTransactions'.tr}: ${e.toString()}',
-      );
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -238,9 +231,8 @@ class TransactionController extends GetxController {
           applyFilter();
 
           REYLoaders.successSnackBar(
-            title: 'success'.tr,
-            message:
-                responseBody['message'] ?? 'Transaction created successfully',
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
           return true;
         } else {
@@ -251,8 +243,8 @@ class TransactionController extends GetxController {
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${transactionsResponse.statusCode}',
-          message: 'failedToCreateTransaction'.tr,
+          title: transactionsResponse.body['status'],
+          message: transactionsResponse.body['message'],
         );
       }
     } catch (e) {
@@ -287,9 +279,8 @@ class TransactionController extends GetxController {
             applyFilter();
           }
           REYLoaders.successSnackBar(
-            title: 'success'.tr,
-            message:
-                responseBody['message'] ?? 'Transaction processed successfully',
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         } else {
           REYLoaders.errorSnackBar(
@@ -299,8 +290,8 @@ class TransactionController extends GetxController {
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${transactionsResponse.statusCode}',
-          message: 'failedToProcessTransaction'.tr,
+          title: transactionsResponse.body['status'],
+          message: transactionsResponse.body['message'],
         );
       }
     } catch (e) {
@@ -334,9 +325,8 @@ class TransactionController extends GetxController {
             applyFilter();
           }
           REYLoaders.successSnackBar(
-            title: 'success'.tr,
-            message:
-                responseBody['message'] ?? 'Transaction cancelled successfully',
+            title: responseBody['status'],
+            message: responseBody['message'],
           );
         } else {
           REYLoaders.errorSnackBar(
@@ -346,8 +336,8 @@ class TransactionController extends GetxController {
         }
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${transactionsResponse.statusCode}',
-          message: 'failedToCancelTransaction'.tr,
+          title: transactionsResponse.body['status'],
+          message: transactionsResponse.body['message'],
         );
       }
     } catch (e) {

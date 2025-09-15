@@ -80,19 +80,15 @@ class UserController extends GetxController {
         _redirectToLogin();
       } else {
         REYLoaders.errorSnackBar(
-          title: 'HTTP ${response.statusCode}',
-          message: response.body['message'] ?? 'failedToFetchUserData'.tr,
+          title: response.body['status'],
+          message: response.body['message'],
         );
       }
     } catch (e) {
-      // On network error, don't immediately clear session unless it's auth related
-      REYLoaders.errorSnackBar(
-        title: 'error'.tr,
-        message: '${'failedToFetchUserData'.tr}: ${e.toString()}',
-      );
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
     } finally {
       isLoading.value = false;
-      isInitialized.value = true; // Mark as initialized after loading completes
+      isInitialized.value = true;
     }
   }
 

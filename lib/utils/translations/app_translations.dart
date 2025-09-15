@@ -143,6 +143,7 @@ class AppTranslations extends Translations {
     'darkMode': 'Dark Mode',
     'language': 'Language',
     'logout': 'Logout',
+    'logoutConfirmation': 'Are you sure you want to exit Green Apps?',
 
     // Language Settings
     'english': 'English',
@@ -216,6 +217,7 @@ class AppTranslations extends Translations {
     'loading': 'Loading...',
     'success': 'Success',
     'error': 'Error',
+    'httpError': 'HTTP Error',
     'warning': 'Warning',
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -515,6 +517,7 @@ class AppTranslations extends Translations {
     'darkMode': 'Mode Gelap',
     'language': 'Bahasa',
     'logout': 'Keluar',
+    'logoutConfirmation': 'Yakin mau keluar Green Apps?',
 
     // Language Settings
     'english': 'Bahasa Inggris',
@@ -587,6 +590,7 @@ class AppTranslations extends Translations {
     'loading': 'Memuat...',
     'success': 'Berhasil',
     'error': 'Kesalahan',
+    'httpError': 'Kesalahan HTTP',
     'warning': 'Peringatan',
 
     // ═══════════════════════════════════════════════════════════════════════

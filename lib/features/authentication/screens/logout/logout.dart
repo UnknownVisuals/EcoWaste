@@ -12,12 +12,12 @@ class LogoutScreen extends StatelessWidget {
     return AlertDialog(
       title: Center(
         child: Text(
-          'Keluar',
+          'logout'.tr,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
       content: Text(
-        'Yakin mau keluar Sobat Sampah?',
+        'logoutConfirmation'.tr,
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       actions: <Widget>[
