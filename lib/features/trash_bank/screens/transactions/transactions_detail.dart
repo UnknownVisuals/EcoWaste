@@ -1,6 +1,5 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:eco_waste/common/widgets/appbar.dart';
+import 'package:eco_waste/common/widgets/base64_image_preview.dart';
 import 'package:eco_waste/common/widgets/image_preview_dialog.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
@@ -203,9 +202,10 @@ class TransactionDetailScreen extends StatelessWidget {
                       context: context,
                       imageData: transaction.photos.first,
                     ),
-                    child: ClipRRect(
+                    child: REYBase64ImagePreview(
+                      imageData: transaction.photos.first,
                       borderRadius: BorderRadius.circular(REYSizes.sm),
-                      child: _buildImageThumbnail(transaction.photos.first),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -229,49 +229,5 @@ class TransactionDetailScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Build image thumbnail that handles both File and base64/network images
-  Widget _buildImageThumbnail(String imageData) {
-    if (imageData.startsWith('data:image')) {
-      // Handle base64 images
-      try {
-        final base64String = imageData.split(',').last;
-        final Uint8List bytes = base64Decode(base64String);
-        return Image.memory(
-          bytes,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: REYColors.grey.withValues(alpha: 0.3),
-              child: const Center(
-                child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
-              ),
-            );
-          },
-        );
-      } catch (e) {
-        return Container(
-          color: REYColors.grey.withValues(alpha: 0.3),
-          child: const Center(
-            child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
-          ),
-        );
-      }
-    } else {
-      // Handle network images
-      return Image.network(
-        imageData,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            color: REYColors.grey.withValues(alpha: 0.3),
-            child: const Center(
-              child: Icon(Iconsax.image, color: REYColors.grey, size: 48),
-            ),
-          );
-        },
-      );
-    }
   }
 }

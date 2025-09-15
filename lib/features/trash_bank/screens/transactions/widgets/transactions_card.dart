@@ -1,3 +1,4 @@
+import 'package:eco_waste/common/widgets/base64_image_preview.dart';
 import 'package:eco_waste/features/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/features/trash_bank/screens/transactions/transactions_detail.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -128,67 +129,98 @@ class TransactionCard extends StatelessWidget {
             ),
             const SizedBox(height: REYSizes.spaceBtwItems),
 
-            // Waste Category
-            if (transaction.wasteCategory != null) ...[
-              Row(
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: _parseColor(transaction.wasteCategory!.color),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: REYSizes.spaceBtwItems),
-                  Expanded(
-                    child: Text(
-                      transaction.wasteCategory!.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: REYSizes.sm),
-            ],
-
-            // Location Detail
+            // Main Content Row - Details and Image Side by Side
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Iconsax.location,
-                  size: REYSizes.iconSm,
-                  color: REYColors.darkGrey,
-                ),
-                const SizedBox(width: REYSizes.spaceBtwItems / 2),
+                // Details Section (Left Side)
                 Expanded(
-                  child: Text(
-                    transaction.locationDetail,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Waste Category
+                      if (transaction.wasteCategory != null) ...[
+                        Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: _parseColor(
+                                  transaction.wasteCategory!.color,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: REYSizes.spaceBtwItems),
+                            Expanded(
+                              child: Text(
+                                transaction.wasteCategory!.name,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: REYSizes.sm),
+                      ],
+
+                      // Location Detail
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Iconsax.location,
+                            size: REYSizes.iconSm,
+                            color: REYColors.darkGrey,
+                          ),
+                          const SizedBox(width: REYSizes.spaceBtwItems / 2),
+                          Expanded(
+                            child: Text(
+                              transaction.locationDetail,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: REYSizes.sm),
+
+                      // Scheduled Date
+                      Row(
+                        children: [
+                          Icon(
+                            Iconsax.calendar,
+                            size: REYSizes.iconSm,
+                            color: REYColors.darkGrey,
+                          ),
+                          const SizedBox(width: REYSizes.spaceBtwItems / 2),
+                          Expanded(
+                            child: Text(
+                              DateFormat(
+                                'dd MMM yyyy, HH:mm',
+                              ).format(transaction.scheduledDate),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: REYSizes.sm),
 
-            // Scheduled Date
-            Row(
-              children: [
-                Icon(
-                  Iconsax.calendar,
-                  size: REYSizes.iconSm,
-                  color: REYColors.darkGrey,
-                ),
-                const SizedBox(width: REYSizes.spaceBtwItems / 2),
-                Text(
-                  DateFormat(
-                    'dd MMM yyyy, HH:mm',
-                  ).format(transaction.scheduledDate),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                // Image Preview (Right Side)
+                if (transaction.photos.isNotEmpty) ...[
+                  const SizedBox(width: REYSizes.spaceBtwItems),
+                  REYBase64ImagePreview(
+                    imageData: transaction.photos.first,
+                    width: 80,
+                    height: 80,
+                    borderRadius: BorderRadius.circular(REYSizes.sm),
+                    fit: BoxFit.cover,
+                  ),
+                ],
               ],
             ),
 
