@@ -2,9 +2,9 @@ import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
@@ -17,7 +17,7 @@ class ResetPasswordScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: Get.back,
-            icon: const Icon(CupertinoIcons.clear),
+            icon: const Icon(Iconsax.close_circle),
           ),
         ],
       ),

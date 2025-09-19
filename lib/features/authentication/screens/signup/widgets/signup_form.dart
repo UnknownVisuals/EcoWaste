@@ -16,31 +16,31 @@ class SignupForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-          // First Name & Last Name
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  expands: false,
-                  decoration: InputDecoration(
-                    labelText: 'firstName'.tr,
-                    prefixIcon: const Icon(Iconsax.user),
-                  ),
-                ),
-              ),
-              const SizedBox(width: REYSizes.spaceBtwInputFields),
-              Expanded(
-                child: TextFormField(
-                  expands: false,
-                  decoration: InputDecoration(
-                    labelText: 'lastName'.tr,
-                    prefixIcon: const Icon(Iconsax.user),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: REYSizes.spaceBtwInputFields),
+          // // First Name & Last Name
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: TextFormField(
+          //         expands: false,
+          //         decoration: InputDecoration(
+          //           labelText: 'firstName'.tr,
+          //           prefixIcon: const Icon(Iconsax.user),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(width: REYSizes.spaceBtwInputFields),
+          //     Expanded(
+          //       child: TextFormField(
+          //         expands: false,
+          //         decoration: InputDecoration(
+          //           labelText: 'lastName'.tr,
+          //           prefixIcon: const Icon(Iconsax.user),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: REYSizes.spaceBtwInputFields),
 
           // Username
           TextFormField(
@@ -62,15 +62,15 @@ class SignupForm extends StatelessWidget {
           ),
           const SizedBox(height: REYSizes.spaceBtwInputFields),
 
-          // Phone Number
-          TextFormField(
-            expands: false,
-            decoration: InputDecoration(
-              labelText: 'phoneNo'.tr,
-              prefixIcon: const Icon(Iconsax.call),
-            ),
-          ),
-          const SizedBox(height: REYSizes.spaceBtwInputFields),
+          // // Phone Number
+          // TextFormField(
+          //   expands: false,
+          //   decoration: InputDecoration(
+          //     labelText: 'phoneNo'.tr,
+          //     prefixIcon: const Icon(Iconsax.call),
+          //   ),
+          // ),
+          // const SizedBox(height: REYSizes.spaceBtwInputFields),
 
           // Password
           Obx(
@@ -87,6 +87,27 @@ class SignupForm extends StatelessWidget {
                         : Iconsax.eye,
                   ),
                   onPressed: signupController.togglePasswordVisibility,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: REYSizes.spaceBtwInputFields),
+
+          // Confirm Password
+          Obx(
+            () => TextFormField(
+              expands: false,
+              obscureText: signupController.obscureConfirmPassword.value,
+              decoration: InputDecoration(
+                labelText: 'confirmPassword'.tr,
+                prefixIcon: const Icon(Iconsax.password_check),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    signupController.obscureConfirmPassword.value
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye,
+                  ),
+                  onPressed: signupController.toggleConfirmPasswordVisibility,
                 ),
               ),
             ),

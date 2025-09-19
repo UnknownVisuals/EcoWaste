@@ -92,9 +92,9 @@ class ProfileScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () =>
                             REYImagePickerBottomSheet.show(context: context),
-                        child: const Text(
-                          'Ubah gambar profil',
-                          style: TextStyle(color: REYColors.primary),
+                        child: Text(
+                          'changeProfilePicture'.tr,
+                          style: const TextStyle(color: REYColors.primary),
                         ),
                       ),
                     ],
@@ -118,6 +118,16 @@ class ProfileScreen extends StatelessWidget {
                 ProfileMenu(
                   title: 'email'.tr,
                   value: user.email,
+                  onPressed: () {},
+                ),
+                ProfileMenu(
+                  title: 'points'.tr,
+                  value: user.points.toString(),
+                  onPressed: () {},
+                ),
+                ProfileMenu(
+                  title: 'role'.tr,
+                  value: user.role,
                   onPressed: () {},
                 ),
                 ProfileMenu(

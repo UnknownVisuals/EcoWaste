@@ -41,7 +41,7 @@ class REYLoaders {
       message,
       isDismissible: true,
       shouldIconPulse: true,
-      colorText: Colors.white,
+      colorText: REYColors.white,
       backgroundColor: REYColors.success,
       snackPosition: SnackPosition.BOTTOM,
       duration: Duration(seconds: duration),

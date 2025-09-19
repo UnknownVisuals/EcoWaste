@@ -3,6 +3,7 @@ import 'package:eco_waste/features/trash_bank/controllers/waste_category_control
 import 'package:eco_waste/features/trash_bank/controllers/transactions_controller.dart';
 import 'package:eco_waste/controllers/camera_controller.dart';
 import 'package:eco_waste/features/trash_bank/models/transactions_model.dart';
+import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
@@ -228,15 +229,13 @@ class TransactionsInput extends StatelessWidget {
                           Icon(
                             Iconsax.image,
                             size: REYSizes.iconLg * 1.5,
-                            color: Colors.grey.shade400,
+                            color: REYColors.grey,
                           ),
                           const SizedBox(height: REYSizes.sm),
                           Text(
                             'tapToAddImage'.tr,
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: REYSizes.fontSizeSm,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: REYColors.darkGrey),
                           ),
                         ],
                       ),

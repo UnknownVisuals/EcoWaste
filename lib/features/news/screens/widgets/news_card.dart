@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class NewsCard extends StatelessWidget {
   const NewsCard({
@@ -72,23 +73,23 @@ class NewsCard extends StatelessWidget {
                               ),
                             ),
                             errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[200],
+                              color: REYColors.lightGrey,
                               child: const Center(
                                 child: Icon(
-                                  Icons.image_not_supported,
-                                  size: 48,
-                                  color: Colors.grey,
+                                  Iconsax.image,
+                                  size: REYSizes.iconMd,
+                                  color: REYColors.grey,
                                 ),
                               ),
                             ),
                           )
                         : Container(
-                            color: Colors.grey[200],
+                            color: REYColors.lightGrey,
                             child: const Center(
                               child: Icon(
-                                Icons.image_not_supported,
-                                size: 48,
-                                color: Colors.grey,
+                                Iconsax.image,
+                                size: REYSizes.iconMd,
+                                color: REYColors.grey,
                               ),
                             ),
                           ),

@@ -143,8 +143,8 @@ class TransactionCard extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              width: 12,
-                              height: 12,
+                              width: REYSizes.iconXs,
+                              height: REYSizes.iconXs,
                               decoration: BoxDecoration(
                                 color: _parseColor(
                                   transaction.wasteCategory!.color,
@@ -215,8 +215,8 @@ class TransactionCard extends StatelessWidget {
                   const SizedBox(width: REYSizes.spaceBtwItems),
                   REYBase64ImagePreview(
                     imageData: transaction.photos.first,
-                    width: 80,
-                    height: 80,
+                    width: REYSizes.imageThumbSize,
+                    height: REYSizes.imageThumbSize,
                     borderRadius: BorderRadius.circular(REYSizes.sm),
                     fit: BoxFit.cover,
                   ),

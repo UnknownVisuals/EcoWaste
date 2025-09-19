@@ -5,6 +5,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class TransactionHistoryListPreview extends StatelessWidget {
   const TransactionHistoryListPreview({super.key, this.maxItems = 10});
@@ -42,7 +43,11 @@ class TransactionHistoryListPreview extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.history, size: 48, color: REYColors.grey),
+              Icon(
+                Iconsax.clock,
+                size: REYSizes.iconLg * 2,
+                color: REYColors.grey,
+              ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
                 'noTransactionHistoryAvailable'.tr,

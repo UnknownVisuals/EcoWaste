@@ -5,6 +5,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class TransactionsCardList extends StatelessWidget {
   const TransactionsCardList({super.key});
@@ -19,6 +20,7 @@ class TransactionsCardList extends StatelessWidget {
     return Obx(() {
       // Fetch transactions with current user ID when user data becomes available
       final userId = userController.userModel.value.id;
+
       if (userId.isNotEmpty &&
           transactionController.transactions.isEmpty &&
           !transactionController.isLoading.value) {
@@ -26,6 +28,7 @@ class TransactionsCardList extends StatelessWidget {
           transactionController.fetchTransactions(userId: userId);
         });
       }
+
       if (transactionController.isLoading.value) {
         return const Center(
           child: CircularProgressIndicator(color: REYColors.primary),
@@ -37,7 +40,11 @@ class TransactionsCardList extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.inbox_outlined, size: 64, color: REYColors.grey),
+              Icon(
+                Iconsax.box,
+                size: REYSizes.iconLg * 2,
+                color: REYColors.grey,
+              ),
               const SizedBox(height: REYSizes.spaceBtwItems),
               Text(
                 'No transactions available',

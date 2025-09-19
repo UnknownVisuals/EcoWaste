@@ -35,9 +35,10 @@ class REYAnimationLoaderWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset(animation,
-              width: MediaQuery.of(context).size.width *
-                  0.8), // Display Lottie animation
+          Lottie.asset(
+            animation,
+            width: MediaQuery.of(context).size.width * 0.8,
+          ), // Display Lottie animation
           const SizedBox(height: REYSizes.defaultSpace),
           Text(
             text,
@@ -47,17 +48,17 @@ class REYAnimationLoaderWidget extends StatelessWidget {
           const SizedBox(height: REYSizes.defaultSpace),
           showAction
               ? SizedBox(
-                  width: 250,
+                  width: REYSizes.buttonWidth,
                   child: OutlinedButton(
                     onPressed: onActionPressed,
                     style: OutlinedButton.styleFrom(
-                        backgroundColor: REYColors.dark),
+                      backgroundColor: REYColors.dark,
+                    ),
                     child: Text(
                       actionText!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .apply(color: REYColors.light),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.apply(color: REYColors.light),
                     ),
                   ),
                 )

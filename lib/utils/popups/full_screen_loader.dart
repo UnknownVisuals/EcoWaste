@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../constants/colors.dart';
+import '../constants/sizes.dart';
 import '../helpers/helper_functions.dart';
 import '../loaders/animation_loader.dart';
 
@@ -28,7 +29,9 @@ class REYFullScreenLoader {
           height: double.infinity,
           child: Column(
             children: [
-              const SizedBox(height: 250), // Adjust the spacing as needed
+              const SizedBox(
+                height: REYSizes.spaceBtwSections * 4,
+              ), // Adjust the spacing as needed
               REYAnimationLoaderWidget(text: text, animation: animation),
             ],
           ),
@@ -40,7 +43,8 @@ class REYFullScreenLoader {
   /// Stop the currently open loading dialog.
   /// This method doesn't return anything.
   static stopLoading() {
-    Navigator.of(Get.overlayContext!)
-        .pop(); // Close the dialog using the Navigator
+    Navigator.of(
+      Get.overlayContext!,
+    ).pop(); // Close the dialog using the Navigator
   }
 }

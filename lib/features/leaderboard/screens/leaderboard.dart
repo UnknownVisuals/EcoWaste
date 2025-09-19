@@ -36,7 +36,11 @@ class LeaderboardScreen extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () => Get.to(ProfileScreen()),
-            child: Image.asset(REYImages.user, width: 40, height: 40),
+            child: Image.asset(
+              REYImages.user,
+              width: REYSizes.iconMd,
+              height: REYSizes.iconMd,
+            ),
           ),
         ],
       ),
@@ -90,19 +94,19 @@ class LeaderboardScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.leaderboard_outlined,
-                          size: 64,
+                          Iconsax.medal_star,
+                          size: REYSizes.iconLg,
                           color: REYColors.grey,
                         ),
                         const SizedBox(height: REYSizes.spaceBtwItems),
                         Text(
-                          'No leaderboard data available',
+                          'noDataFound'.tr,
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(color: REYColors.grey),
                         ),
                         const SizedBox(height: REYSizes.spaceBtwItems / 2),
                         Text(
-                          'Check back later or try refreshing',
+                          'trySelectingDifferentFilter'.tr,
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: REYColors.grey),
                         ),

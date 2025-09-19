@@ -145,6 +145,12 @@ class AppTranslations extends Translations {
     'logout': 'Logout',
     'logoutConfirmation': 'Are you sure you want to exit Green Apps?',
 
+    // User Management
+    'users': 'Users',
+    'no_users_found': 'No users found',
+    'no_users_description': 'No users available at the moment',
+    'user_selected': 'User selected',
+
     // Language Settings
     'english': 'English',
     'indonesian': 'Indonesian',
@@ -518,6 +524,12 @@ class AppTranslations extends Translations {
     'language': 'Bahasa',
     'logout': 'Keluar',
     'logoutConfirmation': 'Yakin mau keluar Green Apps?',
+
+    // User Management
+    'users': 'Pengguna',
+    'no_users_found': 'Tidak ada pengguna ditemukan',
+    'no_users_description': 'Tidak ada pengguna tersedia saat ini',
+    'user_selected': 'Pengguna dipilih',
 
     // Language Settings
     'english': 'Bahasa Inggris',
