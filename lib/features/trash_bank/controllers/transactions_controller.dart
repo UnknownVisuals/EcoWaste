@@ -1,32 +1,149 @@
+import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/utils/http/http_client.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
 
 class TransactionController extends GetxController {
-  // Dependencies
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
+  final UserController userController = Get.find<UserController>();
 
   // Data variables
-  RxList<TransactionModel> transactions = <TransactionModel>[].obs;
+  RxList<TransactionModel> allTransactions = <TransactionModel>[].obs;
   RxList<TransactionModel> filteredTransactions = <TransactionModel>[].obs;
 
   // Filter state
   RxString selectedFilter = 'ALL'.obs;
 
-  // States variable
-  Rx<bool> isLoading = false.obs;
-  Rx<bool> hasInitialFetch = false.obs;
+  // State variables
+  RxBool isLoading = false.obs;
+  RxBool hasInitialFetch = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Load session cookie from storage
-    REYHttpHelper.loadSessionCookie();
-    // Initialize filtered transactions as all transactions
-    filteredTransactions.value = transactions;
-    // Ensure filter starts as 'ALL'
+    filteredTransactions.value = allTransactions;
     selectedFilter.value = 'ALL';
+  }
+
+  // Get all transactions from API and apply role-based filtering
+  Future<void> fetchTransactions({bool forceRefresh = false}) async {
+    try {
+      // Skip if already loading or have data (unless forcing refresh)
+      if (!forceRefresh &&
+          (allTransactions.isNotEmpty || hasInitialFetch.value) &&
+          !isLoading.value) {
+        return;
+      }
+
+      if (forceRefresh) hasInitialFetch.value = false;
+
+      isLoading.value = true;
+
+      // Fetch all transactions from API (no server-side filtering)
+      final response = await httpHelper.getRequest('waste/transactions');
+
+      if (response.statusCode == 200) {
+        final responseBody = response.body;
+
+        if (responseBody is Map<String, dynamic> &&
+            responseBody['status'] == 'success') {
+          final List<dynamic> transactionsJson = responseBody['data'] ?? [];
+
+          // Parse all transactions
+          List<TransactionModel> apiTransactions = transactionsJson
+              .map(
+                (json) =>
+                    TransactionModel.fromJson(json as Map<String, dynamic>),
+              )
+              .toList();
+
+          // Apply role-based filtering
+          allTransactions.value = _applyRoleBasedFilter(apiTransactions);
+
+          // Sort by creation date (newest first)
+          allTransactions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+          hasInitialFetch.value = true;
+          applyStatusFilter();
+        } else {
+          _handleError(responseBody['status'], responseBody['message']);
+        }
+      } else {
+        _handleError(response.body['status'], response.body['message']);
+      }
+    } catch (e) {
+      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Apply role-based filtering
+  List<TransactionModel> _applyRoleBasedFilter(
+    List<TransactionModel> transactions,
+  ) {
+    final userRole = userController.userModel.value.role.toUpperCase();
+    final userId = userController.userModel.value.id;
+
+    if (userRole == 'NASABAH') {
+      // Filter transactions by current user ID
+      return transactions
+          .where((transaction) => transaction.userId == userId)
+          .toList();
+    } else if (userRole == 'PETUGAS') {
+      // Show all transactions for PETUGAS
+      return transactions;
+    }
+
+    // Default: show user's own transactions
+    return transactions
+        .where((transaction) => transaction.userId == userId)
+        .toList();
+  }
+
+  // Apply status-based filtering
+  void applyStatusFilter() {
+    if (selectedFilter.value == 'ALL') {
+      filteredTransactions.value = List.from(allTransactions);
+    } else {
+      filteredTransactions.value = allTransactions.where((transaction) {
+        final status = transaction.status.toUpperCase();
+        switch (selectedFilter.value) {
+          case 'CONFIRMED':
+            return status == 'COMPLETED' ||
+                status == 'PROCESSED' ||
+                status == 'SUCCESS' ||
+                status == 'APPROVED';
+          case 'PENDING':
+            return status == 'PENDING';
+          case 'REJECTED':
+            return status == 'CANCELLED' ||
+                status == 'REJECTED' ||
+                status == 'FAILED' ||
+                status == 'DENIED';
+          default:
+            return true;
+        }
+      }).toList();
+    }
+  }
+
+  // Set status filter
+  void setFilter(String filter) {
+    selectedFilter.value = filter;
+    applyStatusFilter();
+  }
+
+  // Reset filter to show all
+  void resetFilter() {
+    selectedFilter.value = 'ALL';
+    applyStatusFilter();
+  }
+
+  // Refresh transactions
+  Future<void> refreshTransactions() async {
+    await fetchTransactions(forceRefresh: true);
   }
 
   // Get single transaction details and update local cache
@@ -47,25 +164,21 @@ class TransactionController extends GetxController {
             responseBody['data'] as Map<String, dynamic>,
           );
 
-          // Update the transaction in local cache if it exists
-          final index = transactions.indexWhere((tx) => tx.id == transactionId);
+          // Update in local cache
+          final index = allTransactions.indexWhere(
+            (tx) => tx.id == transactionId,
+          );
           if (index != -1) {
-            transactions[index] = updatedTransaction;
-            applyFilter();
+            allTransactions[index] = updatedTransaction;
+            applyStatusFilter();
           }
 
           return updatedTransaction;
         } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'],
-            message: responseBody['message'],
-          );
+          _handleError(responseBody['status'], responseBody['message']);
         }
       } else {
-        REYLoaders.errorSnackBar(
-          title: response.body['status'],
-          message: response.body['message'],
-        );
+        _handleError(response.body['status'], response.body['message']);
       }
     } catch (e) {
       REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
@@ -73,137 +186,12 @@ class TransactionController extends GetxController {
     return null;
   }
 
-  // Get all transactions and filter by user
-  Future<void> fetchTransactions({
-    String? userId,
-    bool forceRefresh = false,
-  }) async {
-    try {
-      // Skip loading if we already have data and not forcing refresh
-      // Or if we've already done the initial fetch for this user (even if no data was found)
-      if (!forceRefresh &&
-          (transactions.isNotEmpty || hasInitialFetch.value) &&
-          !isLoading.value) {
-        return;
-      }
-
-      // Reset initial fetch flag if forcing refresh
-      if (forceRefresh) {
-        hasInitialFetch.value = false;
-      }
-
-      isLoading.value = true;
-
-      // Build query parameters if userId is provided
-      String endpoint = 'waste/transactions';
-      if (userId != null && userId.isNotEmpty) {
-        endpoint += '?userId=$userId';
-      }
-
-      final transactionsResponse = await httpHelper.getRequest(endpoint);
-
-      if (transactionsResponse.statusCode == 200) {
-        final responseBody = transactionsResponse.body;
-
-        if (responseBody is Map<String, dynamic> &&
-            responseBody['status'] == 'success') {
-          final List<dynamic> transactionsJson = responseBody['data'] ?? [];
-
-          List<TransactionModel> allTransactions = transactionsJson
-              .map(
-                (json) =>
-                    TransactionModel.fromJson(json as Map<String, dynamic>),
-              )
-              .toList();
-
-          // If we used userId in query params, the API should have filtered for us
-          // But if not, we'll filter client-side as fallback
-          if (userId != null &&
-              userId.isNotEmpty &&
-              !endpoint.contains('userId')) {
-            transactions.value = allTransactions
-                .where((transaction) => transaction.userId == userId)
-                .toList();
-          } else {
-            transactions.value = allTransactions;
-          }
-
-          // Sort by creation date (newest first)
-          transactions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-          // Mark that initial fetch is complete
-          hasInitialFetch.value = true;
-
-          // Apply current filter
-          applyFilter();
-        } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'],
-            message: responseBody['message'],
-          );
-        }
-      } else {
-        REYLoaders.errorSnackBar(
-          title: transactionsResponse.body['status'],
-          message: transactionsResponse.body['message'],
-        );
-      }
-    } catch (e) {
-      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // Method to refresh transactions
-  Future<void> refreshTransactions({String? userId}) async {
-    await fetchTransactions(userId: userId, forceRefresh: true);
-  }
-
-  // Filter methods
-  void setFilter(String filter) {
-    selectedFilter.value = filter;
-    applyFilter();
-  }
-
-  void resetFilter() {
-    selectedFilter.value = 'ALL';
-    applyFilter();
-  }
-
-  void applyFilter() {
-    if (selectedFilter.value == 'ALL') {
-      filteredTransactions.value = List.from(transactions);
-    } else {
-      filteredTransactions.value = transactions.where((transaction) {
-        final status = transaction.status.toUpperCase();
-        switch (selectedFilter.value) {
-          case 'CONFIRMED':
-            return status == 'COMPLETED' ||
-                status == 'PROCESSED' ||
-                status == 'SUCCESS' ||
-                status == 'APPROVED';
-          case 'PENDING':
-            return status == 'PENDING';
-          case 'REJECTED':
-            return status == 'CANCELLED' ||
-                status == 'REJECTED' ||
-                status == 'FAILED' ||
-                status == 'DENIED';
-          default:
-            return true;
-        }
-      }).toList();
-    }
-
-    // Print transaction statuses for debugging
-    if (transactions.isNotEmpty) {
-      final statusCounts = <String, int>{};
-      for (final transaction in transactions) {
-        final status = transaction.status.toUpperCase();
-        statusCounts[status] = (statusCounts[status] ?? 0) + 1;
-      }
-    }
+  // Helper method for error handling
+  void _handleError(String? title, String? message) {
+    REYLoaders.errorSnackBar(
+      title: title ?? 'error'.tr,
+      message: message ?? 'error'.tr,
+    );
   }
 
   // Create a new transaction
@@ -211,24 +199,22 @@ class TransactionController extends GetxController {
     isLoading.value = true;
 
     try {
-      final transactionsResponse = await httpHelper.postRequest(
+      final response = await httpHelper.postRequest(
         'waste/transactions',
         transaction.toJson(),
       );
 
-      if (transactionsResponse.statusCode == 201) {
-        final responseBody = transactionsResponse.body;
+      if (response.statusCode == 201) {
+        final responseBody = response.body;
 
         if (responseBody['status'] == 'success') {
           final newTransaction = TransactionModel.fromJson(
             responseBody['data'],
           );
-          transactions.insert(
-            0,
-            newTransaction,
-          ); // Add to beginning (newest first)
-          // Reapply filter to update UI
-          applyFilter();
+
+          // Add to beginning (newest first) and reapply filters
+          allTransactions.insert(0, newTransaction);
+          applyStatusFilter();
 
           REYLoaders.successSnackBar(
             title: responseBody['status'],
@@ -236,16 +222,10 @@ class TransactionController extends GetxController {
           );
           return true;
         } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'],
-            message: responseBody['message'],
-          );
+          _handleError(responseBody['status'], responseBody['message']);
         }
       } else {
-        REYLoaders.errorSnackBar(
-          title: transactionsResponse.body['status'],
-          message: transactionsResponse.body['message'],
-        );
+        _handleError(response.body['status'], response.body['message']);
       }
     } catch (e) {
       REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
@@ -255,44 +235,42 @@ class TransactionController extends GetxController {
     return false;
   }
 
-  // Process a transaction (Admin/Partner only)
+  // Process a transaction (Admin/PETUGAS only)
   Future<void> processTransaction(String transactionId) async {
     isLoading.value = true;
 
     try {
-      final transactionsResponse = await httpHelper.postRequest(
+      final response = await httpHelper.postRequest(
         'waste/transactions/$transactionId/process',
         {},
       );
 
-      if (transactionsResponse.statusCode == 200) {
-        final responseBody = transactionsResponse.body;
+      if (response.statusCode == 200) {
+        final responseBody = response.body;
 
         if (responseBody['status'] == 'success') {
           final updatedTransaction = TransactionModel.fromJson(
             responseBody['data'],
           );
-          final index = transactions.indexWhere((tx) => tx.id == transactionId);
+
+          // Update in local cache
+          final index = allTransactions.indexWhere(
+            (tx) => tx.id == transactionId,
+          );
           if (index != -1) {
-            transactions[index] = updatedTransaction;
-            // Reapply filter to update UI
-            applyFilter();
+            allTransactions[index] = updatedTransaction;
+            applyStatusFilter();
           }
+
           REYLoaders.successSnackBar(
             title: responseBody['status'],
             message: responseBody['message'],
           );
         } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'],
-            message: responseBody['message'],
-          );
+          _handleError(responseBody['status'], responseBody['message']);
         }
       } else {
-        REYLoaders.errorSnackBar(
-          title: transactionsResponse.body['status'],
-          message: transactionsResponse.body['message'],
-        );
+        _handleError(response.body['status'], response.body['message']);
       }
     } catch (e) {
       REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
@@ -306,39 +284,37 @@ class TransactionController extends GetxController {
     isLoading.value = true;
 
     try {
-      final transactionsResponse = await httpHelper.postRequest(
+      final response = await httpHelper.postRequest(
         'waste/transactions/$transactionId/cancel',
         {},
       );
 
-      if (transactionsResponse.statusCode == 200) {
-        final responseBody = transactionsResponse.body;
+      if (response.statusCode == 200) {
+        final responseBody = response.body;
 
         if (responseBody['status'] == 'success') {
           final updatedTransaction = TransactionModel.fromJson(
             responseBody['data'],
           );
-          final index = transactions.indexWhere((tx) => tx.id == transactionId);
+
+          // Update in local cache
+          final index = allTransactions.indexWhere(
+            (tx) => tx.id == transactionId,
+          );
           if (index != -1) {
-            transactions[index] = updatedTransaction;
-            // Reapply filter to update UI
-            applyFilter();
+            allTransactions[index] = updatedTransaction;
+            applyStatusFilter();
           }
+
           REYLoaders.successSnackBar(
             title: responseBody['status'],
             message: responseBody['message'],
           );
         } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'],
-            message: responseBody['message'],
-          );
+          _handleError(responseBody['status'], responseBody['message']);
         }
       } else {
-        REYLoaders.errorSnackBar(
-          title: transactionsResponse.body['status'],
-          message: transactionsResponse.body['message'],
-        );
+        _handleError(response.body['status'], response.body['message']);
       }
     } catch (e) {
       REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
@@ -346,4 +322,7 @@ class TransactionController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Getter for backwards compatibility
+  RxList<TransactionModel> get transactions => allTransactions;
 }

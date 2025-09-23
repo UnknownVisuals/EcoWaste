@@ -32,32 +32,24 @@ class TransactionModel {
     required this.createdAt,
     required this.updatedAt,
     this.actualWeight,
-    this.points,
+    this.points = 0,
     this.notes,
     this.processedByUserId,
     this.completedDate,
-    this.wasteCategory,
-    this.user,
+    required this.wasteCategory,
+    required this.user,
   });
 
-  final String id;
-  final String userId;
-  final String wasteCategoryId;
-  final String type;
-  final String status;
-  final String locationDetail;
-  final DateTime scheduledDate;
+  final String id, userId, wasteCategoryId, type, status, locationDetail;
+  final DateTime scheduledDate, createdAt, updatedAt;
   final List<String> photos;
+  final int points;
   final String locationId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final double? actualWeight;
-  final int? points;
-  final String? notes;
-  final String? processedByUserId;
+  final String? notes, processedByUserId;
   final DateTime? completedDate;
-  final WasteCategoryModel? wasteCategory;
-  final TransactionUser? user;
+  final WasteCategoryModel wasteCategory;
+  final TransactionUser user;
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
@@ -67,48 +59,28 @@ class TransactionModel {
       type: json['type']?.toString() ?? '',
       status: json['status']?.toString() ?? '',
       locationDetail: json['locationDetail']?.toString() ?? '',
-      scheduledDate: json['scheduledDate'] != null
-          ? DateTime.parse(json['scheduledDate']).toLocal()
-          : DateTime.now(),
-      photos: json['photos'] != null ? List<String>.from(json['photos']) : [],
+      scheduledDate: DateTime.parse(
+        json['scheduledDate']?.toString() ?? DateTime.now().toIso8601String(),
+      ),
+      photos: List<String>.from(json['photos'] ?? []),
       locationId: json['locationId']?.toString() ?? '',
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt']).toLocal()
-          : DateTime.now(),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt']).toLocal()
-          : DateTime.now(),
-      // Handle both 'actualWeight' and 'weighedWeight' from API
-      actualWeight: json['actualWeight'] != null
-          ? (json['actualWeight'] is double
-                ? json['actualWeight']
-                : double.tryParse(json['actualWeight'].toString()))
-          : json['weighedWeight'] != null
-          ? (json['weighedWeight'] is double
-                ? json['weighedWeight']
-                : double.tryParse(json['weighedWeight'].toString()))
-          : null,
-      points: json['points'] != null
-          ? (json['points'] is int
-                ? json['points']
-                : int.tryParse(json['points'].toString()) ?? 0)
-          : null,
+      createdAt: DateTime.parse(
+        json['createdAt']?.toString() ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: DateTime.parse(
+        json['updatedAt']?.toString() ?? DateTime.now().toIso8601String(),
+      ),
+      actualWeight: json['actualWeight']?.toDouble(),
+      points: (json['points'] is int)
+          ? json['points']
+          : int.tryParse(json['points']?.toString() ?? '0') ?? 0,
       notes: json['notes']?.toString(),
       processedByUserId: json['processedByUserId']?.toString(),
       completedDate: json['completedDate'] != null
-          ? DateTime.parse(json['completedDate']).toLocal()
+          ? DateTime.parse(json['completedDate'].toString())
           : null,
-      // Handle both 'wasteCategory' and 'tps3r' from API
-      wasteCategory: json['wasteCategory'] != null
-          ? WasteCategoryModel.fromJson(
-              json['wasteCategory'] as Map<String, dynamic>,
-            )
-          : json['tps3r'] != null
-          ? WasteCategoryModel.fromJson(json['tps3r'] as Map<String, dynamic>)
-          : null,
-      user: json['user'] != null
-          ? TransactionUser.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
+      wasteCategory: WasteCategoryModel.fromJson(json['wasteCategory'] ?? {}),
+      user: TransactionUser.fromJson(json['user'] ?? {}),
     );
   }
 
@@ -125,12 +97,13 @@ class TransactionModel {
       'locationId': locationId,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-      if (actualWeight != null) 'actualWeight': actualWeight,
-      if (points != null) 'points': points,
-      if (notes != null) 'notes': notes,
-      if (processedByUserId != null) 'processedByUserId': processedByUserId,
-      if (completedDate != null)
-        'completedDate': completedDate!.toIso8601String(),
+      'actualWeight': actualWeight,
+      'points': points,
+      'notes': notes,
+      'processedByUserId': processedByUserId,
+      'completedDate': completedDate?.toIso8601String(),
+      'wasteCategory': wasteCategory.toJson(),
+      'user': user.toJson(),
     };
   }
 }

@@ -5,27 +5,22 @@ import 'package:get/get.dart';
 class ThemeController extends GetxController {
   final _localStorage = REYLocalStorage();
   final _key = 'isDarkMode';
+
+  // Default to light theme (false)
   var isDarkMode = false.obs;
 
-  ThemeMode get theme {
-    return isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
-  }
+  ThemeMode get theme => isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
 
-  ThemeController() {
-    isDarkMode.value = _loadThemeFromStorage();
-  }
-
-  bool _loadThemeFromStorage() {
-    return _localStorage.readData<bool>(_key) ?? false;
-  }
-
-  void _saveThemeToStorage(bool isDark) {
-    _localStorage.saveData(_key, isDark);
+  @override
+  void onInit() {
+    super.onInit();
+    isDarkMode.value =
+        _localStorage.readData<bool>(_key) ?? false; // Default to light theme
   }
 
   void toggleTheme(bool isDark) {
     isDarkMode.value = isDark;
     Get.changeThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
-    _saveThemeToStorage(isDark);
+    _localStorage.saveData(_key, isDark);
   }
 }

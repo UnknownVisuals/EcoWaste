@@ -1,4 +1,3 @@
-import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/trash_bank/controllers/transactions_controller.dart';
 import 'package:eco_waste/features/trash_bank/screens/transactions/widgets/transactions_card.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -15,17 +14,13 @@ class TransactionsCardList extends StatelessWidget {
     final TransactionController transactionController = Get.put(
       TransactionController(),
     );
-    final UserController userController = Get.find<UserController>();
 
     return Obx(() {
-      // Fetch transactions with current user ID when user data becomes available
-      final userId = userController.userModel.value.id;
-
-      if (userId.isNotEmpty &&
-          transactionController.transactions.isEmpty &&
+      // Fetch transactions when needed
+      if (transactionController.allTransactions.isEmpty &&
           !transactionController.isLoading.value) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          transactionController.fetchTransactions(userId: userId);
+          transactionController.fetchTransactions();
         });
       }
 
@@ -35,7 +30,7 @@ class TransactionsCardList extends StatelessWidget {
         );
       }
 
-      if (transactionController.transactions.isEmpty) {
+      if (transactionController.allTransactions.isEmpty) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +52,8 @@ class TransactionsCardList extends StatelessWidget {
         );
       }
 
-      final displayTransactions = transactionController.transactions.toList();
+      final displayTransactions = transactionController.allTransactions
+          .toList();
 
       return Column(
         spacing: REYSizes.spaceBtwItems / 2,

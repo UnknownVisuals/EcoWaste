@@ -16,37 +16,24 @@ import 'package:get_storage/get_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize storage first
+  // Initialize storage and environment
   await dotenv.load(fileName: ".env");
   await GetStorage.init();
 
-  // Initialize other controllers
+  // Initialize core controllers
   Get.put(ThemeController());
   Get.put(LanguageController());
   Get.put(REYHttpHelper());
 
-  // Load session cookie before initializing UserController
+  // Load session cookie and initialize UserController
   REYHttpHelper.loadSessionCookie();
-
-  // Initialize UserController after storage is ready
   Get.put(UserController());
 
-  final storage = REYLocalStorage();
-  final bool seenOnboarding =
-      storage.readData<bool>('hasSeenOnboarding') ?? false;
-  final bool rememberMe = storage.readData<bool>('rememberMe') ?? false;
-
-  runApp(App(seenOnboarding: seenOnboarding, rememberMe: rememberMe));
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
-  const App({
-    super.key,
-    required this.seenOnboarding,
-    required this.rememberMe,
-  });
-
-  final bool seenOnboarding, rememberMe;
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,21 +55,23 @@ class App extends StatelessWidget {
   }
 
   Widget _determineHomeScreen() {
+    final storage = REYLocalStorage();
+    final bool seenOnboarding =
+        storage.readData<bool>('hasSeenOnboarding') ?? false;
+    final bool rememberMe = storage.readData<bool>('rememberMe') ?? false;
+    final String? sessionCookie = storage.readData<String>('sessionCookie');
+
+    // Show onboarding for first-time users
     if (!seenOnboarding) {
       return const OnBoardingScreen();
     }
 
-    // Check both rememberMe flag and session cookie existence
-    final storage = REYLocalStorage();
-    final sessionCookie = storage.readData<String>('sessionCookie');
-
-    // If remember me is false or no session cookie, go to login
-    if (!rememberMe || sessionCookie == null) {
-      return const LoginScreen();
+    // If user chose remember me and has valid session cookie, go to main app
+    if (rememberMe && sessionCookie != null) {
+      return const NavigationMenu();
     }
 
-    // If remember me is true and we have a session cookie, go to navigation menu
-    // UserController will fetch fresh user data and handle session validation
-    return const NavigationMenu();
+    // Otherwise, show login screen
+    return const LoginScreen();
   }
 }

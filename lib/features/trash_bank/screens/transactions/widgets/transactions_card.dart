@@ -139,7 +139,7 @@ class TransactionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Waste Category
-                      if (transaction.wasteCategory != null) ...[
+                      ...[
                         Row(
                           children: [
                             Container(
@@ -147,7 +147,7 @@ class TransactionCard extends StatelessWidget {
                               height: REYSizes.iconXs,
                               decoration: BoxDecoration(
                                 color: _parseColor(
-                                  transaction.wasteCategory!.color,
+                                  transaction.wasteCategory.color,
                                 ),
                                 shape: BoxShape.circle,
                               ),
@@ -155,7 +155,7 @@ class TransactionCard extends StatelessWidget {
                             const SizedBox(width: REYSizes.spaceBtwItems),
                             Expanded(
                               child: Text(
-                                transaction.wasteCategory!.name,
+                                transaction.wasteCategory.name,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
@@ -249,34 +249,33 @@ class TransactionCard extends StatelessWidget {
                       ],
                     ),
                   // Points
-                  if (transaction.points != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'pointsEarned'.tr,
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.coin_1,
-                              size: REYSizes.iconSm,
-                              color: REYColors.primary,
-                            ),
-                            const SizedBox(width: REYSizes.xs),
-                            Text(
-                              transaction.points.toString(),
-                              style: Theme.of(context).textTheme.titleSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: REYColors.primary,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'pointsEarned'.tr,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Iconsax.coin_1,
+                            size: REYSizes.iconSm,
+                            color: REYColors.primary,
+                          ),
+                          const SizedBox(width: REYSizes.xs),
+                          Text(
+                            transaction.points.toString(),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: REYColors.primary,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],

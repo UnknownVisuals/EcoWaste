@@ -12,13 +12,19 @@ class REYHttpHelper extends GetConnect {
   }
 
   // Setter method to set session cookie
-  static Future<void> setSessionCookie(Response response) async {
+  static Future<void> setSessionCookie(
+    Response response, {
+    bool persist = true,
+  }) async {
     final rawCookie = response.headers?['set-cookie'];
     if (rawCookie != null && rawCookie.isNotEmpty) {
       final index = rawCookie.indexOf(';');
       _sessionCookie = index != -1 ? rawCookie.substring(0, index) : rawCookie;
-      // Persist the session cookie to storage
-      await _storage.saveData('sessionCookie', _sessionCookie);
+
+      // Only persist the session cookie to storage if persist is true (remember me)
+      if (persist) {
+        await _storage.saveData('sessionCookie', _sessionCookie);
+      }
     }
   }
 

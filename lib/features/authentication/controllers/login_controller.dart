@@ -1,4 +1,3 @@
-// import 'package:eco_waste/features/admin/navigation_menu.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/authentication/models/login_model.dart';
 import 'package:eco_waste/features/authentication/models/user_model.dart';
@@ -8,26 +7,18 @@ import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  // Dependencies
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
   final UserController userController = Get.put(UserController());
 
-  // States variables
+  // State variables
   Rx<bool> isObscurePassword = true.obs;
   Rx<bool> isRememberMe = false.obs;
   Rx<bool> isLoading = false.obs;
 
-  // Toggle password visibility
-  void toggleObscurePassword() {
-    isObscurePassword.value = !isObscurePassword.value;
-  }
+  void toggleObscurePassword() =>
+      isObscurePassword.value = !isObscurePassword.value;
+  void toggleRememberMe(bool? value) => isRememberMe.value = value ?? false;
 
-  // Toggle remember me
-  void toggleRememberMe(bool? value) {
-    isRememberMe.value = value ?? false;
-  }
-
-  // Login method
   Future<void> login({required String email, required String password}) async {
     isLoading.value = true;
 
@@ -38,21 +29,25 @@ class LoginController extends GetxController {
         loginModel.toJson(),
       );
 
-      await REYHttpHelper.setSessionCookie(loginResponse);
-
       if (loginResponse.statusCode == 200) {
         final responseBody = loginResponse.body;
 
         if (responseBody['status'] == 'success') {
-          // Set user data immediately in controller
+          // Set user data in controller
           userController.userModel.value = UserModel.fromJson(
             responseBody['data'],
           );
 
-          // Set remember me preference - only store this flag, not user data
+          // Set session cookie (persist only if remember me is checked)
+          await REYHttpHelper.setSessionCookie(
+            loginResponse,
+            persist: isRememberMe.value,
+          );
+
+          // Save remember me preference
           await userController.setRememberMe(isRememberMe.value);
 
-          Get.offAll(() => NavigationMenu());
+          Get.offAll(() => const NavigationMenu());
         } else {
           REYLoaders.errorSnackBar(
             title: responseBody['status'],

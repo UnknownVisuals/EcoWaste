@@ -3,7 +3,6 @@ import 'package:eco_waste/features/authentication/screens/login/login.dart';
 import 'package:eco_waste/features/navigation_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
-import 'package:eco_waste/utils/local_storage/storage_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -18,45 +17,8 @@ class NavigationMenu extends StatelessWidget {
     final userController = Get.find<UserController>();
     final dark = REYHelperFunctions.isDarkMode(context);
 
-    // Listen to user authentication state
     return Obx(() {
-      // Wait for UserController to complete its initial session check
-      if (!userController.isInitialized.value) {
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(color: REYColors.primary),
-          ),
-        );
-      }
-
-      final storage = REYLocalStorage();
-      final rememberMe = storage.readData<bool>('rememberMe') ?? false;
-
-      // If remember me is false, redirect to login
-      if (!rememberMe) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Get.offAll(() => const LoginScreen());
-        });
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(color: REYColors.primary),
-          ),
-        );
-      }
-
-      // If session is invalid, redirect to login
-      if (!userController.isSessionValid.value) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Get.offAll(() => const LoginScreen());
-        });
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(color: REYColors.primary),
-          ),
-        );
-      }
-
-      // If user is loading (fetching current user), show loading
+      // Show loading while fetching user data
       if (userController.isLoading.value) {
         return const Scaffold(
           body: Center(
@@ -65,7 +27,7 @@ class NavigationMenu extends StatelessWidget {
         );
       }
 
-      // If we still don't have user data after loading, redirect to login
+      // Redirect to login if no user data (session expired/invalid)
       if (userController.userModel.value.id.isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Get.offAll(() => const LoginScreen());
@@ -77,6 +39,7 @@ class NavigationMenu extends StatelessWidget {
         );
       }
 
+      // Main navigation UI
       return Scaffold(
         bottomNavigationBar: Obx(
           () => GNav(

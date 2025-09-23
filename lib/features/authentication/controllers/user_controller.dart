@@ -6,11 +6,10 @@ import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  // Dependencies
   final REYHttpHelper httpHelper = Get.put(REYHttpHelper());
-  final storage = REYLocalStorage();
+  final REYLocalStorage storage = REYLocalStorage();
 
-  // Initialize with empty user model - will be populated from API
+  // User model - starts empty
   late Rx<UserModel> userModel = UserModel(
     id: '',
     name: '',
@@ -24,33 +23,30 @@ class UserController extends GetxController {
   ).obs;
 
   final RxBool isLoading = false.obs;
-  final RxBool isSessionValid = true.obs;
-  final RxBool isInitialized = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Add a small delay to ensure GetStorage is fully initialized
-    Future.delayed(const Duration(milliseconds: 100), () {
-      _initializeSession();
-    });
+    _autoLogin();
   }
 
-  void _initializeSession() {
-    // Check if user has active session (remember me was checked)
+  @override
+  void onClose() {
+    // Clear session cookie if remember me is false (when app is closed)
+    final rememberMe = storage.readData<bool>('rememberMe') ?? false;
+    if (!rememberMe) {
+      REYHttpHelper.clearSessionCookie();
+    }
+    super.onClose();
+  }
+
+  // Auto-login if user has remember me enabled and valid session
+  void _autoLogin() {
     final rememberMe = storage.readData<bool>('rememberMe') ?? false;
     final sessionCookie = storage.readData<String>('sessionCookie');
 
     if (rememberMe && sessionCookie != null) {
-      // Set loading to true immediately to prevent race condition in UI
-      isLoading.value = true;
-      // Ensure session cookie is loaded in HTTP helper
-      REYHttpHelper.loadSessionCookie();
-      // If remember me is true and we have a session cookie, fetch current user data
       fetchCurrentUser();
-    } else {
-      // Mark as initialized even if we don't have a session to restore
-      isInitialized.value = true;
     }
   }
 
@@ -62,38 +58,32 @@ class UserController extends GetxController {
 
       if (response.statusCode == 200) {
         final responseBody = response.body;
-
         if (responseBody['status'] == 'success') {
           userModel.value = UserModel.fromJson(responseBody['data']);
-          isSessionValid.value = true;
-          // We don't save user data to storage anymore - only session token is persisted
         } else {
-          REYLoaders.errorSnackBar(
-            title: responseBody['status'] ?? 'error'.tr,
-            message: responseBody['message'] ?? 'failedToFetchUserData'.tr,
+          _handleAuthError(
+            responseBody['message'] ?? 'failedToFetchUserData'.tr,
           );
         }
       } else if (response.statusCode == 401) {
-        // Session expired or invalid, clear stored data and mark session as invalid
-        isSessionValid.value = false;
+        // Session expired
         await clearSession();
         _redirectToLogin();
       } else {
-        REYLoaders.errorSnackBar(
-          title: response.body['status'],
-          message: response.body['message'],
-        );
+        _handleAuthError(response.body['message'] ?? 'error'.tr);
       }
     } catch (e) {
-      REYLoaders.errorSnackBar(title: 'error'.tr, message: e.toString());
+      _handleAuthError(e.toString());
     } finally {
       isLoading.value = false;
-      isInitialized.value = true;
     }
   }
 
+  void _handleAuthError(String message) {
+    REYLoaders.errorSnackBar(title: 'error'.tr, message: message);
+  }
+
   void _redirectToLogin() {
-    // Only redirect if we're not already on the login screen
     if (Get.currentRoute != '/LoginScreen') {
       Future.delayed(Duration.zero, () {
         Get.offAll(() => const LoginScreen());
@@ -101,15 +91,17 @@ class UserController extends GetxController {
     }
   }
 
-  // Simplified storage methods - only handle rememberMe flag and session token
+  // Set remember me preference
   Future<void> setRememberMe(bool value) async {
     await storage.saveData('rememberMe', value);
   }
 
+  // Clear all session data
   Future<void> clearSession() async {
     await storage.removeData('rememberMe');
     await REYHttpHelper.clearSessionCookie();
-    // Reset user model to empty state
+
+    // Reset user model
     userModel.value = UserModel(
       id: '',
       name: '',
@@ -121,6 +113,5 @@ class UserController extends GetxController {
       rt: '',
       rw: '',
     );
-    isSessionValid.value = false;
   }
 }

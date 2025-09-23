@@ -127,40 +127,40 @@ class TransactionDetailScreen extends StatelessWidget {
             const SizedBox(height: REYSizes.spaceBtwSections),
 
             // Waste Category Information
-            if (transaction.wasteCategory != null) ...[
+            ...[
               REYSectionHeading(title: 'wasteCategory'.tr),
               const SizedBox(height: REYSizes.spaceBtwItems),
               TransactionsInfoRow(
                 title: 'category'.tr,
-                value: transaction.wasteCategory!.name,
+                value: transaction.wasteCategory.name,
               ),
               TransactionsInfoRow(
                 title: 'description'.tr,
-                value: transaction.wasteCategory!.description,
+                value: transaction.wasteCategory.description,
               ),
               TransactionsInfoRow(
                 title: 'pointsPerKg'.tr,
-                value: '${transaction.wasteCategory!.pointsPerKg}',
+                value: '${transaction.wasteCategory.pointsPerKg}',
               ),
               TransactionsInfoRow(
                 title: 'color'.tr,
-                value: transaction.wasteCategory!.color,
+                value: transaction.wasteCategory.color,
               ),
             ],
 
             const SizedBox(height: REYSizes.spaceBtwSections),
 
             // User Information
-            if (transaction.user != null) ...[
+            ...[
               REYSectionHeading(title: 'userInformation'.tr),
               const SizedBox(height: REYSizes.spaceBtwItems),
               TransactionsInfoRow(
                 title: 'name'.tr,
-                value: transaction.user!.name,
+                value: transaction.user.name,
               ),
               TransactionsInfoRow(
                 title: 'userId'.tr,
-                value: transaction.user!.id,
+                value: transaction.user.id,
               ),
             ],
 
@@ -176,11 +176,10 @@ class TransactionDetailScreen extends StatelessWidget {
                   value:
                       '${transaction.actualWeight!.toStringAsFixed(2)} ${'kg'.tr}',
                 ),
-              if (transaction.points != null)
-                TransactionsInfoRow(
-                  title: 'pointsEarned'.tr,
-                  value: transaction.points.toString(),
-                ),
+              TransactionsInfoRow(
+                title: 'pointsEarned'.tr,
+                value: transaction.points.toString(),
+              ),
               if (transaction.notes != null && transaction.notes!.isNotEmpty)
                 TransactionsInfoRow(
                   title: 'notes'.tr,
