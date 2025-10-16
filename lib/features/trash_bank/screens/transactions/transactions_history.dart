@@ -47,7 +47,7 @@ class TransactionsHistoryScreen extends StatelessWidget {
                     const SizedBox(width: REYSizes.spaceBtwItems),
                     REYChipFilter(
                       chipFilterString: 'all'.tr,
-                      chipFilterColor: REYColors.primary,
+                      chipFilterColor: REYColors.info,
                       chipFilterIcon: Iconsax.filter,
                       isSelected:
                           transactionController.selectedFilter.value == 'ALL',

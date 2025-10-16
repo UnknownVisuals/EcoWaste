@@ -36,11 +36,7 @@ class LeaderboardScreen extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () => Get.to(ProfileScreen()),
-            child: Image.asset(
-              REYImages.user,
-              width: REYSizes.iconMd,
-              height: REYSizes.iconMd,
-            ),
+            child: Image.asset(REYImages.user, width: 40, height: 40),
           ),
         ],
       ),
@@ -54,7 +50,7 @@ class LeaderboardScreen extends StatelessWidget {
                 const SizedBox(width: REYSizes.spaceBtwItems),
                 REYChipFilter(
                   chipFilterString: 'allVillages'.tr,
-                  chipFilterColor: REYColors.primary,
+                  chipFilterColor: REYColors.info,
                   chipFilterIcon: Iconsax.global,
                   isSelected:
                       leaderboardController.selectedFilter.value ==

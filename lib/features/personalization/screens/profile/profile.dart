@@ -4,6 +4,7 @@ import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/authentication/controllers/user_controller.dart';
 import 'package:eco_waste/features/personalization/screens/profile/widgets/profile_menu.dart';
 import 'package:eco_waste/common/widgets/image_picker_bottom_sheet.dart';
+import 'package:eco_waste/common/widgets/image_preview_dialog.dart';
 import 'package:eco_waste/features/trash_bank/controllers/locations_controller.dart';
 import 'package:eco_waste/controllers/camera_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
@@ -53,48 +54,128 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(REYSizes.defaultSpace),
             child: Column(
               children: [
-                // Profile Picture
+                // Profile Picture Section
                 SizedBox(
                   width: double.infinity,
                   child: Column(
                     children: [
+                      // Profile Picture with Camera Icon
                       Obx(() {
+                        Widget profileImage;
+
                         // Check if user has selected a new image
                         if (cameraController.selectedImage.value != null) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
+                          profileImage = ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
                             child: Image.file(
                               cameraController.selectedImage.value!,
-                              width: 100,
-                              height: 100,
+                              width: 120,
+                              height: 120,
                               fit: BoxFit.cover,
                             ),
                           );
                         }
                         // Show existing avatar or default
                         else if (user.avatar.isNotEmpty) {
-                          return REYCircularImage(
+                          profileImage = REYCircularImage(
                             image: user.avatar,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             isNetworkImage: true,
                           );
                         }
                         // Show default avatar
                         else {
-                          return const REYCircularImage(
+                          profileImage = const REYCircularImage(
                             image: REYImages.user,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                           );
                         }
+
+                        return Stack(
+                          children: [
+                            // Profile Image with Tap to Preview
+                            GestureDetector(
+                              onTap: () {
+                                // Preview the image
+                                if (cameraController.selectedImage.value !=
+                                    null) {
+                                  REYImagePreviewDialog.showFile(
+                                    context: context,
+                                    imageFile:
+                                        cameraController.selectedImage.value!,
+                                  );
+                                } else if (user.avatar.isNotEmpty) {
+                                  REYImagePreviewDialog.showData(
+                                    context: context,
+                                    imageData: user.avatar,
+                                  );
+                                }
+                              },
+                              child: profileImage,
+                            ),
+                            // Camera Icon Button
+                            Positioned(
+                              bottom: 2,
+                              right: 2,
+                              child: GestureDetector(
+                                onTap: () => REYImagePickerBottomSheet.show(
+                                  context: context,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(REYSizes.xs),
+                                  decoration: BoxDecoration(
+                                    color: REYColors.success,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
+                                      width: 3,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt,
+                                    color: REYColors.white,
+                                    size: REYSizes.iconMd,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
                       }),
-                      TextButton(
-                        onPressed: () =>
-                            REYImagePickerBottomSheet.show(context: context),
+
+                      const SizedBox(height: REYSizes.spaceBtwItems),
+
+                      // User Name
+                      Text(
+                        user.name,
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: REYSizes.spaceBtwItems / 2),
+
+                      // Points Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: REYSizes.md,
+                          vertical: REYSizes.xs,
+                        ),
+                        decoration: BoxDecoration(
+                          color: REYColors.success,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Text(
-                          'changeProfilePicture'.tr,
-                          style: const TextStyle(color: REYColors.primary),
+                          '${user.points} ${'points'.tr}',
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
+                                color: REYColors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                       ),
                     ],
@@ -111,18 +192,8 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: REYSizes.spaceBtwItems),
 
                 ProfileMenu(
-                  title: 'name'.tr,
-                  value: user.name,
-                  onPressed: () {},
-                ),
-                ProfileMenu(
                   title: 'email'.tr,
                   value: user.email,
-                  onPressed: () {},
-                ),
-                ProfileMenu(
-                  title: 'points'.tr,
-                  value: user.points.toString(),
                   onPressed: () {},
                 ),
                 ProfileMenu(

@@ -86,10 +86,10 @@ class TransactionDetailScreen extends StatelessWidget {
             // Transaction Information
             REYSectionHeading(title: 'transactionInformation'.tr),
             const SizedBox(height: REYSizes.spaceBtwItems),
-            TransactionsInfoRow(
-              title: 'transactionId'.tr,
-              value: transaction.id,
-            ),
+            // TransactionsInfoRow(
+            //   title: 'transactionId'.tr,
+            //   value: transaction.id,
+            // ),
             TransactionsInfoRow(
               title: 'type'.tr,
               value: transaction.type == 'PICKUP' ? 'pickUp'.tr : 'dropOff'.tr,
@@ -142,10 +142,10 @@ class TransactionDetailScreen extends StatelessWidget {
                 title: 'pointsPerKg'.tr,
                 value: '${transaction.wasteCategory.pointsPerKg}',
               ),
-              TransactionsInfoRow(
-                title: 'color'.tr,
-                value: transaction.wasteCategory.color,
-              ),
+              // TransactionsInfoRow(
+              //   title: 'color'.tr,
+              //   value: transaction.wasteCategory.color,
+              // ),
             ],
 
             const SizedBox(height: REYSizes.spaceBtwSections),
@@ -158,10 +158,10 @@ class TransactionDetailScreen extends StatelessWidget {
                 title: 'name'.tr,
                 value: transaction.user.name,
               ),
-              TransactionsInfoRow(
-                title: 'userId'.tr,
-                value: transaction.user.id,
-              ),
+              // TransactionsInfoRow(
+              //   title: 'userId'.tr,
+              //   value: transaction.user.id,
+              // ),
             ],
 
             const SizedBox(height: REYSizes.spaceBtwSections),

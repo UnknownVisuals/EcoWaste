@@ -21,9 +21,10 @@ class ProfileMenu extends StatelessWidget {
       onTap: onPressed,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: REYSizes.spaceBtwItems / 1.5,
+          vertical: REYSizes.spaceBtwItems / 2.5,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 4,
@@ -31,14 +32,16 @@ class ProfileMenu extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.bodySmall,
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
             Expanded(
               flex: 6,
               child: Text(
                 value,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyLarge,
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
             // Expanded(child: Icon(icon, size: 18)),

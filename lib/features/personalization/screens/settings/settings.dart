@@ -79,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   REYSettingsMenuTile(
                     icon: Iconsax.receipt,
-                    title: 'history'.tr,
+                    title: 'transactionHistory'.tr,
                     subTitle: 'historySubtitle'.tr,
                     onTap: () => Get.to(TransactionsHistoryScreen()),
                   ),

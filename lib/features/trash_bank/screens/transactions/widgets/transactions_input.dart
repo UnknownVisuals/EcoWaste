@@ -6,6 +6,7 @@ import 'package:eco_waste/controllers/camera_controller.dart';
 import 'package:eco_waste/features/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/common/widgets/image_picker_bottom_sheet.dart';
@@ -38,7 +39,11 @@ class TransactionsInput extends StatelessWidget {
     final RxString selectedWasteCategory = ''.obs;
     final RxString selectedTransactionType = ''.obs;
     final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+    final RxBool dateSelected = false.obs;
+    final RxBool timeSelected = false.obs;
     final TextEditingController locationController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
+    final TextEditingController timeController = TextEditingController();
 
     // Fetch waste categories when widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -138,9 +143,17 @@ class TransactionsInput extends StatelessWidget {
         ),
 
         const SizedBox(height: REYSizes.spaceBtwInputFields),
-        // Jadwal
-        Obx(
-          () => TextFormField(
+
+        // Date Field
+        Obx(() {
+          // Update controller text when date changes
+          if (dateSelected.value && selectedDate.value != null) {
+            dateController.text =
+                '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}';
+          }
+
+          return TextFormField(
+            controller: dateController,
             readOnly: true,
             onTap: () async {
               final DateTime? pickedDate = await showDatePicker(
@@ -150,32 +163,70 @@ class TransactionsInput extends StatelessWidget {
                 lastDate: DateTime.now().add(const Duration(days: 30)),
               );
               if (pickedDate != null) {
-                final TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.fromDateTime(
-                    selectedDate.value ?? DateTime.now(),
-                  ),
+                // Preserve existing time if available, otherwise use current time
+                final existingDateTime = selectedDate.value ?? DateTime.now();
+                selectedDate.value = DateTime(
+                  pickedDate.year,
+                  pickedDate.month,
+                  pickedDate.day,
+                  existingDateTime.hour,
+                  existingDateTime.minute,
                 );
-                if (pickedTime != null) {
-                  selectedDate.value = DateTime(
-                    pickedDate.year,
-                    pickedDate.month,
-                    pickedDate.day,
-                    pickedTime.hour,
-                    pickedTime.minute,
-                  );
-                }
+                dateSelected.value = true;
+                dateController.text =
+                    '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
               }
             },
             decoration: InputDecoration(
               prefixIcon: const Icon(Iconsax.calendar_1),
               labelText: 'selectDate'.tr,
-              hintText: selectedDate.value != null
-                  ? '${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year} ${selectedDate.value!.hour.toString().padLeft(2, '0')}:${selectedDate.value!.minute.toString().padLeft(2, '0')}'
-                  : 'tapToSelectDate'.tr,
+              hintText: 'tapToSelectDate'.tr,
             ),
-          ),
-        ),
+          );
+        }),
+
+        const SizedBox(height: REYSizes.spaceBtwInputFields),
+
+        // Time Field
+        Obx(() {
+          // Update controller text when time changes
+          if (timeSelected.value && selectedDate.value != null) {
+            timeController.text =
+                '${selectedDate.value!.hour.toString().padLeft(2, '0')}:${selectedDate.value!.minute.toString().padLeft(2, '0')}';
+          }
+
+          return TextFormField(
+            controller: timeController,
+            readOnly: true,
+            onTap: () async {
+              final TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.fromDateTime(
+                  selectedDate.value ?? DateTime.now(),
+                ),
+              );
+              if (pickedTime != null) {
+                // Preserve existing date if available, otherwise use current date
+                final existingDateTime = selectedDate.value ?? DateTime.now();
+                selectedDate.value = DateTime(
+                  existingDateTime.year,
+                  existingDateTime.month,
+                  existingDateTime.day,
+                  pickedTime.hour,
+                  pickedTime.minute,
+                );
+                timeSelected.value = true;
+                timeController.text =
+                    '${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}';
+              }
+            },
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Iconsax.clock),
+              labelText: 'selectTime'.tr,
+              hintText: 'tapToSelectTime'.tr,
+            ),
+          );
+        }),
 
         const SizedBox(height: REYSizes.spaceBtwSections),
 
@@ -194,8 +245,10 @@ class TransactionsInput extends StatelessWidget {
         const SizedBox(height: REYSizes.spaceBtwItems),
 
         // Image Preview
-        Obx(
-          () => GestureDetector(
+        Obx(() {
+          final dark = REYHelperFunctions.isDarkMode(context);
+
+          return GestureDetector(
             onTap: () {
               if (cameraController.selectedImage.value == null) {
                 REYImagePickerBottomSheet.show(context: context);
@@ -212,8 +265,12 @@ class TransactionsInput extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(REYSizes.borderRadiusMd),
-                  border: Border.all(color: Colors.grey.shade300),
-                  color: Colors.grey.shade50,
+                  border: Border.all(
+                    color: dark ? REYColors.darkGrey : REYColors.borderPrimary,
+                  ),
+                  color: dark
+                      ? REYColors.darkContainer
+                      : REYColors.lightContainer,
                 ),
                 child: cameraController.selectedImage.value != null
                     ? ClipRRect(
@@ -231,20 +288,24 @@ class TransactionsInput extends StatelessWidget {
                           Icon(
                             Iconsax.image,
                             size: REYSizes.iconLg * 1.5,
-                            color: REYColors.grey,
+                            color: dark ? REYColors.grey : REYColors.darkGrey,
                           ),
                           const SizedBox(height: REYSizes.sm),
                           Text(
                             'tapToAddImage'.tr,
                             style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(color: REYColors.darkGrey),
+                                ?.copyWith(
+                                  color: dark
+                                      ? REYColors.grey
+                                      : REYColors.darkGrey,
+                                ),
                           ),
                         ],
                       ),
               ),
             ),
-          ),
-        ),
+          );
+        }),
 
         const SizedBox(height: REYSizes.spaceBtwSections),
 
@@ -274,6 +335,10 @@ class TransactionsInput extends StatelessWidget {
                           selectedTransactionType,
                           locationController,
                           selectedDate,
+                          dateSelected,
+                          timeSelected,
+                          dateController,
+                          timeController,
                           cameraController,
                         ),
                   child: transactionController.isLoading.value
@@ -303,6 +368,10 @@ class TransactionsInput extends StatelessWidget {
     RxString selectedTransactionType,
     TextEditingController locationController,
     Rx<DateTime?> selectedDate,
+    RxBool dateSelected,
+    RxBool timeSelected,
+    TextEditingController dateController,
+    TextEditingController timeController,
     CameraController cameraController,
   ) async {
     // Validation
@@ -330,7 +399,7 @@ class TransactionsInput extends StatelessWidget {
       return;
     }
 
-    if (selectedDate.value == null) {
+    if (!dateSelected.value || !timeSelected.value) {
       REYLoaders.errorSnackBar(
         title: 'error'.tr,
         message: 'selectTransactionDate'.tr,
@@ -392,6 +461,10 @@ class TransactionsInput extends StatelessWidget {
       selectedTransactionType.value = '';
       locationController.clear();
       selectedDate.value = null;
+      dateSelected.value = false;
+      timeSelected.value = false;
+      dateController.clear();
+      timeController.clear();
       cameraController.selectedImage.value = null;
 
       // Navigate back or show success message
