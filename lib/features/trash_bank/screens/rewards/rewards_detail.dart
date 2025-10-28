@@ -3,6 +3,7 @@ import 'package:eco_waste/common/widgets/notification_menu_icon.dart';
 import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dart';
 import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_cart.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +19,7 @@ class RewardsDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RewardsController rewardsController = Get.find<RewardsController>();
+    final bool dark = REYHelperFunctions.isDarkMode(context);
 
     return Scaffold(
       appBar: REYAppBar(
@@ -49,11 +51,22 @@ class RewardsDetail extends StatelessWidget {
               borderRadius: BorderRadius.circular(REYSizes.cardRadiusLg),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
-                child: Image.network(
-                  "https://greenappstelkom.id/generic-reward-image.png",
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: reward.imageUrl != null && reward.imageUrl!.isNotEmpty
+                    ? Image.network(
+                        'https://api.greenappstelkom.id${reward.imageUrl}',
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        color: dark
+                            ? REYColors.darkerGrey
+                            : REYColors.lightGrey,
+                        child: Icon(
+                          Iconsax.image,
+                          size: REYSizes.iconLg,
+                          color: dark ? REYColors.light : REYColors.primary,
+                        ),
+                      ),
               ),
             ),
 
@@ -95,7 +108,7 @@ class RewardsDetail extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: reward.stock > 0
-                            ? REYColors.grey
+                            ? (dark ? REYColors.darkerGrey : REYColors.grey)
                             : REYColors.error,
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -106,7 +119,9 @@ class RewardsDetail extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
                               color: reward.stock > 0
-                                  ? REYColors.textPrimary
+                                  ? (dark
+                                        ? REYColors.textWhite
+                                        : REYColors.textPrimary)
                                   : REYColors.textWhite,
                               fontWeight: FontWeight.w600,
                             ),

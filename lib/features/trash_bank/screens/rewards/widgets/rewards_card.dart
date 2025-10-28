@@ -14,7 +14,7 @@ class RewardsCard extends StatelessWidget {
     required this.description,
     required this.pointsRequired,
     required this.stock,
-    required this.image,
+    this.image,
     this.onTap,
     this.reward,
   });
@@ -23,7 +23,7 @@ class RewardsCard extends StatelessWidget {
   final String description;
   final int pointsRequired;
   final int stock;
-  final String image;
+  final String? image;
   final VoidCallback? onTap;
   final RewardsModel? reward;
 
@@ -54,11 +54,22 @@ class RewardsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(
                   REYSizes.productImageRadius,
                 ),
-                child: Image.network(
-                  image,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
+                child: image != null && image!.isNotEmpty
+                    ? Image.network(
+                        image!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      )
+                    : Container(
+                        color: dark
+                            ? REYColors.darkerGrey
+                            : REYColors.lightGrey,
+                        child: Icon(
+                          Iconsax.image,
+                          color: REYColors.primary,
+                          size: REYSizes.iconLg,
+                        ),
+                      ),
               ),
             ),
 
@@ -118,7 +129,9 @@ class RewardsCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: stock > 0
-                                  ? REYColors.grey
+                                  ? (dark
+                                        ? REYColors.darkerGrey
+                                        : REYColors.grey)
                                   : REYColors.error,
                               borderRadius: BorderRadius.circular(
                                 REYSizes.borderRadiusMd,
@@ -131,7 +144,9 @@ class RewardsCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(
                                     color: stock > 0
-                                        ? REYColors.textPrimary
+                                        ? (dark
+                                              ? REYColors.textWhite
+                                              : REYColors.textPrimary)
                                         : REYColors.textWhite,
                                     fontWeight: FontWeight.w600,
                                   ),

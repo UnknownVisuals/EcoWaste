@@ -67,13 +67,16 @@ class RewardsScreen extends StatelessWidget {
             ),
             itemBuilder: (_, index) {
               final reward = rewards[index];
+              final String? imageUrl = reward.imageUrl;
               return RewardsCard(
                 reward: reward,
                 name: reward.name,
                 description: reward.description,
                 pointsRequired: reward.pointsRequired,
                 stock: reward.stock,
-                image: 'https://greenappstelkom.id/generic-reward-image.png',
+                image: imageUrl != null && imageUrl.isNotEmpty
+                    ? 'https://api.greenappstelkom.id$imageUrl'
+                    : null,
                 onTap: () => Get.to(() => RewardsDetail(reward: reward)),
               );
             },

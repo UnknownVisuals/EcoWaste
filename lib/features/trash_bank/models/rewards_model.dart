@@ -5,11 +5,12 @@ class RewardsModel {
     required this.description,
     required this.pointsRequired,
     required this.stock,
-    required this.icon,
+    this.imageUrl,
     required this.locationId,
   });
 
-  final String id, name, description, icon, locationId;
+  final String id, name, description, locationId;
+  final String? imageUrl;
   final int pointsRequired, stock;
 
   factory RewardsModel.fromJson(Map<String, dynamic> json) {
@@ -23,7 +24,7 @@ class RewardsModel {
       stock: (json['stock'] is int)
           ? json['stock']
           : int.tryParse(json['stock']?.toString() ?? '0') ?? 0,
-      icon: json['icon']?.toString() ?? '',
+      imageUrl: json['imageUrl'] != null ? json['imageUrl']?.toString() : null,
       locationId: json['locationId']?.toString() ?? '',
     );
   }
@@ -35,7 +36,7 @@ class RewardsModel {
       'description': description,
       'pointsRequired': pointsRequired,
       'stock': stock,
-      'icon': icon,
+      'imageUrl': imageUrl,
       'locationId': locationId,
     };
   }
