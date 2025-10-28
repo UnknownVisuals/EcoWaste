@@ -1,5 +1,6 @@
 import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dart';
 import 'package:eco_waste/features/trash_bank/models/rewards_model.dart';
+import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_redeem.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
@@ -157,21 +158,40 @@ class RewardsCard extends StatelessWidget {
 
                       // Right: Add to Cart Plus Icon
                       if (reward != null)
-                        Obx(
-                          () => GestureDetector(
-                            onTap:
-                                stock > 0 &&
-                                    !rewardsController.isInCart(reward!)
-                                ? () => rewardsController.addToCart(reward!)
-                                : null,
+                        Obx(() {
+                          final bool isRedeeming =
+                              rewardsController.isRedeeming.value;
+                          final bool isCurrentReward =
+                              rewardsController.redeemingRewardId.value ==
+                              reward!.id;
+                          final bool isDisabled = stock <= 0 || isRedeeming;
+
+                          return GestureDetector(
+                            onTap: isDisabled
+                                ? null
+                                : () async {
+                                    final bool? confirm =
+                                        await showDialog<bool>(
+                                          context: context,
+                                          builder: (_) => RewardsRedeem(
+                                            rewardName: reward!.name,
+                                            pointsRequired:
+                                                reward!.pointsRequired,
+                                          ),
+                                        );
+
+                                    if (confirm == true) {
+                                      await rewardsController.redeemRequest(
+                                        rewardId: reward!.id,
+                                      );
+                                    }
+                                  },
                             child: Container(
                               padding: const EdgeInsets.all(REYSizes.md / 1.5),
                               decoration: BoxDecoration(
-                                color: rewardsController.isInCart(reward!)
-                                    ? REYColors.primary
-                                    : (stock > 0
-                                          ? REYColors.primary
-                                          : REYColors.grey),
+                                color: isDisabled
+                                    ? REYColors.grey
+                                    : REYColors.primary,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(REYSizes.md),
                                   topRight: Radius.circular(REYSizes.xs),
@@ -179,16 +199,26 @@ class RewardsCard extends StatelessWidget {
                                   bottomRight: Radius.circular(REYSizes.md),
                                 ),
                               ),
-                              child: Icon(
-                                rewardsController.isInCart(reward!)
-                                    ? Iconsax.box_tick
-                                    : Iconsax.add,
-                                size: REYSizes.iconMd,
-                                color: Colors.white,
-                              ),
+                              child: isRedeeming && isCurrentReward
+                                  ? const SizedBox(
+                                      width: REYSizes.iconMd,
+                                      height: REYSizes.iconMd,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                      ),
+                                    )
+                                  : Icon(
+                                      Iconsax.ticket,
+                                      size: REYSizes.iconMd,
+                                      color: Colors.white,
+                                    ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                     ],
                   ),
                 ],

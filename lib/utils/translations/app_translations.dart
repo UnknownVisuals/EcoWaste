@@ -189,6 +189,7 @@ class AppTranslations extends Translations {
     'all': 'All',
     'confirmed': 'Confirmed',
     'pending': 'Pending',
+    'approved': 'Approved',
     'cancelled': 'Cancelled',
 
     // Admin Actions
@@ -303,6 +304,15 @@ class AppTranslations extends Translations {
     'cartCleared': 'Cart Cleared',
     'cartClearedMessage': 'All items have been removed from your cart.',
     'isOutOfStock': 'is currently out of stock.',
+    'rewardsHistoryTitle': 'Rewards History',
+    'rewardsHistoryEmptyTitle': 'No rewards history yet',
+    'rewardsHistoryEmptySubtitle':
+        'Start redeeming rewards to see them listed here.',
+    'dateNotAvailable': 'Date not available',
+    'redeemRewardTitle': 'Redeem Reward',
+    'redeemRewardMessage':
+        'Are you sure you want to redeem @reward for @points points?',
+    'redeem': 'Redeem',
 
     // Product Information
     'stock': 'Stock:',
@@ -570,6 +580,7 @@ class AppTranslations extends Translations {
     'all': 'Semua',
     'confirmed': 'Dikonfirmasi',
     'pending': 'Menunggu',
+    'approved': 'Disetujui',
     'cancelled': 'Dibatalkan',
 
     // Admin Actions
@@ -682,6 +693,15 @@ class AppTranslations extends Translations {
     'cartCleared': 'Keranjang Dikosongkan',
     'cartClearedMessage': 'Semua item telah dihapus dari keranjang Anda.',
     'isOutOfStock': 'sedang tidak tersedia.',
+    'rewardsHistoryTitle': 'Riwayat Penukaran',
+    'rewardsHistoryEmptyTitle': 'Belum ada riwayat penukaran',
+    'rewardsHistoryEmptySubtitle':
+        'Mulai tukarkan reward untuk melihat riwayat di sini.',
+    'dateNotAvailable': 'Tanggal tidak tersedia',
+    'redeemRewardTitle': 'Tukar Reward',
+    'redeemRewardMessage':
+        'Apakah Anda yakin ingin menukar @reward dengan @points poin?',
+    'redeem': 'Tukar',
 
     // Product Information
     'stock': 'Stok:',

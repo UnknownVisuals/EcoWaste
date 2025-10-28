@@ -1,10 +1,9 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/common/widgets/notification_menu_icon.dart';
 import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dart';
 import 'package:eco_waste/features/trash_bank/models/rewards_model.dart';
+import 'package:eco_waste/features/trash_bank/screens/rewards/rewards_history.dart';
 import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_card.dart';
 import 'package:eco_waste/features/trash_bank/screens/rewards/rewards_detail.dart';
-import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_cart.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -27,14 +26,18 @@ class RewardsScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         actions: [
-          Obx(
-            () => REYNotificationCounter(
-              badgeCount: rewardsController.cartItemCount,
-              child: IconButton(
-                icon: const Icon(Iconsax.shopping_cart),
-                onPressed: () => RewardsCart.showCartBottomSheet(context),
-              ),
-            ),
+          // Obx(
+          //   () => REYNotificationCounter(
+          //     badgeCount: rewardsController.cartItemCount,
+          //     child: IconButton(
+          //       icon: const Icon(Iconsax.shopping_cart),
+          //       onPressed: () => RewardsCart.showCartBottomSheet(context),
+          //     ),
+          //   ),
+          // ),
+          IconButton(
+            onPressed: () => Get.to(const RewardsHistoryScreen()),
+            icon: Icon(Iconsax.receipt),
           ),
         ],
       ),

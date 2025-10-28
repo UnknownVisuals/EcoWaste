@@ -1,12 +1,10 @@
 import 'package:eco_waste/common/widgets/appbar.dart';
-import 'package:eco_waste/common/widgets/notification_menu_icon.dart';
 import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dart';
-import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_cart.dart';
+import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_redeem.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:eco_waste/features/trash_bank/models/rewards_model.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:iconsax/iconsax.dart';
@@ -29,17 +27,17 @@ class RewardsDetail extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
           overflow: TextOverflow.ellipsis,
         ),
-        actions: [
-          Obx(
-            () => REYNotificationCounter(
-              badgeCount: rewardsController.cartItemCount,
-              child: IconButton(
-                icon: const Icon(Iconsax.shopping_cart),
-                onPressed: () => RewardsCart.showCartBottomSheet(context),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Obx(
+        //     () => REYNotificationCounter(
+        //       badgeCount: rewardsController.cartItemCount,
+        //       child: IconButton(
+        //         icon: const Icon(Iconsax.shopping_cart),
+        //         onPressed: () => RewardsCart.showCartBottomSheet(context),
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(REYSizes.defaultSpace),
@@ -142,33 +140,57 @@ class RewardsDetail extends StatelessWidget {
 
             const Spacer(),
 
-            // Add to Cart Button
-            Obx(
-              () => SizedBox(
+            // Redeem Reward Button
+            Obx(() {
+              final bool isRedeeming = rewardsController.isRedeeming.value;
+              final bool isCurrentReward =
+                  rewardsController.redeemingRewardId.value == reward.id;
+              final bool isDisabled = reward.stock <= 0 || isRedeeming;
+
+              return SizedBox(
                 width: double.infinity,
-                child: rewardsController.isInCart(reward)
-                    ? OutlinedButton(
-                        onPressed: null,
-                        child: Text(
-                          'alreadyInCart'.tr,
+                child: ElevatedButton(
+                  onPressed: isDisabled
+                      ? null
+                      : () async {
+                          final bool? confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (_) => RewardsRedeem(
+                              rewardName: reward.name,
+                              pointsRequired: reward.pointsRequired,
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            await rewardsController.redeemRequest(
+                              rewardId: reward.id,
+                            );
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isDisabled
+                        ? REYColors.grey
+                        : REYColors.primary,
+                  ),
+                  child: isRedeeming && isCurrentReward
+                      ? const SizedBox(
+                          height: REYSizes.iconMd,
+                          width: REYSizes.iconMd,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          'redeem'.tr,
                           style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                              ?.copyWith(color: Colors.white),
                         ),
-                      )
-                    : ElevatedButton(
-                        onPressed: reward.stock > 0
-                            ? () => rewardsController.addToCart(reward)
-                            : null,
-                        child: Text(
-                          'addToCart'.tr,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: reward.stock > 0 ? Colors.white : null,
-                              ),
-                        ),
-                      ),
-              ),
-            ),
+                ),
+              );
+            }),
 
             const SizedBox(height: REYSizes.defaultSpace),
           ],
