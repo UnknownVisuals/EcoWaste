@@ -7,6 +7,7 @@ import 'package:eco_waste/features/trash_bank/models/transactions_model.dart';
 import 'package:eco_waste/features/trash_bank/screens/transactions/widgets/transactions_info_row.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -140,7 +141,9 @@ class TransactionDetailScreen extends StatelessWidget {
               ),
               TransactionsInfoRow(
                 title: 'pointsPerKg'.tr,
-                value: '${transaction.wasteCategory.pointsPerKg}',
+                value: REYFormatter.formatPoints(
+                  transaction.wasteCategory.pointsPerKg,
+                ),
               ),
               // TransactionsInfoRow(
               //   title: 'color'.tr,
@@ -178,7 +181,7 @@ class TransactionDetailScreen extends StatelessWidget {
                 ),
               TransactionsInfoRow(
                 title: 'pointsEarned'.tr,
-                value: transaction.points.toString(),
+                value: REYFormatter.formatPoints(transaction.points),
               ),
               if (transaction.notes != null && transaction.notes!.isNotEmpty)
                 TransactionsInfoRow(

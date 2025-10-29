@@ -1,6 +1,10 @@
 import 'package:intl/intl.dart';
 
 class REYFormatter {
+  static final NumberFormat _pointsFormatter = NumberFormat.decimalPattern(
+    'id_ID',
+  );
+
   // Customize the date format as needed
   static String formatDate(DateTime? date) {
     date ??= DateTime.now();
@@ -25,6 +29,10 @@ class REYFormatter {
     }
     // Add more custom phone number formatting logic for different formats if needed.
     return phoneNumber;
+  }
+
+  static String formatPoints(num? points) {
+    return _pointsFormatter.format(points ?? 0);
   }
 
   // Not fully tested.

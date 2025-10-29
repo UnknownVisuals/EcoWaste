@@ -5,10 +5,10 @@ import 'package:eco_waste/features/trash_bank/models/rewards_history_model.dart'
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 
 class RewardsHistoryScreen extends StatefulWidget {
   const RewardsHistoryScreen({super.key});
@@ -53,7 +53,6 @@ class _RewardsHistoryScreenState extends State<RewardsHistoryScreen> {
   Widget build(BuildContext context) {
     final bool dark = REYHelperFunctions.isDarkMode(context);
     final ThemeData theme = Theme.of(context);
-    final NumberFormat pointsFormatter = NumberFormat.decimalPattern('id_ID');
 
     return Scaffold(
       appBar: REYAppBar(
@@ -215,7 +214,7 @@ class _RewardsHistoryScreenState extends State<RewardsHistoryScreen> {
                                           ),
                                           const SizedBox(width: REYSizes.xs),
                                           Text(
-                                            '${pointsFormatter.format(historyItem.pointsSpent)} ${'points'.tr}',
+                                            '${REYFormatter.formatPoints(historyItem.pointsSpent)} ${'points'.tr}',
                                             style: theme.textTheme.bodyMedium
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w600,

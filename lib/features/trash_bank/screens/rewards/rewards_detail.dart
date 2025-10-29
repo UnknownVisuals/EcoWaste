@@ -3,6 +3,7 @@ import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dar
 import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_redeem.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eco_waste/features/trash_bank/models/rewards_model.dart';
@@ -92,7 +93,7 @@ class RewardsDetail extends StatelessWidget {
                         ),
                         const SizedBox(width: REYSizes.spaceBtwItems / 4),
                         Text(
-                          reward.pointsRequired.toString(),
+                          REYFormatter.formatPoints(reward.pointsRequired),
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(fontWeight: FontWeight.w600),
                         ),

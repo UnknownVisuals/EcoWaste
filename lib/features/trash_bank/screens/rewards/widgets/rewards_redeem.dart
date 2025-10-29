@@ -1,5 +1,6 @@
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +37,7 @@ class RewardsRedeem extends StatelessWidget {
             Text(
               'redeemRewardMessage'.trParams({
                 'reward': rewardName,
-                'points': pointsRequired.toString(),
+                'points': REYFormatter.formatPoints(pointsRequired),
               }),
               style: theme.textTheme.bodyLarge,
               textAlign: TextAlign.center,

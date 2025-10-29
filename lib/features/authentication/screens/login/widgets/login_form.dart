@@ -1,7 +1,4 @@
 import 'package:eco_waste/features/authentication/controllers/login_controller.dart';
-import 'package:eco_waste/features/authentication/screens/password_config/forget_password.dart';
-import 'package:eco_waste/features/authentication/screens/signup/signup.dart';
-import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/validators/validation.dart';
 import 'package:flutter/material.dart';
@@ -74,13 +71,13 @@ class LoginForm extends StatelessWidget {
                   ),
 
                   // Forgot Password
-                  TextButton(
-                    onPressed: () => Get.to(const ForgetPasswordScreen()),
-                    child: Text(
-                      'forgetPassword'.tr,
-                      style: const TextStyle(color: REYColors.primary),
-                    ),
-                  ),
+                  // TextButton(
+                  //   onPressed: () => Get.to(const ForgetPasswordScreen()),
+                  //   child: Text(
+                  //     'forgetPassword'.tr,
+                  //     style: const TextStyle(color: REYColors.primary),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: REYSizes.spaceBtwSections),
@@ -103,13 +100,13 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: REYSizes.spaceBtwItems),
 
               // Create Account Button
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Get.to(const SignupScreen()),
-                  child: Text('createAccount'.tr),
-                ),
-              ),
+              // SizedBox(
+              //   width: double.infinity,
+              //   child: OutlinedButton(
+              //     onPressed: () => Get.to(const SignupScreen()),
+              //     child: Text('createAccount'.tr),
+              //   ),
+              // ),
             ],
           ),
         ),

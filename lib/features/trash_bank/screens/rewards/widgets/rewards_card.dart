@@ -4,6 +4,7 @@ import 'package:eco_waste/features/trash_bank/screens/rewards/widgets/rewards_re
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -114,7 +115,7 @@ class RewardsCard extends StatelessWidget {
                               ),
                               const SizedBox(width: REYSizes.xs),
                               Text(
-                                pointsRequired.toString(),
+                                REYFormatter.formatPoints(pointsRequired),
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),

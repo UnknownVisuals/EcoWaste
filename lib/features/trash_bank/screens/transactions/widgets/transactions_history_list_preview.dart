@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TransactionHistoryListPreview extends StatelessWidget {
-  const TransactionHistoryListPreview({super.key, this.maxItems = 10});
+  const TransactionHistoryListPreview({super.key, this.maxItems = 5});
 
   final int maxItems;
 

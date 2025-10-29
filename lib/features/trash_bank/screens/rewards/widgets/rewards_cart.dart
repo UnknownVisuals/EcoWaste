@@ -2,6 +2,7 @@ import 'package:eco_waste/common/widgets/section_heading.dart';
 import 'package:eco_waste/features/trash_bank/controllers/rewards_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:eco_waste/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -102,7 +103,7 @@ class RewardsCart extends StatelessWidget {
                         ),
                         const SizedBox(width: REYSizes.xs),
                         Text(
-                          reward.pointsRequired.toString(),
+                          REYFormatter.formatPoints(reward.pointsRequired),
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
@@ -141,7 +142,7 @@ class RewardsCart extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
-                  rewardsController.totalCartPoints.toString(),
+                  REYFormatter.formatPoints(rewardsController.totalCartPoints),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],

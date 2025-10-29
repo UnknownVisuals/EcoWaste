@@ -10,6 +10,7 @@ import 'package:eco_waste/controllers/camera_controller.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -170,7 +171,7 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          '${user.points} ${'points'.tr}',
+                          '${REYFormatter.formatPoints(user.points)} ${'points'.tr}',
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(
                                 color: REYColors.white,

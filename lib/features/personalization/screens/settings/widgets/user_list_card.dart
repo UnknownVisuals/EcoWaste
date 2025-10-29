@@ -3,6 +3,7 @@ import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/image_strings.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
 import 'package:eco_waste/utils/helpers/helper_functions.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -111,7 +112,7 @@ class UserListCard extends StatelessWidget {
                 children: [
                   const Icon(Iconsax.coin_1, size: REYSizes.iconLg),
                   Text(
-                    user.points.toString(),
+                    REYFormatter.formatPoints(user.points),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ],

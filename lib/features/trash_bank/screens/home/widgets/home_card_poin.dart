@@ -4,6 +4,7 @@ import 'package:eco_waste/features/trash_bank/screens/rewards/rewards.dart';
 import 'package:eco_waste/features/trash_bank/screens/transactions/transactions.dart';
 import 'package:eco_waste/utils/constants/colors.dart';
 import 'package:eco_waste/utils/constants/sizes.dart';
+import 'package:eco_waste/utils/formatters/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -41,7 +42,7 @@ class HomeCardPoin extends StatelessWidget {
                     ).textTheme.titleMedium!.copyWith(color: REYColors.white),
                   ),
                   Text(
-                    user.points.toString(),
+                    REYFormatter.formatPoints(user.points),
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: REYColors.white,
                     ),
